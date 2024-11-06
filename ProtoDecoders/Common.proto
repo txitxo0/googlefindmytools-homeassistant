@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+message Time {
+    uint32 time = 1;
+}
+
+message EncryptedReport {
+    bytes publicKeyRandom = 1;
+    bytes encryptedLocation = 2;
+    uint32 isOwnReport = 3;
+}
+
+message LocationAndRotationOffset {
+  EncryptedReport encryptedReport = 1;
+  uint32 deviceTimeOffset = 2;
+  float accuracy = 3;
+}

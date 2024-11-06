@@ -1,0 +1,48 @@
+syntax = "proto3";
+import "ProtoDecoders/Common.proto";
+
+message DeviceUpdate {
+    DeviceMetadata metadata = 3;
+}
+
+message DeviceMetadata {
+  DeviceInformation information = 4;
+  string deviceName = 5;
+}
+
+message DeviceInformation {
+  LocationInformation locationInformation = 2;
+  OwnerInformation owner = 3;
+}
+
+message LocationInformation {
+  LocationsAndTimestampsWrapper reports = 3;
+}
+
+message LocationsAndTimestampsWrapper {
+  RecentLocationAndNetworkLocations recentLocationAndNetworkLocations = 4;
+}
+
+message RecentLocationAndNetworkLocations {
+  LocationStatusAndRotationOffset recentLocation = 1;
+  Time recentLocationTimestamp = 2;
+  repeated LocationStatusAndRotationOffset networkLocations = 5;
+  repeated Time networkLocationTimestamps = 6;
+  uint32 minLocationsNeededForAggregation = 9;
+}
+
+message LocationStatusAndRotationOffset {
+  LocationAndRotationOffset locationAndDeviceTimeOffset = 10;
+  Status status = 11;
+}
+
+enum Status {
+  SEMANTIC = 0;
+  LAST_KNOWN = 1;
+  CROWDSOURCED = 2;
+  AGGREGATED = 3;
+}
+
+message OwnerInformation {
+  string email = 1;
+}
