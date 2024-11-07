@@ -7,7 +7,7 @@ import requests
 from FMDNCrypto.eid_generator import generate_eid
 from FMDNCrypto.key_derivation import FMDNOwnerOperations
 from OwnerLookup.link_generator import getOwnerLoopUpLink
-from private import identity_key
+from private import sample_identity_key
 
 # Constants
 K = 10
@@ -32,7 +32,7 @@ def check_url_for_404(url):
 if __name__ == '__main__':
 
     ownerOperations = FMDNOwnerOperations()
-    ownerOperations.generate_keys(identity_key)
+    ownerOperations.generate_keys(sample_identity_key)
 
     recoveryKey = ownerOperations.recovery_key
 
@@ -41,7 +41,7 @@ if __name__ == '__main__':
     csv_file = 'Results/eid_scan_results.csv'
     current_iteration = 0
 
-    last_start_time = 0
+    last_start_time = seconds
 
     # Get current UNIX timestamp
     start_date = int(datetime.now().timestamp())
@@ -59,7 +59,7 @@ if __name__ == '__main__':
         print(f"New iteration started at {datetime.now()}")
 
         while True:
-            eid = generate_eid(identity_key, current_tried_offset).to_bytes(20, 'big')
+            eid = generate_eid(sample_identity_key, current_tried_offset).to_bytes(20, 'big')
             url = getOwnerLoopUpLink(eid, recoveryKey)
             success = not check_url_for_404(url)
             print(f"Time Offset: {current_tried_offset}, EID: {eid.hex()}, URL: {url}, Success: {success}")
@@ -75,13 +75,14 @@ if __name__ == '__main__':
                 results.append((current_iteration, current_tried_offset))
             elif found_non_404:
                 # try again up to 10 times
-                print("Trying again")
+                print("Trying again...")
                 failed_attempts += 1
 
             if success or not found_non_404:
                 current_tried_offset += interval
 
             if failed_attempts >= 3:
+                print("Failed 3 times.")
                 break
 
             # sleep 10 seconds +- random 0-5 seconds

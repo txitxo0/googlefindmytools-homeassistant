@@ -10,7 +10,7 @@ from ecdsa.ellipticcurve import Point
 
 from FMDNCrypto.eid_generator import generate_eid, calculate_r
 from FMDNCrypto.util import hexadecimal
-from private import identity_key, account_key, sample_location_data
+from private import sample_identity_key, sample_account_key, sample_location_data
 
 
 def rx_to_ry(Rx, curve):
@@ -143,7 +143,7 @@ if __name__ == "__main__":
     timestamp = 0x0084D000
 
     # Generate EID
-    eid = generate_eid(identity_key, timestamp)
+    eid = generate_eid(sample_identity_key, timestamp)
     message = hexadecimal(sample_location_data)
 
     # generate 32-byte random number
@@ -154,7 +154,7 @@ if __name__ == "__main__":
     print("Encrypted Message and Tag: " + encryptedAndTag.hex())
     print("Random Sx: " + Sx.hex())
 
-    decrypted = decrypt(identity_key, encryptedAndTag, Sx, timestamp)
+    decrypted = decrypt(sample_identity_key, encryptedAndTag, Sx, timestamp)
     print("Decrypted Message: " + decrypted.hex())
 
     assert decrypted == message

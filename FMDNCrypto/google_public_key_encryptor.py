@@ -1,3 +1,4 @@
+import secrets
 from binascii import unhexlify
 
 from cryptography.hazmat.primitives.ciphers import algorithms
@@ -60,7 +61,7 @@ class SecurityOperation:
 
     def encrypt(self, data, associated_data):
         # Example encryption using AES-GCM
-        iv = os.urandom(12)  # 12 bytes for GCM
+        iv = secrets.token_bytes(12)  # 12 bytes for GCM
         cipher = Cipher(algorithms.AES(self.key_material), modes.GCM(iv), backend=default_backend())
         encryptor = cipher.encryptor()
         encryptor.authenticate_additional_data(associated_data)
@@ -124,7 +125,7 @@ def encrypt(secret_key, prefix, encodedPoint, plaintext):
     assert len(secret_key) in {16, 24, 32}
 
     # Generate a random IV (12 bytes for GCM)
-    iv = os.urandom(12) #0d8af4db1d15cfeb090518cf01
+    iv = secrets.token_bytes(12) #0d8af4db1d15cfeb090518cf01
 
     assert len(iv) in {12}
 
