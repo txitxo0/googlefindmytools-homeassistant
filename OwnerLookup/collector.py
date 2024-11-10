@@ -56,7 +56,7 @@ if __name__ == '__main__':
         failed_attempts = 0
 
         # Print that a new iteration started, as well as the current date
-        print(f"New iteration started at {datetime.now()}")
+        print(f"New iteration started at {datetime.now()} with offset {current_tried_offset}")
 
         while True:
             eid = generate_eid(sample_identity_key, current_tried_offset).to_bytes(20, 'big')

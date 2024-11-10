@@ -1,7 +1,8 @@
 syntax = "proto3";
 
 message Time {
-    uint32 time = 1;
+    uint32 seconds = 1;
+    uint32 nanos = 2;
 }
 
 message EncryptedReport {

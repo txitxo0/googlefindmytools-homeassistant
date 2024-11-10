@@ -8,7 +8,6 @@ import pytz
 from ProtoDecoders import DeviceUpdate_pb2, LocationReportsUpload_pb2
 from private import sample_own_report, sample_foreign_report, sample_device_update
 
-
 # Custom message formatter to print the Protobuf byte fields as hex strings
 def custom_message_formatter(message, indent, as_one_line):
     lines = []
@@ -24,7 +23,7 @@ def custom_message_formatter(message, indent, as_one_line):
                 for sub_message in value:
                     if field.message_type.name == "Time":
                         # Convert Unix time to human-readable format
-                        unix_time = sub_message.time
+                        unix_time = sub_message.seconds
                         local_time = datetime.datetime.fromtimestamp(unix_time, pytz.timezone('Europe/Berlin'))
                         lines.append(f"{indent}{field.name} {{\n{indent}  {local_time}\n{indent}}}")
                     else:
@@ -33,7 +32,7 @@ def custom_message_formatter(message, indent, as_one_line):
             else:
                 if field.message_type.name == "Time":
                     # Convert Unix time to human-readable format
-                    unix_time = value.time
+                    unix_time = value.seconds
                     local_time = datetime.datetime.fromtimestamp(unix_time, pytz.timezone('Europe/Berlin'))
                     lines.append(f"{indent}{field.name} {{\n{indent}  {local_time}\n{indent}}}")
                 else:
@@ -63,8 +62,10 @@ def print_device_update_protobuf(hex_string):
 
 
 if __name__ == '__main__':
-
-    # Parse the byte string
+    # Recompile
+    subprocess.run(["protoc", "--python_out=.", "ProtoDecoders/Common.proto"], cwd="../")
+    subprocess.run(["protoc", "--python_out=.", "ProtoDecoders/DeviceUpdate.proto"], cwd="../")
+    subprocess.run(["protoc", "--python_out=.", "ProtoDecoders/LocationReportsUpload.proto"], cwd="../")
 
     print("Own Report: ")
     print_location_report_upload_protobuf(sample_own_report)

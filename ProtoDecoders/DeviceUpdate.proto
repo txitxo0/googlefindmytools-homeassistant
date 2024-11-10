@@ -2,17 +2,52 @@ syntax = "proto3";
 import "ProtoDecoders/Common.proto";
 
 message DeviceUpdate {
-    DeviceMetadata metadata = 3;
+    DeviceMetadata deviceMetadata = 3;
+    RequestMetadata requestMetadata = 2;
 }
 
 message DeviceMetadata {
+  IdentitfierInformation identifierInformation = 1;
   DeviceInformation information = 4;
   string deviceName = 5;
+  ImageInformation imageInformation = 6;
+}
+
+message ImageInformation {
+  string imageUrl = 1;
+}
+
+message IdentitfierInformation {
+  CanonicIds canonicIds = 3;
+}
+
+message CanonicIds {
+  repeated CanonicId canonicId = 1;
+}
+
+message CanonicId {
+  string id = 1;
 }
 
 message DeviceInformation {
+  EphemeralDeviceInformation ephemeralDeviceInformation = 1;
   LocationInformation locationInformation = 2;
   OwnerInformation owner = 3;
+}
+
+message DeviceTypeInformation {
+  DeviceType deviceType = 2;
+}
+
+message EphemeralDeviceInformation {
+  DeviceTypeInformation deviceTypeInformation = 2;
+  EncryptedKeys encryptedKeys = 19;
+  string manufacturer = 20;
+  string model = 34;
+}
+
+message EncryptedKeys {
+  Time keyTimestamp = 8;
 }
 
 message LocationInformation {
@@ -43,6 +78,40 @@ enum Status {
   AGGREGATED = 3;
 }
 
+enum DeviceType {
+    DEVICE_TYPE_UNKNOWN = 0;
+    DEVICE_TYPE_BEACON = 1;
+    DEVICE_TYPE_HEADPHONES = 2;
+    DEVICE_TYPE_KEYS = 3;
+    DEVICE_TYPE_WATCH = 4;
+    DEVICE_TYPE_WALLET = 5;
+    DEVICE_TYPE_BAG = 7;
+    DEVICE_TYPE_LAPTOP = 8;
+    DEVICE_TYPE_CAR = 9;
+    DEVICE_TYPE_REMOTE_CONTROL = 10;
+    DEVICE_TYPE_BADGE = 11;
+    DEVICE_TYPE_BIKE = 12;
+    DEVICE_TYPE_CAMERA = 13;
+    DEVICE_TYPE_CAT = 14;
+    DEVICE_TYPE_CHARGER = 15;
+    DEVICE_TYPE_CLOTHING = 16;
+    DEVICE_TYPE_DOG = 17;
+    DEVICE_TYPE_NOTEBOOK = 18;
+    DEVICE_TYPE_PASSPORT = 19;
+    DEVICE_TYPE_PHONE = 20;
+    DEVICE_TYPE_SPEAKER = 21;
+    DEVICE_TYPE_TABLET = 22;
+    DEVICE_TYPE_TOY = 23;
+    DEVICE_TYPE_UMBRELLA = 24;
+    DEVICE_TYPE_STYLUS = 25;
+    DEVICE_TYPE_EARBUDS = 26;
+    UNRECOGNIZED = -1;
+}
+
 message OwnerInformation {
   string email = 1;
+}
+
+message RequestMetadata {
+  Time responseTime = 1;
 }
