@@ -9,7 +9,7 @@ message DeviceUpdate {
 message DeviceMetadata {
   IdentitfierInformation identifierInformation = 1;
   DeviceInformation information = 4;
-  string deviceName = 5;
+  string userDefinedDeviceName = 5;
   ImageInformation imageInformation = 6;
 }
 
@@ -47,7 +47,11 @@ message EphemeralDeviceInformation {
 }
 
 message EncryptedKeys {
+  bytes encryptedIdentityKey = 1;
+  int32 keyVersion = 3;
+  bytes encryptedAccountKey = 4;
   Time keyTimestamp = 8;
+  bytes encryptedSha256AccountKeyPublicAddress = 11;
 }
 
 message LocationInformation {

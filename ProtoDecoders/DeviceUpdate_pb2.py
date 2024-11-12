@@ -25,47 +25,47 @@ _sym_db = _symbol_database.Default()
 from ProtoDecoders import Common_pb2 as ProtoDecoders_dot_Common__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n ProtoDecoders/DeviceUpdate.proto\x1a\x1aProtoDecoders/Common.proto\"b\n\x0c\x44\x65viceUpdate\x12\'\n\x0e\x64\x65viceMetadata\x18\x03 \x01(\x0b\x32\x0f.DeviceMetadata\x12)\n\x0frequestMetadata\x18\x02 \x01(\x0b\x32\x10.RequestMetadata\"\xb2\x01\n\x0e\x44\x65viceMetadata\x12\x36\n\x15identifierInformation\x18\x01 \x01(\x0b\x32\x17.IdentitfierInformation\x12\'\n\x0binformation\x18\x04 \x01(\x0b\x32\x12.DeviceInformation\x12\x12\n\ndeviceName\x18\x05 \x01(\t\x12+\n\x10imageInformation\x18\x06 \x01(\x0b\x32\x11.ImageInformation\"$\n\x10ImageInformation\x12\x10\n\x08imageUrl\x18\x01 \x01(\t\"9\n\x16IdentitfierInformation\x12\x1f\n\ncanonicIds\x18\x03 \x01(\x0b\x32\x0b.CanonicIds\"+\n\nCanonicIds\x12\x1d\n\tcanonicId\x18\x01 \x03(\x0b\x32\n.CanonicId\"\x17\n\tCanonicId\x12\n\n\x02id\x18\x01 \x01(\t\"\xa9\x01\n\x11\x44\x65viceInformation\x12?\n\x1a\x65phemeralDeviceInformation\x18\x01 \x01(\x0b\x32\x1b.EphemeralDeviceInformation\x12\x31\n\x13locationInformation\x18\x02 \x01(\x0b\x32\x14.LocationInformation\x12 \n\x05owner\x18\x03 \x01(\x0b\x32\x11.OwnerInformation\"8\n\x15\x44\x65viceTypeInformation\x12\x1f\n\ndeviceType\x18\x02 \x01(\x0e\x32\x0b.DeviceType\"\x9f\x01\n\x1a\x45phemeralDeviceInformation\x12\x35\n\x15\x64\x65viceTypeInformation\x18\x02 \x01(\x0b\x32\x16.DeviceTypeInformation\x12%\n\rencryptedKeys\x18\x13 \x01(\x0b\x32\x0e.EncryptedKeys\x12\x14\n\x0cmanufacturer\x18\x14 \x01(\t\x12\r\n\x05model\x18\" \x01(\t\",\n\rEncryptedKeys\x12\x1b\n\x0ckeyTimestamp\x18\x08 \x01(\x0b\x32\x05.Time\"F\n\x13LocationInformation\x12/\n\x07reports\x18\x03 \x01(\x0b\x32\x1e.LocationsAndTimestampsWrapper\"n\n\x1dLocationsAndTimestampsWrapper\x12M\n!recentLocationAndNetworkLocations\x18\x04 \x01(\x0b\x32\".RecentLocationAndNetworkLocations\"\x95\x02\n!RecentLocationAndNetworkLocations\x12\x38\n\x0erecentLocation\x18\x01 \x01(\x0b\x32 .LocationStatusAndRotationOffset\x12&\n\x17recentLocationTimestamp\x18\x02 \x01(\x0b\x32\x05.Time\x12:\n\x10networkLocations\x18\x05 \x03(\x0b\x32 .LocationStatusAndRotationOffset\x12(\n\x19networkLocationTimestamps\x18\x06 \x03(\x0b\x32\x05.Time\x12(\n minLocationsNeededForAggregation\x18\t \x01(\r\"{\n\x1fLocationStatusAndRotationOffset\x12?\n\x1blocationAndDeviceTimeOffset\x18\n \x01(\x0b\x32\x1a.LocationAndRotationOffset\x12\x17\n\x06status\x18\x0b \x01(\x0e\x32\x07.Status\"!\n\x10OwnerInformation\x12\r\n\x05\x65mail\x18\x01 \x01(\t\".\n\x0fRequestMetadata\x12\x1b\n\x0cresponseTime\x18\x01 \x01(\x0b\x32\x05.Time*H\n\x06Status\x12\x0c\n\x08SEMANTIC\x10\x00\x12\x0e\n\nLAST_KNOWN\x10\x01\x12\x10\n\x0c\x43ROWDSOURCED\x10\x02\x12\x0e\n\nAGGREGATED\x10\x03*\x99\x05\n\nDeviceType\x12\x17\n\x13\x44\x45VICE_TYPE_UNKNOWN\x10\x00\x12\x16\n\x12\x44\x45VICE_TYPE_BEACON\x10\x01\x12\x1a\n\x16\x44\x45VICE_TYPE_HEADPHONES\x10\x02\x12\x14\n\x10\x44\x45VICE_TYPE_KEYS\x10\x03\x12\x15\n\x11\x44\x45VICE_TYPE_WATCH\x10\x04\x12\x16\n\x12\x44\x45VICE_TYPE_WALLET\x10\x05\x12\x13\n\x0f\x44\x45VICE_TYPE_BAG\x10\x07\x12\x16\n\x12\x44\x45VICE_TYPE_LAPTOP\x10\x08\x12\x13\n\x0f\x44\x45VICE_TYPE_CAR\x10\t\x12\x1e\n\x1a\x44\x45VICE_TYPE_REMOTE_CONTROL\x10\n\x12\x15\n\x11\x44\x45VICE_TYPE_BADGE\x10\x0b\x12\x14\n\x10\x44\x45VICE_TYPE_BIKE\x10\x0c\x12\x16\n\x12\x44\x45VICE_TYPE_CAMERA\x10\r\x12\x13\n\x0f\x44\x45VICE_TYPE_CAT\x10\x0e\x12\x17\n\x13\x44\x45VICE_TYPE_CHARGER\x10\x0f\x12\x18\n\x14\x44\x45VICE_TYPE_CLOTHING\x10\x10\x12\x13\n\x0f\x44\x45VICE_TYPE_DOG\x10\x11\x12\x18\n\x14\x44\x45VICE_TYPE_NOTEBOOK\x10\x12\x12\x18\n\x14\x44\x45VICE_TYPE_PASSPORT\x10\x13\x12\x15\n\x11\x44\x45VICE_TYPE_PHONE\x10\x14\x12\x17\n\x13\x44\x45VICE_TYPE_SPEAKER\x10\x15\x12\x16\n\x12\x44\x45VICE_TYPE_TABLET\x10\x16\x12\x13\n\x0f\x44\x45VICE_TYPE_TOY\x10\x17\x12\x18\n\x14\x44\x45VICE_TYPE_UMBRELLA\x10\x18\x12\x16\n\x12\x44\x45VICE_TYPE_STYLUS\x10\x19\x12\x17\n\x13\x44\x45VICE_TYPE_EARBUDS\x10\x1a\x12\x19\n\x0cUNRECOGNIZED\x10\xff\xff\xff\xff\xff\xff\xff\xff\xff\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n ProtoDecoders/DeviceUpdate.proto\x1a\x1aProtoDecoders/Common.proto\"b\n\x0c\x44\x65viceUpdate\x12\'\n\x0e\x64\x65viceMetadata\x18\x03 \x01(\x0b\x32\x0f.DeviceMetadata\x12)\n\x0frequestMetadata\x18\x02 \x01(\x0b\x32\x10.RequestMetadata\"\xbd\x01\n\x0e\x44\x65viceMetadata\x12\x36\n\x15identifierInformation\x18\x01 \x01(\x0b\x32\x17.IdentitfierInformation\x12\'\n\x0binformation\x18\x04 \x01(\x0b\x32\x12.DeviceInformation\x12\x1d\n\x15userDefinedDeviceName\x18\x05 \x01(\t\x12+\n\x10imageInformation\x18\x06 \x01(\x0b\x32\x11.ImageInformation\"$\n\x10ImageInformation\x12\x10\n\x08imageUrl\x18\x01 \x01(\t\"9\n\x16IdentitfierInformation\x12\x1f\n\ncanonicIds\x18\x03 \x01(\x0b\x32\x0b.CanonicIds\"+\n\nCanonicIds\x12\x1d\n\tcanonicId\x18\x01 \x03(\x0b\x32\n.CanonicId\"\x17\n\tCanonicId\x12\n\n\x02id\x18\x01 \x01(\t\"\xa9\x01\n\x11\x44\x65viceInformation\x12?\n\x1a\x65phemeralDeviceInformation\x18\x01 \x01(\x0b\x32\x1b.EphemeralDeviceInformation\x12\x31\n\x13locationInformation\x18\x02 \x01(\x0b\x32\x14.LocationInformation\x12 \n\x05owner\x18\x03 \x01(\x0b\x32\x11.OwnerInformation\"8\n\x15\x44\x65viceTypeInformation\x12\x1f\n\ndeviceType\x18\x02 \x01(\x0e\x32\x0b.DeviceType\"\x9f\x01\n\x1a\x45phemeralDeviceInformation\x12\x35\n\x15\x64\x65viceTypeInformation\x18\x02 \x01(\x0b\x32\x16.DeviceTypeInformation\x12%\n\rencryptedKeys\x18\x13 \x01(\x0b\x32\x0e.EncryptedKeys\x12\x14\n\x0cmanufacturer\x18\x14 \x01(\t\x12\r\n\x05model\x18\" \x01(\t\"\xab\x01\n\rEncryptedKeys\x12\x1c\n\x14\x65ncryptedIdentityKey\x18\x01 \x01(\x0c\x12\x12\n\nkeyVersion\x18\x03 \x01(\x05\x12\x1b\n\x13\x65ncryptedAccountKey\x18\x04 \x01(\x0c\x12\x1b\n\x0ckeyTimestamp\x18\x08 \x01(\x0b\x32\x05.Time\x12.\n&encryptedSha256AccountKeyPublicAddress\x18\x0b \x01(\x0c\"F\n\x13LocationInformation\x12/\n\x07reports\x18\x03 \x01(\x0b\x32\x1e.LocationsAndTimestampsWrapper\"n\n\x1dLocationsAndTimestampsWrapper\x12M\n!recentLocationAndNetworkLocations\x18\x04 \x01(\x0b\x32\".RecentLocationAndNetworkLocations\"\x95\x02\n!RecentLocationAndNetworkLocations\x12\x38\n\x0erecentLocation\x18\x01 \x01(\x0b\x32 .LocationStatusAndRotationOffset\x12&\n\x17recentLocationTimestamp\x18\x02 \x01(\x0b\x32\x05.Time\x12:\n\x10networkLocations\x18\x05 \x03(\x0b\x32 .LocationStatusAndRotationOffset\x12(\n\x19networkLocationTimestamps\x18\x06 \x03(\x0b\x32\x05.Time\x12(\n minLocationsNeededForAggregation\x18\t \x01(\r\"{\n\x1fLocationStatusAndRotationOffset\x12?\n\x1blocationAndDeviceTimeOffset\x18\n \x01(\x0b\x32\x1a.LocationAndRotationOffset\x12\x17\n\x06status\x18\x0b \x01(\x0e\x32\x07.Status\"!\n\x10OwnerInformation\x12\r\n\x05\x65mail\x18\x01 \x01(\t\".\n\x0fRequestMetadata\x12\x1b\n\x0cresponseTime\x18\x01 \x01(\x0b\x32\x05.Time*H\n\x06Status\x12\x0c\n\x08SEMANTIC\x10\x00\x12\x0e\n\nLAST_KNOWN\x10\x01\x12\x10\n\x0c\x43ROWDSOURCED\x10\x02\x12\x0e\n\nAGGREGATED\x10\x03*\x99\x05\n\nDeviceType\x12\x17\n\x13\x44\x45VICE_TYPE_UNKNOWN\x10\x00\x12\x16\n\x12\x44\x45VICE_TYPE_BEACON\x10\x01\x12\x1a\n\x16\x44\x45VICE_TYPE_HEADPHONES\x10\x02\x12\x14\n\x10\x44\x45VICE_TYPE_KEYS\x10\x03\x12\x15\n\x11\x44\x45VICE_TYPE_WATCH\x10\x04\x12\x16\n\x12\x44\x45VICE_TYPE_WALLET\x10\x05\x12\x13\n\x0f\x44\x45VICE_TYPE_BAG\x10\x07\x12\x16\n\x12\x44\x45VICE_TYPE_LAPTOP\x10\x08\x12\x13\n\x0f\x44\x45VICE_TYPE_CAR\x10\t\x12\x1e\n\x1a\x44\x45VICE_TYPE_REMOTE_CONTROL\x10\n\x12\x15\n\x11\x44\x45VICE_TYPE_BADGE\x10\x0b\x12\x14\n\x10\x44\x45VICE_TYPE_BIKE\x10\x0c\x12\x16\n\x12\x44\x45VICE_TYPE_CAMERA\x10\r\x12\x13\n\x0f\x44\x45VICE_TYPE_CAT\x10\x0e\x12\x17\n\x13\x44\x45VICE_TYPE_CHARGER\x10\x0f\x12\x18\n\x14\x44\x45VICE_TYPE_CLOTHING\x10\x10\x12\x13\n\x0f\x44\x45VICE_TYPE_DOG\x10\x11\x12\x18\n\x14\x44\x45VICE_TYPE_NOTEBOOK\x10\x12\x12\x18\n\x14\x44\x45VICE_TYPE_PASSPORT\x10\x13\x12\x15\n\x11\x44\x45VICE_TYPE_PHONE\x10\x14\x12\x17\n\x13\x44\x45VICE_TYPE_SPEAKER\x10\x15\x12\x16\n\x12\x44\x45VICE_TYPE_TABLET\x10\x16\x12\x13\n\x0f\x44\x45VICE_TYPE_TOY\x10\x17\x12\x18\n\x14\x44\x45VICE_TYPE_UMBRELLA\x10\x18\x12\x16\n\x12\x44\x45VICE_TYPE_STYLUS\x10\x19\x12\x17\n\x13\x44\x45VICE_TYPE_EARBUDS\x10\x1a\x12\x19\n\x0cUNRECOGNIZED\x10\xff\xff\xff\xff\xff\xff\xff\xff\xff\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'ProtoDecoders.DeviceUpdate_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_STATUS']._serialized_start=1622
-  _globals['_STATUS']._serialized_end=1694
-  _globals['_DEVICETYPE']._serialized_start=1697
-  _globals['_DEVICETYPE']._serialized_end=2362
+  _globals['_STATUS']._serialized_start=1761
+  _globals['_STATUS']._serialized_end=1833
+  _globals['_DEVICETYPE']._serialized_start=1836
+  _globals['_DEVICETYPE']._serialized_end=2501
   _globals['_DEVICEUPDATE']._serialized_start=64
   _globals['_DEVICEUPDATE']._serialized_end=162
   _globals['_DEVICEMETADATA']._serialized_start=165
-  _globals['_DEVICEMETADATA']._serialized_end=343
-  _globals['_IMAGEINFORMATION']._serialized_start=345
-  _globals['_IMAGEINFORMATION']._serialized_end=381
-  _globals['_IDENTITFIERINFORMATION']._serialized_start=383
-  _globals['_IDENTITFIERINFORMATION']._serialized_end=440
-  _globals['_CANONICIDS']._serialized_start=442
-  _globals['_CANONICIDS']._serialized_end=485
-  _globals['_CANONICID']._serialized_start=487
-  _globals['_CANONICID']._serialized_end=510
-  _globals['_DEVICEINFORMATION']._serialized_start=513
-  _globals['_DEVICEINFORMATION']._serialized_end=682
-  _globals['_DEVICETYPEINFORMATION']._serialized_start=684
-  _globals['_DEVICETYPEINFORMATION']._serialized_end=740
-  _globals['_EPHEMERALDEVICEINFORMATION']._serialized_start=743
-  _globals['_EPHEMERALDEVICEINFORMATION']._serialized_end=902
-  _globals['_ENCRYPTEDKEYS']._serialized_start=904
-  _globals['_ENCRYPTEDKEYS']._serialized_end=948
-  _globals['_LOCATIONINFORMATION']._serialized_start=950
-  _globals['_LOCATIONINFORMATION']._serialized_end=1020
-  _globals['_LOCATIONSANDTIMESTAMPSWRAPPER']._serialized_start=1022
-  _globals['_LOCATIONSANDTIMESTAMPSWRAPPER']._serialized_end=1132
-  _globals['_RECENTLOCATIONANDNETWORKLOCATIONS']._serialized_start=1135
-  _globals['_RECENTLOCATIONANDNETWORKLOCATIONS']._serialized_end=1412
-  _globals['_LOCATIONSTATUSANDROTATIONOFFSET']._serialized_start=1414
-  _globals['_LOCATIONSTATUSANDROTATIONOFFSET']._serialized_end=1537
-  _globals['_OWNERINFORMATION']._serialized_start=1539
-  _globals['_OWNERINFORMATION']._serialized_end=1572
-  _globals['_REQUESTMETADATA']._serialized_start=1574
-  _globals['_REQUESTMETADATA']._serialized_end=1620
+  _globals['_DEVICEMETADATA']._serialized_end=354
+  _globals['_IMAGEINFORMATION']._serialized_start=356
+  _globals['_IMAGEINFORMATION']._serialized_end=392
+  _globals['_IDENTITFIERINFORMATION']._serialized_start=394
+  _globals['_IDENTITFIERINFORMATION']._serialized_end=451
+  _globals['_CANONICIDS']._serialized_start=453
+  _globals['_CANONICIDS']._serialized_end=496
+  _globals['_CANONICID']._serialized_start=498
+  _globals['_CANONICID']._serialized_end=521
+  _globals['_DEVICEINFORMATION']._serialized_start=524
+  _globals['_DEVICEINFORMATION']._serialized_end=693
+  _globals['_DEVICETYPEINFORMATION']._serialized_start=695
+  _globals['_DEVICETYPEINFORMATION']._serialized_end=751
+  _globals['_EPHEMERALDEVICEINFORMATION']._serialized_start=754
+  _globals['_EPHEMERALDEVICEINFORMATION']._serialized_end=913
+  _globals['_ENCRYPTEDKEYS']._serialized_start=916
+  _globals['_ENCRYPTEDKEYS']._serialized_end=1087
+  _globals['_LOCATIONINFORMATION']._serialized_start=1089
+  _globals['_LOCATIONINFORMATION']._serialized_end=1159
+  _globals['_LOCATIONSANDTIMESTAMPSWRAPPER']._serialized_start=1161
+  _globals['_LOCATIONSANDTIMESTAMPSWRAPPER']._serialized_end=1271
+  _globals['_RECENTLOCATIONANDNETWORKLOCATIONS']._serialized_start=1274
+  _globals['_RECENTLOCATIONANDNETWORKLOCATIONS']._serialized_end=1551
+  _globals['_LOCATIONSTATUSANDROTATIONOFFSET']._serialized_start=1553
+  _globals['_LOCATIONSTATUSANDROTATIONOFFSET']._serialized_end=1676
+  _globals['_OWNERINFORMATION']._serialized_start=1678
+  _globals['_OWNERINFORMATION']._serialized_end=1711
+  _globals['_REQUESTMETADATA']._serialized_start=1713
+  _globals['_REQUESTMETADATA']._serialized_end=1759
 # @@protoc_insertion_point(module_scope)

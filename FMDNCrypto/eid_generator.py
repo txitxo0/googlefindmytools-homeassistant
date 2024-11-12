@@ -2,6 +2,7 @@ from Crypto.Cipher import AES
 from ecdsa import SigningKey, SECP160r1
 
 from FMDNCrypto.util import hexadecimal
+from private import sample_identity_key
 
 # Constants
 K = 10
@@ -47,3 +48,11 @@ def generate_eid(identity_key, timestamp):
 
     # Return the x coordinate of R as the EID
     return R.x()
+
+
+if __name__ == '__main__':
+    # Generate EIDs
+    for i in range(EID_COUNT):
+        timestamp = i * ROTATION_PERIOD
+        eid = generate_eid(sample_identity_key, timestamp)
+        print(f"{timestamp}: {hex(eid)}")
