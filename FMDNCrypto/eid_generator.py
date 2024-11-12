@@ -7,7 +7,6 @@ from private import sample_identity_key
 # Constants
 K = 10
 ROTATION_PERIOD = 1024  # 2^K seconds
-EID_COUNT = 1000
 
 def calculate_r(identity_key, timestamp):
     # Prepare the data structure
@@ -52,7 +51,7 @@ def generate_eid(identity_key, timestamp):
 
 if __name__ == '__main__':
     # Generate EIDs
-    for i in range(EID_COUNT):
+    for i in range(1000):
         timestamp = i * ROTATION_PERIOD
         eid = generate_eid(sample_identity_key, timestamp)
         print(f"{timestamp}: {hex(eid)}")

@@ -9,12 +9,6 @@ from FMDNCrypto.key_derivation import FMDNOwnerOperations
 from OwnerLookup.link_generator import getOwnerLoopUpLink
 from private import sample_identity_key
 
-# Constants
-K = 10
-ROTATION_PERIOD = 1024  # 2^K seconds
-EID_COUNT = 1000
-
-
 def check_url_for_404(url):
     try:
         response = requests.get(url)
@@ -30,11 +24,6 @@ def check_url_for_404(url):
 
 
 if __name__ == '__main__':
-
-    ownerOperations = FMDNOwnerOperations()
-    ownerOperations.generate_keys(sample_identity_key)
-
-    recoveryKey = ownerOperations.recovery_key
 
     seconds = 0
     interval = 1024
@@ -59,10 +48,9 @@ if __name__ == '__main__':
         print(f"New iteration started at {datetime.now()} with offset {current_tried_offset}")
 
         while True:
-            eid = generate_eid(sample_identity_key, current_tried_offset).to_bytes(20, 'big')
-            url = getOwnerLoopUpLink(eid, recoveryKey)
+            (eid, url) = getOwnerLoopUpLink(sample_identity_key, current_tried_offset)
             success = not check_url_for_404(url)
-            print(f"Time Offset: {current_tried_offset}, EID: {eid.hex()}, URL: {url}, Success: {success}")
+            print(f"Time Offset: {current_tried_offset}, EID: {eid}, URL: {url}, Success: {success}")
 
             if success:
                 # found first non-404
