@@ -1,12 +1,15 @@
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from binascii import unhexlify
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from cryptography.hazmat.primitives.hashes import SHA256
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.backends import default_backend
+
 from TitanBackup.lskf_hasher import ascii_to_bytes, get_lskf_hash
 from private import sample_pin, sample_pin_salt, sample_encrypted_recovery_key, sample_encrypted_application_key, \
-    sample_encrypted_security_domain_key, sample_encrypted_shared_key
+    sample_encrypted_security_domain_key, sample_encrypted_shared_key, sample_encrypted_owner_key, sample_encrypted_eik, \
+    sample_encrypted_account_key
 
 # Constants
 VERSION = b'\x02\x00'
@@ -72,17 +75,35 @@ def derive_shared_secret(private_key_jwt, public_key_bytes):
     return private_key.exchange(ec.ECDH(), public_key)
 
 
-def decrypt_aes_gcm(key, encrypted_data_and_iv, additional_data=None) -> bytes:
+def decrypt_aes_gcm(key, encrypted_data_and_iv, additional_data=None, iv_length = 12) -> bytes:
 
-    # IV is appended to encrypted data
-    iv = encrypted_data_and_iv[:12]
-    ciphertext = encrypted_data_and_iv[12:]
+    # IV is prepended to encrypted data
+    iv = encrypted_data_and_iv[:iv_length]
+    ciphertext = encrypted_data_and_iv[iv_length:]
 
     # Perform AES-GCM
     aes_gcm = AESGCM(key)
     decrypted_data = aes_gcm.decrypt(iv, ciphertext, additional_data)
 
     # Return result
+    return decrypted_data
+
+
+def decrypt_aes_cbc_no_padding(key, encrypted_data_and_iv, iv_length = 16) -> bytes:
+
+    # IV is prepended to encrypted data
+    iv = encrypted_data_and_iv[:iv_length]
+    ciphertext = encrypted_data_and_iv[iv_length:]
+
+    cipher = Cipher(
+        algorithms.AES(key),
+        modes.CBC(iv),
+        backend=default_backend()
+    )
+
+    decryptor = cipher.decryptor()
+    decrypted_data = decryptor.update(ciphertext) + decryptor.finalize()
+
     return decrypted_data
 
 
@@ -108,9 +129,43 @@ def decrypt_security_domain_key(application_key, encrypted_security_domain_key):
 
 def decrypt_shared_key(security_domain_key, encrypted_shared_key):
 
-    # The shared key / domain key is encrypted using the security domain key
+    # The shared key is encrypted using the security domain key
     return decrypt_aes_gcm_with_derived_key(unhexlify(encrypted_shared_key), security_domain_key,
                                             ascii_to_bytes("V1 shared_key"), True)
+
+
+def decrypt_owner_key(shared_key, encrypted_owner_key):
+
+    # The owner key is encrypted using the shared key. The owner key is valid for all trackers
+    return decrypt_aes_gcm(shared_key, unhexlify(encrypted_owner_key))
+
+
+def decrypt_eik(owner_key, encrypted_eik):
+
+    encrypted_eik_bytes = unhexlify(encrypted_eik)
+
+    # The EIK is encrypted using the owner key. The EIK is only valid for a certain tracker
+    if len(encrypted_eik_bytes) == 48:
+        return decrypt_aes_cbc_no_padding(owner_key, encrypted_eik_bytes)
+
+    if len(encrypted_eik_bytes) == 60:
+        return decrypt_aes_gcm(owner_key, encrypted_eik_bytes)
+
+    raise ValueError("The encrypted EIK has invalid length!")
+
+
+def decrypt_account_key(owner_key, encrypted_account_key):
+
+    encrypted_account_key_bytes = unhexlify(encrypted_account_key)
+
+    # The account key is encrypted using the owner key. The account key is only valid for a certain tracker
+    if len(encrypted_account_key_bytes) == 32:
+        return decrypt_aes_cbc_no_padding(owner_key, encrypted_account_key_bytes)
+
+    if len(encrypted_account_key_bytes) == 44:
+        return decrypt_aes_gcm(owner_key, encrypted_account_key_bytes)
+
+    raise ValueError("The encrypted Account Key has invalid length!")
 
 
 if __name__ == '__main__':
@@ -122,6 +177,9 @@ if __name__ == '__main__':
     encrypted_application_key = sample_encrypted_application_key
     encrypted_security_domain_key = sample_encrypted_security_domain_key
     encrypted_shared_key = sample_encrypted_shared_key
+    encrypted_owner_key = sample_encrypted_owner_key
+    encrypted_eik = sample_encrypted_eik
+    encrypted_account_key = sample_encrypted_account_key
 
     # Calculate keys
     lskf_hash = get_lskf_hash(pin, pin_salt)
@@ -129,6 +187,9 @@ if __name__ == '__main__':
     application_key = decrypt_application_key(recovery_key, encrypted_application_key)
     security_domain_key = decrypt_security_domain_key(application_key, encrypted_security_domain_key)
     shared_key = decrypt_shared_key(security_domain_key, encrypted_shared_key)
+    owner_key = decrypt_owner_key(shared_key, encrypted_owner_key)
+    eik = decrypt_eik(owner_key, encrypted_eik)
+    account_key = decrypt_account_key(owner_key, encrypted_account_key)
 
     # Print results
     print("Recovery Key:")
@@ -142,3 +203,13 @@ if __name__ == '__main__':
 
     print("Shared Key:")
     print(shared_key.hex())
+
+    print("Owner Key:")
+    print(owner_key.hex())
+
+    print("EIK:")
+    print(eik.hex())
+
+    print("Account Key:")
+    print(account_key.hex())
+
