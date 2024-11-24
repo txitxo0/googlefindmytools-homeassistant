@@ -32,7 +32,7 @@ message CanonicId {
 message DeviceInformation {
   EphemeralDeviceInformation ephemeralDeviceInformation = 1;
   LocationInformation locationInformation = 2;
-  OwnerInformation owner = 3;
+  repeated AccessInformation accessInformation = 3;
 }
 
 message DeviceTypeInformation {
@@ -112,8 +112,11 @@ enum DeviceType {
     UNRECOGNIZED = -1;
 }
 
-message OwnerInformation {
+message AccessInformation {
   string email = 1;
+  bool hasAccess = 2;
+  bool isOwner = 3;
+  bool thisAccount = 4;
 }
 
 message RequestMetadata {

@@ -7,7 +7,7 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.backends import default_backend
 
 from TitanBackup.lskf_hasher import ascii_to_bytes, get_lskf_hash
-from private import sample_pin, sample_pin_salt, sample_encrypted_recovery_key, sample_encrypted_application_key, \
+from private import sample_pin, sample_pin_salt, sample_locally_encrypted_recovery_key, sample_encrypted_application_key, \
     sample_encrypted_security_domain_key, sample_encrypted_shared_key, sample_encrypted_owner_key, sample_encrypted_eik, \
     sample_encrypted_account_key
 
@@ -33,18 +33,18 @@ def derive_key_using_hkdf_sha256(input_key: bytes, salt: bytes, info: bytes) -> 
     return hkdf.derive(input_key)
 
 
-def decrypt_aes_gcm_with_derived_key(encrypted_key: bytes, key: bytes, key_type_string: bytes,
+def decrypt_aes_gcm_with_derived_key(encrypted_data: bytes, private_key: bytes, key_type_string: bytes,
                                      derive_with_public_key=False) -> bytes:
 
     # Only supporting specified version, else return
-    if len(encrypted_key) < 2 or encrypted_key[:2] != VERSION:
+    if len(encrypted_data) < 2 or encrypted_data[:2] != VERSION:
         raise ValueError("Invalid version or data length")
 
     version_length = len(VERSION)
 
     # Get ciphertext and iv from encrypted key data
     ciphertext_offset = 65 if derive_with_public_key else 0
-    ciphertext_and_iv = encrypted_key[version_length + ciphertext_offset:]
+    ciphertext_and_iv = encrypted_data[version_length + ciphertext_offset:]
 
     # Create HKDF salt and info
     hkdf_salt = SECUREBOX + VERSION
@@ -52,11 +52,11 @@ def decrypt_aes_gcm_with_derived_key(encrypted_key: bytes, key: bytes, key_type_
 
     if derive_with_public_key:
         # Perform key exchange and derive shared secret
-        shared_public_key = encrypted_key[version_length:version_length + ciphertext_offset]
-        key = derive_shared_secret(key, shared_public_key)
+        shared_public_key = encrypted_data[version_length:version_length + ciphertext_offset]
+        private_key = derive_shared_secret(private_key, shared_public_key)
 
     # Derive key using HKDF
-    derived_key = derive_key_using_hkdf_sha256(key, hkdf_salt, hkdf_info)
+    derived_key = derive_key_using_hkdf_sha256(private_key, hkdf_salt, hkdf_info)
 
     # Decrypt data with AES-GCM
     return decrypt_aes_gcm(derived_key, ciphertext_and_iv, key_type_string)
@@ -173,7 +173,7 @@ if __name__ == '__main__':
     # Load sample data
     pin = sample_pin
     pin_salt = sample_pin_salt
-    encrypted_recovery_key = sample_encrypted_recovery_key
+    encrypted_recovery_key = sample_locally_encrypted_recovery_key
     encrypted_application_key = sample_encrypted_application_key
     encrypted_security_domain_key = sample_encrypted_security_domain_key
     encrypted_shared_key = sample_encrypted_shared_key
