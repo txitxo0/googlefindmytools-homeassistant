@@ -1,6 +1,19 @@
 syntax = "proto3";
 import "ProtoDecoders/Common.proto";
 
+message DevicesList {
+  repeated DeviceMetadata deviceMetadata = 2;
+}
+
+message DevicesListRequest {
+  DevicesListRequestPayload deviceListRequestPayload = 1;
+}
+
+message DevicesListRequestPayload {
+  int32 type = 1;
+  string id = 3;
+}
+
 message DeviceUpdate {
     DeviceMetadata deviceMetadata = 3;
     RequestMetadata requestMetadata = 2;

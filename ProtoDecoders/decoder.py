@@ -1,12 +1,14 @@
 import binascii
 import subprocess
+import uuid
 
 from google.protobuf import text_format
 import datetime
 import pytz
 
 from ProtoDecoders import DeviceUpdate_pb2, LocationReportsUpload_pb2
-from private import sample_own_report, sample_foreign_report, sample_device_update
+from private import sample_own_report, sample_foreign_report, sample_device_update, sample_nbe_list_devices_response
+
 
 # Custom message formatter to print the Protobuf byte fields as hex strings
 def custom_message_formatter(message, indent, as_one_line):
@@ -48,10 +50,18 @@ def parse_location_report_upload_protobuf(hex_string):
     locationReports.ParseFromString(bytes.fromhex(hex_string))
     return locationReports
 
+
 def parse_device_update_protobuf(hex_string):
     deviceUpdate = DeviceUpdate_pb2.DeviceUpdate()
     deviceUpdate.ParseFromString(bytes.fromhex(hex_string))
     return deviceUpdate
+
+
+def parse_device_list_protobuf(hex_string):
+    deviceList = DeviceUpdate_pb2.DevicesList()
+    deviceList.ParseFromString(bytes.fromhex(hex_string))
+    return deviceList
+
 
 def print_location_report_upload_protobuf(hex_string):
     print(text_format.MessageToString(parse_location_report_upload_protobuf(hex_string), message_formatter=custom_message_formatter))
@@ -61,11 +71,21 @@ def print_device_update_protobuf(hex_string):
     print(text_format.MessageToString(parse_device_update_protobuf(hex_string), message_formatter=custom_message_formatter))
 
 
+def print_device_list_protobuf(hex_string):
+    print(text_format.MessageToString(parse_device_list_protobuf(hex_string), message_formatter=custom_message_formatter))
+
+
 if __name__ == '__main__':
     # Recompile
     subprocess.run(["protoc", "--python_out=.", "ProtoDecoders/Common.proto"], cwd="../")
     subprocess.run(["protoc", "--python_out=.", "ProtoDecoders/DeviceUpdate.proto"], cwd="../")
     subprocess.run(["protoc", "--python_out=.", "ProtoDecoders/LocationReportsUpload.proto"], cwd="../")
+
+    print("\n ------------------- \n")
+
+    print("Device List: ")
+    print_device_list_protobuf(sample_nbe_list_devices_response)
+
 
     print("Own Report: ")
     print_location_report_upload_protobuf(sample_own_report)
