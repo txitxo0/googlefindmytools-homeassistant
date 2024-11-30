@@ -1,5 +1,7 @@
 import binascii
 import requests
+from bs4 import BeautifulSoup
+
 from private import sample_android_device_manager_oauth_token
 
 def nova_request(api_scope, hex_payload):
@@ -22,4 +24,5 @@ def nova_request(api_scope, hex_payload):
         print("[NovaRequest] Request performed successfully.")
         return response.content.hex()
     else:
-        print("[NovaRequest] 404 - DeviceManager Token has expired or is invalid.")
+        soup = BeautifulSoup(response.text, 'html.parser')
+        print("[NovaRequest] Error: ", soup.get_text())

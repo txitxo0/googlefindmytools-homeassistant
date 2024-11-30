@@ -35,7 +35,7 @@ message ExecuteActionRequestMetadata {
   string requestUuid = 2;
   string fmdClientUuid = 3;
   GcmCloudMessagingIdProtobuf gcmRegistrationId = 4;
-  bool isValid = 6;
+  bool unknown = 6;
 }
 
 message GcmCloudMessagingIdProtobuf {
@@ -44,7 +44,7 @@ message GcmCloudMessagingIdProtobuf {
 
 message ExecuteActionType {
   ExecuteActionLocateTrackerType locateTracker = 30;
-  ExecuteActionSoundType makeSound = 31;
+  ExecuteActionSoundType startSound = 31;
   ExecuteActionSoundType stopSound = 32;
 }
 
