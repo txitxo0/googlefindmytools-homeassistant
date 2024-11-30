@@ -6,7 +6,7 @@ from cryptography.hazmat.primitives.hashes import SHA256
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.backends import default_backend
 
-from TitanBackup.lskf_hasher import ascii_to_bytes, get_lskf_hash
+from KeyBackup.lskf_hasher import ascii_to_bytes, get_lskf_hash
 from private import sample_pin, sample_pin_salt, sample_locally_encrypted_recovery_key, sample_encrypted_application_key, \
     sample_encrypted_security_domain_key, sample_encrypted_shared_key, sample_encrypted_owner_key, sample_encrypted_eik, \
     sample_encrypted_account_key

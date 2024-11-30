@@ -1,7 +1,7 @@
 from FMDNCrypto.eid_generator import generate_eid, ROTATION_PERIOD
-from FMDNCrypto.key_derivation import FMDNOwnerOperations
+from FMDNCrypto.TrackerCommunication.key_derivation import FMDNOwnerOperations
 from FMDNCrypto.util import calculate_hmac_sha256
-from private import sample_identity_key, sample_account_key
+from private import sample_identity_key
 
 ownerOperations = FMDNOwnerOperations()
 ownerOperations.generate_keys(sample_identity_key)

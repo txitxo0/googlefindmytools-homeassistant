@@ -4,9 +4,7 @@ from datetime import datetime
 import os
 import struct
 import requests
-from FMDNCrypto.eid_generator import generate_eid
-from FMDNCrypto.key_derivation import FMDNOwnerOperations
-from OwnerLookup.link_generator import getOwnerLoopUpLink
+from DULT.OwnerLookup.link_generator import getOwnerLoopUpLink
 from private import sample_identity_key
 
 def check_url_for_404(url):

@@ -10,8 +10,75 @@ message DevicesListRequest {
 }
 
 message DevicesListRequestPayload {
-  int32 type = 1;
+  DeviceType type = 1;
   string id = 3;
+}
+
+enum DeviceType {
+    UNKNOWN_DEVICE_TYPE = 0;
+    ANDROID_DEVICE = 1;
+    SPOT_DEVICE = 2;
+    TEST_DEVICE_TYPE = 3;
+    AUTO_DEVICE = 4;
+    FASTPAIR_DEVICE = 5;
+    SUPERVISED_ANDROID_DEVICE = 7;
+}
+
+message ExecuteActionRequest {
+    ExecuteActionScope scope = 1;
+    ExecuteActionType action = 2;
+    ExecuteActionRequestMetadata requestMetadata = 3;
+}
+
+message ExecuteActionRequestMetadata {
+  DeviceType type = 1;
+  string requestUuid = 2;
+  string fmdClientUuid = 3;
+  GcmCloudMessagingIdProtobuf gcmRegistrationId = 4;
+  bool isValid = 6;
+}
+
+message GcmCloudMessagingIdProtobuf {
+  string id = 1;
+}
+
+message ExecuteActionType {
+  ExecuteActionLocateTrackerType locateTracker = 30;
+  ExecuteActionSoundType makeSound = 31;
+  ExecuteActionSoundType stopSound = 32;
+}
+
+message ExecuteActionLocateTrackerType {
+  Time activationDate = 2;
+  SpotContributorType contributorType = 3;
+}
+
+enum SpotContributorType {
+    FMDN_DISABLED_DEFAULT = 0;
+    FMDN_CONTRIBUTOR_HIGH_TRAFFIC = 3;
+    FMDN_CONTRIBUTOR_ALL_LOCATIONS = 4;
+    FMDN_HIGH_TRAFFIC = 1;
+    FMDN_ALL_LOCATIONS = 2;
+}
+
+message ExecuteActionSoundType {
+  DeviceComponent component = 1;
+}
+
+enum DeviceComponent {
+    DEVICE_COMPONENT_UNSPECIFIED = 0;
+    DEVICE_COMPONENT_RIGHT = 1;
+    DEVICE_COMPONENT_LEFT = 2;
+    DEVICE_COMPONENT_CASE = 3;
+}
+
+message ExecuteActionScope {
+    DeviceType type = 2;
+    ExecuteActionDeviceIdentifier device = 3;
+}
+
+message ExecuteActionDeviceIdentifier {
+  CanonicId canonicId = 1;
 }
 
 message DeviceUpdate {
@@ -49,7 +116,7 @@ message DeviceInformation {
 }
 
 message DeviceTypeInformation {
-  DeviceType deviceType = 2;
+  SpotDeviceType deviceType = 2;
 }
 
 message EphemeralDeviceInformation {
@@ -95,7 +162,7 @@ enum Status {
   AGGREGATED = 3;
 }
 
-enum DeviceType {
+enum SpotDeviceType {
     DEVICE_TYPE_UNKNOWN = 0;
     DEVICE_TYPE_BEACON = 1;
     DEVICE_TYPE_HEADPHONES = 2;
@@ -122,7 +189,6 @@ enum DeviceType {
     DEVICE_TYPE_UMBRELLA = 24;
     DEVICE_TYPE_STYLUS = 25;
     DEVICE_TYPE_EARBUDS = 26;
-    UNRECOGNIZED = -1;
 }
 
 message AccessInformation {
