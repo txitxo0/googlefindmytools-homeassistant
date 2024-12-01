@@ -5,7 +5,7 @@
 
 import binascii
 
-from NovaApi.common_request import nova_request
+from NovaApi.nova_request import nova_request
 from NovaApi.scopes import NOVA_LIST_DEVICS_API_SCOPE
 from NovaApi.util import generate_random_uuid
 from ProtoDecoders import DeviceUpdate_pb2

@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from Auth.aas_token_retrieval import get_aas_token
-from Auth.app_token_retrieval import get_adm_token
+from Auth.adm_token_retrieval import get_adm_token
 from Auth.username_provider import get_username
 
 

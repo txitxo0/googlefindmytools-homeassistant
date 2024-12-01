@@ -4,7 +4,7 @@
 #
 
 from NovaApi.ExecuteAction.nbe_execute_action import create_action_request, serialize_action_request
-from NovaApi.common_request import nova_request
+from NovaApi.nova_request import nova_request
 from NovaApi.scopes import NOVA_ACTION_API_SCOPE
 from ProtoDecoders import DeviceUpdate_pb2
 from private import sample_gcm_registration_id, sample_canonic_device_id

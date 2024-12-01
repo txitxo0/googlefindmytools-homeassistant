@@ -6,7 +6,7 @@
 from Auth.token_cache import get_cached_value
 
 def get_username():
-    return get_cached_value('username', lambda: input("Username was not setup yet. Enter your Google Username (Email without @gmail.com)') and hit enter:"))
+    return get_cached_value('username', lambda: input("[UsernameProvider] Username was not setup yet. Enter your Google Username (Email without @gmail.com)') and hit enter:"))
 
 if __name__ == '__main__':
     get_username()
