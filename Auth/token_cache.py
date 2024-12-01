@@ -12,10 +12,18 @@ def get_cached_value(name, generator):
 
     if os.path.exists(secrets_file):
         with open(secrets_file, 'r') as file:
-            data = json.load(file)
-            value = data.get(name)
-            if value:
-                print("[TokenCache] Using cached " + name)
+            try:
+                data = json.load(file)
+                value = data.get(name)
+                if value:
+                    print("[TokenCache] Using cached " + name)
+                    return value
+            except json.JSONDecodeError:
+                print("[TokenCache] Could not parse secrets.json. Need to overwrite file.")
+                value = generator()
+                data = {name: value}
+                with open(secrets_file, 'w') as file:
+                    json.dump(data, file)
                 return value
 
 

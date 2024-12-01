@@ -6,15 +6,15 @@
 import gpsoauth
 
 from Auth.android_id_generator import get_android_id
+from Auth.auth_flow import get_google_account_auth_token
 from Auth.token_cache import get_cached_value
 from Auth.username_provider import get_username
-from private import sample_oauth_account_token
 
 
 def _generate_aas_token():
     username = get_username()
     android_id = get_android_id()
-    token = sample_oauth_account_token
+    token = get_google_account_auth_token()
 
     print("[AASTokenRetrieval] Asking Server for AAS Token.")
     aas_token_response = gpsoauth.exchange_token(username, token, android_id)
