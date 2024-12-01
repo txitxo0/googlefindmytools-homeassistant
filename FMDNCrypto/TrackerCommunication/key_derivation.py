@@ -1,3 +1,8 @@
+#
+#  GoogleFindMyTools - A set of tools to interact with the Google Find My API
+#  Copyright © 2024 Leon Böttger. All rights reserved.
+#
+
 from FMDNCrypto.util import hexadecimal, hex_encoded_string, calculate_truncated_sha256
 import hashlib
 import hmac

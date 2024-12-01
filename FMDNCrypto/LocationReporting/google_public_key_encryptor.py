@@ -1,3 +1,8 @@
+#
+#  GoogleFindMyTools - A set of tools to interact with the Google Find My API
+#  Copyright © 2024 Leon Böttger. All rights reserved.
+#
+
 import secrets
 from binascii import unhexlify
 
@@ -11,7 +16,6 @@ from cryptography.hazmat.primitives import serialization
 import os
 
 from private import sample_pk_secret_key, sample_pk_prefix, sample_pk_encoded_point, sample_pk_encoded_point_hmac
-
 
 def hmac_sha256_hex(payload_hex, key_length):
     payload = unhexlify(payload_hex)

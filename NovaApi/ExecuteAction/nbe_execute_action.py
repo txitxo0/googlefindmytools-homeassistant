@@ -1,9 +1,14 @@
+#
+#  GoogleFindMyTools - A set of tools to interact with the Google Find My API
+#  Copyright © 2024 Leon Böttger. All rights reserved.
+#
+
 import binascii
 
 from NovaApi.util import generate_random_uuid
 from ProtoDecoders import DeviceUpdate_pb2
 
-# Generate a random, but fixed client ID for request identification
+# Generate a random, but fixed client ID for request identification for this session
 client_id = generate_random_uuid()
 
 def create_action_request(canonic_device_id, gcm_registration_id, request_uuid = generate_random_uuid(), fmd_client_uuid = client_id):

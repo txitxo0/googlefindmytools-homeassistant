@@ -1,3 +1,8 @@
+#
+#  GoogleFindMyTools - A set of tools to interact with the Google Find My API
+#  Copyright © 2024 Leon Böttger. All rights reserved.
+#
+
 import secrets
 from ecdsa import SECP160r1
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
@@ -8,7 +13,6 @@ from ecdsa.ellipticcurve import Point
 from FMDNCrypto.eid_generator import generate_eid, calculate_r
 from FMDNCrypto.util import hexadecimal
 from private import sample_identity_key, sample_location_data
-
 
 def rx_to_ry(Rx, curve):
     # Calculate y^2 = x^3 + ax + b (mod p)

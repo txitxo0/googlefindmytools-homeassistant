@@ -1,3 +1,8 @@
+#
+#  GoogleFindMyTools - A set of tools to interact with the Google Find My API
+#  Copyright © 2024 Leon Böttger. All rights reserved.
+#
+
 import secrets
 
 from Crypto.Cipher import AES
@@ -5,7 +10,6 @@ from Crypto.Hash import SHA256
 from binascii import unhexlify, hexlify
 
 from private import sample_identity_key, sample_location_data
-
 
 def to_hex(byte_array):
     return hexlify(byte_array).decode()

@@ -1,3 +1,8 @@
+#
+#  GoogleFindMyTools - A set of tools to interact with the Google Find My API
+#  Copyright © 2024 Leon Böttger. All rights reserved.
+#
+
 import binascii
 
 from NovaApi.common_request import nova_request

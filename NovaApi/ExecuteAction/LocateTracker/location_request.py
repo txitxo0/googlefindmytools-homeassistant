@@ -1,3 +1,8 @@
+#
+#  GoogleFindMyTools - A set of tools to interact with the Google Find My API
+#  Copyright © 2024 Leon Böttger. All rights reserved.
+#
+
 from NovaApi.ExecuteAction.nbe_execute_action import create_action_request, serialize_action_request
 from NovaApi.common_request import nova_request
 from NovaApi.scopes import NOVA_ACTION_API_SCOPE

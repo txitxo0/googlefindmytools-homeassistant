@@ -1,3 +1,8 @@
+#
+#  GoogleFindMyTools - A set of tools to interact with the Google Find My API
+#  Copyright © 2024 Leon Böttger. All rights reserved.
+#
+
 # Decrypts the advertised beacon state from the Bluetooth advertisement of the tracker
 
 from Crypto.Cipher import AES
@@ -6,7 +11,7 @@ from private import sample_account_key
 
 def get_beacon_parameters():
     # Hex-encoded ciphertext and key
-    ciphertext_hex = "4773d81b1ff6059ca956ba10695ce414"
+    ciphertext_hex = "4773d81b1ff6059ca956ba10695ce414" # Example ciphertext
     key_hex = sample_account_key
 
     # Convert hex to bytes

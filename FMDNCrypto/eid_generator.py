@@ -1,3 +1,8 @@
+#
+#  GoogleFindMyTools - A set of tools to interact with the Google Find My API
+#  Copyright © 2024 Leon Böttger. All rights reserved.
+#
+
 from Crypto.Cipher import AES
 from ecdsa import SigningKey, SECP160r1
 

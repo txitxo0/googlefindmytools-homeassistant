@@ -1,3 +1,8 @@
+#
+#  GoogleFindMyTools - A set of tools to interact with the Google Find My API
+#  Copyright © 2024 Leon Böttger. All rights reserved.
+#
+
 from binascii import unhexlify
 import pyscrypt
 from private import sample_pin, sample_pin_salt
