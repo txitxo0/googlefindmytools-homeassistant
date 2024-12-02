@@ -13,9 +13,9 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
-import os
 
-from private import sample_pk_secret_key, sample_pk_prefix, sample_pk_encoded_point, sample_pk_encoded_point_hmac
+from example_data_provider import get_example_data
+
 
 def hmac_sha256_hex(payload_hex, key_length):
     payload = unhexlify(payload_hex)
@@ -148,6 +148,12 @@ def encrypt(secret_key, prefix, encodedPoint, plaintext):
 
 # Example usage
 if __name__ == "__main__":
+
+    sample_pk_secret_key = get_example_data("sample_pk_secret_key")
+    sample_pk_prefix = get_example_data("sample_pk_prefix")
+    sample_pk_encoded_point = get_example_data("sample_pk_encoded_point")
+    sample_pk_encoded_point_hmac = get_example_data("sample_pk_encoded_point_hmac")
+
     encryptedData = (
         encrypt(unhexlify(sample_pk_secret_key), unhexlify(sample_pk_prefix), unhexlify(sample_pk_encoded_point), unhexlify(sample_pk_encoded_point_hmac)))
 

@@ -11,7 +11,7 @@ from NovaApi.scopes import NOVA_ACTION_API_SCOPE
 from NovaApi.util import generate_random_uuid
 from ProtoDecoders import DeviceUpdate_pb2
 from ProtoDecoders.decoder import print_device_update_protobuf
-from private import sample_canonic_device_id
+from example_data_provider import get_example_data
 
 done = False
 request_uuid = generate_random_uuid()
@@ -34,15 +34,14 @@ def create_location_request(canonic_device_id, fcm_registration_id, request_uuid
 
 def handle_location_response(response):
     global done
-    print(request_uuid)
     print("[LocationRequest] Location request successful. Reponse:")
     print_device_update_protobuf(response)
     done = True
 
 
 if __name__ == '__main__':
-    print(request_uuid)
     fcm_token = FcmReceiver().register_for_location_updates(handle_location_response)
+    sample_canonic_device_id = get_example_data("sample_canonic_device_id")
 
     hex_payload = create_location_request(sample_canonic_device_id, fcm_token, request_uuid)
     nova_request(NOVA_ACTION_API_SCOPE, hex_payload)

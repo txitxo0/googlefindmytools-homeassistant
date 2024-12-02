@@ -6,7 +6,7 @@ from Cryptodome.Cipher import AES
 from ecdsa import SECP160r1
 
 from FMDNCrypto.util import hexadecimal
-from private import sample_identity_key
+from example_data_provider import get_example_data
 
 # Constants
 K = 10
@@ -65,6 +65,9 @@ def get_masked_timestamp(timestamp, K):
 
 
 if __name__ == '__main__':
+
+    sample_identity_key = get_example_data("sample_identity_key")
+
     # Generate EIDs
     for i in range(1000):
         timestamp = i * ROTATION_PERIOD

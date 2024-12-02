@@ -10,7 +10,8 @@ from binascii import unhexlify, hexlify
 from Cryptodome.Cipher import AES
 from Cryptodome.Hash import SHA256
 
-from private import sample_identity_key, sample_location_data
+from example_data_provider import get_example_data
+
 
 def to_hex(byte_array):
     return hexlify(byte_array).decode()
@@ -42,6 +43,10 @@ def decrypt_bytes(key, encrypted_data):
     return decrypted_data
 
 if __name__ == "__main__":
+
+    sample_identity_key = get_example_data("sample_identity_key")
+    sample_location_data = get_example_data("sample_location_data")
+
     # EIK (32 bytes)
     key = unhexlify(sample_identity_key)
 

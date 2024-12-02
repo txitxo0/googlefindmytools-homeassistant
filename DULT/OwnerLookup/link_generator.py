@@ -6,12 +6,12 @@
 from FMDNCrypto.eid_generator import generate_eid, ROTATION_PERIOD
 from FMDNCrypto.TrackerCommunication.key_derivation import FMDNOwnerOperations
 from FMDNCrypto.util import calculate_hmac_sha256
-from private import sample_identity_key
-
-ownerOperations = FMDNOwnerOperations()
-ownerOperations.generate_keys(sample_identity_key)
+from example_data_provider import get_example_data
 
 def getOwnerLoopUpLink(eik, offset):
+
+    ownerOperations = FMDNOwnerOperations()
+    ownerOperations.generate_keys(eik)
 
     recoveryKey = ownerOperations.recovery_key
     eid = generate_eid(eik, offset).to_bytes(20, 'big')
@@ -24,6 +24,9 @@ def getOwnerLoopUpLink(eik, offset):
     return (eid.hex(), 'https://spot-pa.googleapis.com/lookup?e=' + truncated_ephemeral_id.hex() + hmac_truncated)
 
 if __name__ == '__main__':
+
+    sample_identity_key = get_example_data("sample_identity_key")
+
     # Generate a few URLs
     for i in range(1000):
         offset = i*ROTATION_PERIOD

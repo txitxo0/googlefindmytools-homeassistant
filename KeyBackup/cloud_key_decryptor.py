@@ -12,9 +12,7 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.backends import default_backend
 
 from KeyBackup.lskf_hasher import ascii_to_bytes, get_lskf_hash
-from private import sample_pin, sample_pin_salt, sample_locally_encrypted_recovery_key, sample_encrypted_application_key, \
-    sample_encrypted_security_domain_key, sample_encrypted_shared_key, sample_encrypted_owner_key, sample_encrypted_eik, \
-    sample_encrypted_account_key
+from example_data_provider import get_example_data
 
 # Constants
 VERSION = b'\x02\x00'
@@ -176,15 +174,15 @@ def decrypt_account_key(owner_key, encrypted_account_key):
 if __name__ == '__main__':
 
     # Load sample data
-    pin = sample_pin
-    pin_salt = sample_pin_salt
-    encrypted_recovery_key = sample_locally_encrypted_recovery_key
-    encrypted_application_key = sample_encrypted_application_key
-    encrypted_security_domain_key = sample_encrypted_security_domain_key
-    encrypted_shared_key = sample_encrypted_shared_key
-    encrypted_owner_key = sample_encrypted_owner_key
-    encrypted_eik = sample_encrypted_eik
-    encrypted_account_key = sample_encrypted_account_key
+    pin = get_example_data("sample_pin")
+    pin_salt = get_example_data("sample_pin_salt")
+    encrypted_recovery_key = get_example_data("sample_locally_encrypted_recovery_key")
+    encrypted_application_key = get_example_data("sample_encrypted_application_key")
+    encrypted_security_domain_key = get_example_data("sample_encrypted_security_domain_key")
+    encrypted_shared_key = get_example_data("sample_encrypted_shared_key")
+    encrypted_owner_key = get_example_data("sample_encrypted_owner_key")
+    encrypted_eik = get_example_data("sample_encrypted_eik")
+    encrypted_account_key = get_example_data("sample_encrypted_account_key")
 
     # Calculate keys
     lskf_hash = get_lskf_hash(pin, pin_salt)

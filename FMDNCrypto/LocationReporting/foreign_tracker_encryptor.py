@@ -13,7 +13,8 @@ from ecdsa.ellipticcurve import Point
 
 from FMDNCrypto.eid_generator import generate_eid, calculate_r
 from FMDNCrypto.util import hexadecimal
-from private import sample_identity_key, sample_location_data
+from example_data_provider import get_example_data
+
 
 def rx_to_ry(Rx, curve):
     # Calculate y^2 = x^3 + ax + b (mod p)
@@ -143,6 +144,9 @@ def decrypt(identity_key, encryptedAndTag, Sx, beacon_time_counter):
 if __name__ == "__main__":
     # 4-byte timestamp
     timestamp = 0x0084D000
+
+    sample_identity_key = get_example_data("sample_identity_key")
+    sample_location_data = get_example_data("sample_location_data")
 
     # Generate EID
     eid = generate_eid(sample_identity_key, timestamp)

@@ -8,19 +8,17 @@
 from binascii import unhexlify, hexlify
 from Cryptodome.Cipher import AES
 
-from private import sample_account_key
+from example_data_provider import get_example_data
 
-def get_beacon_parameters():
-    # Hex-encoded ciphertext and key
-    ciphertext_hex = "4773d81b1ff6059ca956ba10695ce414" # Example ciphertext
-    key_hex = sample_account_key
+
+def get_beacon_parameters(account_key, ciphertext_hex):
 
     # Convert hex to bytes
     ciphertext = unhexlify(ciphertext_hex)
-    key = unhexlify(key_hex)
+    key_bytes = unhexlify(account_key)
 
     # Create AES cipher in ECB mode
-    cipher = AES.new(key, AES.MODE_ECB)
+    cipher = AES.new(key_bytes, AES.MODE_ECB)
 
     # Decrypt the ciphertext
     plaintext = cipher.decrypt(ciphertext)
@@ -32,4 +30,6 @@ def get_beacon_parameters():
     return plaintext_hex
 
 if __name__ == '__main__':
-    print("Decrypted Beacon State (hex): " + get_beacon_parameters())
+    sample_identity_key = get_example_data("sample_identity_key")
+
+    print("Decrypted Beacon State (hex): " + get_beacon_parameters(sample_identity_key, "4773d81b1ff6059ca956ba10695ce414"))

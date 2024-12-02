@@ -10,7 +10,8 @@ import os
 import struct
 import requests
 from DULT.OwnerLookup.link_generator import getOwnerLoopUpLink
-from private import sample_identity_key
+from example_data_provider import get_example_data
+
 
 def check_url_for_404(url):
     try:
@@ -51,7 +52,7 @@ if __name__ == '__main__':
         print(f"New iteration started at {datetime.now()} with offset {current_tried_offset}")
 
         while True:
-            (eid, url) = getOwnerLoopUpLink(sample_identity_key, current_tried_offset)
+            (eid, url) = getOwnerLoopUpLink(get_example_data("sample_identity_key"), current_tried_offset)
             success = not check_url_for_404(url)
             print(f"Time Offset: {current_tried_offset}, EID: {eid}, URL: {url}, Success: {success}")
 

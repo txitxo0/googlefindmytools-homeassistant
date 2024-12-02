@@ -11,7 +11,7 @@ import datetime
 import pytz
 
 from ProtoDecoders import DeviceUpdate_pb2, LocationReportsUpload_pb2
-from private import sample_own_report, sample_foreign_report, sample_device_update, sample_nbe_list_devices_response
+from example_data_provider import get_example_data
 
 
 # Custom message formatter to print the Protobuf byte fields as hex strings
@@ -88,18 +88,18 @@ if __name__ == '__main__':
     print("\n ------------------- \n")
 
     print("Device List: ")
-    print_device_list_protobuf(sample_nbe_list_devices_response)
+    print_device_list_protobuf(get_example_data("sample_nbe_list_devices_response"))
 
 
     print("Own Report: ")
-    print_location_report_upload_protobuf(sample_own_report)
+    print_location_report_upload_protobuf(get_example_data("sample_own_report"))
 
     print("\n ------------------- \n")
 
     print("Not Own Report: ")
-    print_location_report_upload_protobuf(sample_foreign_report)
+    print_location_report_upload_protobuf(get_example_data("sample_foreign_report"))
 
     print("\n ------------------- \n")
 
     print("Device Update: ")
-    print_device_update_protobuf(sample_device_update)
+    print_device_update_protobuf(get_example_data("sample_device_update"))

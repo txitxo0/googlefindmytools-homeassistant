@@ -4,8 +4,9 @@
 #
 
 from binascii import unhexlify
+
 import pyscrypt
-from private import sample_pin, sample_pin_salt
+from example_data_provider import get_example_data
 
 
 def ascii_to_bytes(string):
@@ -34,4 +35,8 @@ def get_lskf_hash(pin, salt):
     return hashed
 
 if __name__ == '__main__':
-   print(get_lskf_hash(sample_pin, sample_pin_salt).hex())
+
+    sample_pin = get_example_data("sample_pin")
+    sample_pin_salt = get_example_data("sample_pin_salt")
+
+    print(get_lskf_hash(sample_pin, sample_pin_salt).hex())
