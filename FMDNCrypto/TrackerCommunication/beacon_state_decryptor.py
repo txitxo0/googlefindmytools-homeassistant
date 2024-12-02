@@ -5,8 +5,9 @@
 
 # Decrypts the advertised beacon state from the Bluetooth advertisement of the tracker
 
-from Crypto.Cipher import AES
 from binascii import unhexlify, hexlify
+from Cryptodome.Cipher import AES
+
 from private import sample_account_key
 
 def get_beacon_parameters():

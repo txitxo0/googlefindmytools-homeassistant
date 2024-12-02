@@ -4,10 +4,11 @@
 #
 
 import secrets
+
+from Cryptodome.Cipher import AES
 from ecdsa import SECP160r1
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from cryptography.hazmat.primitives import hashes
-from Crypto.Cipher import AES
 from ecdsa.ellipticcurve import Point
 
 from FMDNCrypto.eid_generator import generate_eid, calculate_r

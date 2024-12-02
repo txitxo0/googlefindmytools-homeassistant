@@ -5,9 +5,10 @@
 
 import secrets
 
-from Crypto.Cipher import AES
-from Crypto.Hash import SHA256
 from binascii import unhexlify, hexlify
+
+from Cryptodome.Cipher import AES
+from Cryptodome.Hash import SHA256
 
 from private import sample_identity_key, sample_location_data
 
