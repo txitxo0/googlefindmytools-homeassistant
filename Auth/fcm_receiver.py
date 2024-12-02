@@ -55,7 +55,10 @@ class FcmReceiver:
 
 
     def get_android_id(self):
-        self.credentials = self.credentials
+
+        if self.credentials is None:
+            return asyncio.get_event_loop().run_until_complete(self._register_for_fcm_and_listen())
+
         return self.credentials['gcm']['android_id']
 
 
@@ -95,7 +98,7 @@ class FcmReceiver:
         print("[FCMReceiver] Credentials updated.")
 
 
-    async def _register_for_fcm_and_listen(self):
+    async def _register_for_fcm(self):
         fcm_token = None
 
         # Register or check in with FCM and get the FCM token
@@ -107,6 +110,10 @@ class FcmReceiver:
                 await asyncio.sleep(5)
 
         print("[FCMReceiver] Retrieved FCM Token successfully:", fcm_token)
+
+
+    async def _register_for_fcm_and_listen(self):
+        await self._register_for_fcm()
         await self.pc.start()
         self._listening = True
         print("[FCMReceiver] Listening for notifications.")
@@ -114,5 +121,4 @@ class FcmReceiver:
 
 if __name__ == "__main__":
     receiver = FcmReceiver()
-    print(receiver.get_fcm_registration_token())
     print(receiver.get_android_id())
