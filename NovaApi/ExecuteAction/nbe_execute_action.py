@@ -19,6 +19,7 @@ def create_action_request(canonic_device_id, gcm_registration_id, request_uuid =
 
     actionRequest.requestMetadata.type = DeviceUpdate_pb2.DeviceType.SPOT_DEVICE
     actionRequest.requestMetadata.requestUuid = request_uuid
+
     actionRequest.requestMetadata.fmdClientUuid = fmd_client_uuid
     actionRequest.requestMetadata.gcmRegistrationId.id = gcm_registration_id
     actionRequest.requestMetadata.unknown = True

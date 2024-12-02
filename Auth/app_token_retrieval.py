@@ -6,14 +6,15 @@
 import gpsoauth
 
 from Auth.aas_token_retrieval import get_aas_token
-from Auth.android_id_generator import get_android_id
+from Auth.fcm_receiver import FcmReceiver
+
 
 def request_fmdn_app_token(username, scope):
 
     print("[AppTokenRetrieval] Asking Server for " + scope + " token.")
 
     aas_token = get_aas_token()
-    android_id = get_android_id()
+    android_id = FcmReceiver().get_android_id()
 
     auth_response = gpsoauth.perform_oauth(
         username, aas_token, android_id,

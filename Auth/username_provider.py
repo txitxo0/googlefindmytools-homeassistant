@@ -3,10 +3,10 @@
 #  Copyright © 2024 Leon Böttger. All rights reserved.
 #
 
-from Auth.token_cache import get_cached_value
+from Auth.token_cache import get_cached_value_or_set
 
 def get_username():
-    return get_cached_value('username', lambda: input("[UsernameProvider] Username was not setup yet. Enter your Google Username (Email without @gmail.com)') and hit enter:"))
+    return get_cached_value_or_set('username', lambda: input("[UsernameProvider] Username was not setup yet. Enter your Google Username (Email without @gmail.com)') and hit enter:"))
 
 if __name__ == '__main__':
     get_username()
