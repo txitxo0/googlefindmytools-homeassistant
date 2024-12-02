@@ -87,6 +87,7 @@ message ExecuteActionDeviceIdentifier {
 }
 
 message DeviceUpdate {
+    ExecuteActionRequestMetadata fcmMetadata = 1;
     DeviceMetadata deviceMetadata = 3;
     RequestMetadata requestMetadata = 2;
 }
