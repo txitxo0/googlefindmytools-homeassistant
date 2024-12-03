@@ -10,11 +10,8 @@ from NovaApi.nova_request import nova_request
 from NovaApi.scopes import NOVA_ACTION_API_SCOPE
 from NovaApi.util import generate_random_uuid
 from ProtoDecoders import DeviceUpdate_pb2
-from ProtoDecoders.decoder import print_device_update_protobuf
+from ProtoDecoders.decoder import print_device_update_protobuf, parse_device_update_protobuf
 from example_data_provider import get_example_data
-
-done = False
-request_uuid = generate_random_uuid()
 
 def create_location_request(canonic_device_id, fcm_registration_id, request_uuid):
 
@@ -32,19 +29,31 @@ def create_location_request(canonic_device_id, fcm_registration_id, request_uuid
     return hex_payload
 
 
-def handle_location_response(response):
-    global done
-    print("[LocationRequest] Location request successful. Reponse:")
-    print_device_update_protobuf(response)
-    done = True
+def get_location_data_for_device(canonic_device_id):
 
+    print("[LocationRequest] Requesting location data for device with canonic ID:", canonic_device_id)
 
-if __name__ == '__main__':
+    finished_request = False
+    request_uuid = generate_random_uuid()
+
+    def handle_location_response(response):
+        nonlocal finished_request
+        device_update = parse_device_update_protobuf(response)
+
+        if device_update.fcmMetadata.requestUuid == request_uuid:
+            print("[LocationRequest] Location request successful. Reponse:")
+            print_device_update_protobuf(response)
+            finished_request = True
+        else:
+            print("[LocationRequest] Received response for a different request. Ignoring.")
+
     fcm_token = FcmReceiver().register_for_location_updates(handle_location_response)
-    sample_canonic_device_id = get_example_data("sample_canonic_device_id")
 
-    hex_payload = create_location_request(sample_canonic_device_id, fcm_token, request_uuid)
+    hex_payload = create_location_request(canonic_device_id, fcm_token, request_uuid)
     nova_request(NOVA_ACTION_API_SCOPE, hex_payload)
 
-    while not done:
+    while not finished_request:
         asyncio.get_event_loop().run_until_complete(asyncio.sleep(1))
+
+if __name__ == '__main__':
+    get_location_data_for_device(get_example_data("sample_canonic_device_id"))

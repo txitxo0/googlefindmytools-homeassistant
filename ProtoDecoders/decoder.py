@@ -67,6 +67,16 @@ def parse_device_list_protobuf(hex_string):
     return deviceList
 
 
+def get_canonic_ids(device_list):
+    result = []
+    for device in device_list.deviceMetadata:
+        canonic_ids = device.identifierInformation.canonicIds.canonicId
+        device_name = device.userDefinedDeviceName
+        for canonic_id in canonic_ids:
+            result.append((device_name, canonic_id.id))
+    return result
+
+
 def print_location_report_upload_protobuf(hex_string):
     print(text_format.MessageToString(parse_location_report_upload_protobuf(hex_string), message_formatter=custom_message_formatter))
 
@@ -89,7 +99,6 @@ if __name__ == '__main__':
 
     print("Device List: ")
     print_device_list_protobuf(get_example_data("sample_nbe_list_devices_response"))
-
 
     print("Own Report: ")
     print_location_report_upload_protobuf(get_example_data("sample_own_report"))

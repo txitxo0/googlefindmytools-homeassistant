@@ -6,6 +6,4 @@
 from NovaApi.ListDevices.nbe_list_devices import request_device_list
 
 if __name__ == '__main__':
-
-    # Currently, only requesting the device list is implemented
     request_device_list()
