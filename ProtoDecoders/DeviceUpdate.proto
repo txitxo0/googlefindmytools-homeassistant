@@ -207,3 +207,15 @@ message AccessInformation {
 message RequestMetadata {
   Time responseTime = 1;
 }
+
+
+message EncryptionUnlockRequestExtras {
+  int32 operation = 1;
+  SecurityDomain securityDomain = 2;
+  string sessionId = 6;
+}
+
+message SecurityDomain {
+    string name = 1;
+    int32 unknown = 2;
+}
