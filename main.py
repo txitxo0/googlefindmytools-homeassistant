@@ -3,7 +3,7 @@
 #  Copyright © 2024 Leon Böttger. All rights reserved.
 #
 
-from NovaApi.ListDevices.nbe_list_devices import request_device_list
+from NovaApi.ListDevices.nbe_list_devices import list_devices
 
 if __name__ == '__main__':
-    request_device_list()
+    list_devices()

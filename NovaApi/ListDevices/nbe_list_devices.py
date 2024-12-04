@@ -39,7 +39,7 @@ def create_device_list_request():
     return hex_payload
 
 
-if __name__ == '__main__':
+def list_devices():
     result_hex = request_device_list()
     print_device_list_protobuf(result_hex)
 
@@ -55,3 +55,7 @@ if __name__ == '__main__':
     selected_canonic_id = canonic_ids[selected_idx][1]
 
     get_location_data_for_device(selected_canonic_id)
+
+
+if __name__ == '__main__':
+    list_devices()
