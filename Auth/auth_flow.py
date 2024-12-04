@@ -7,7 +7,7 @@ import time
 import undetected_chromedriver as uc
 from selenium.webdriver.support.ui import WebDriverWait
 
-def get_google_account_auth_token():
+def request_oauth_account_token_flow():
     # Set up Chrome options
     chrome_options = uc.ChromeOptions()
     chrome_options.add_argument("--disable-extensions")
@@ -54,4 +54,4 @@ def get_google_account_auth_token():
         driver.quit()
 
 if __name__ == '__main__':
-    get_google_account_auth_token()
+    request_oauth_account_token_flow()

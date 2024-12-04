@@ -6,6 +6,15 @@
 syntax = "proto3";
 import "ProtoDecoders/Common.proto";
 
+message GetEidInfoForE2eeDevicesResponse {
+  EncryptedOwnerKeyAndMetadata encryptedOwnerKeyAndMetadata = 4;
+}
+
+message EncryptedOwnerKeyAndMetadata {
+  bytes encryptedOwnerKey = 1;
+  string securityDomain = 3;
+}
+
 message DevicesList {
   repeated DeviceMetadata deviceMetadata = 2;
 }

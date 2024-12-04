@@ -44,7 +44,8 @@ def set_cached_value(name, value):
             try:
                 data = json.load(file)
             except json.JSONDecodeError:
-                data = {}
+                raise Exception("Could not read secrets file. Aborting.")
+                return
     else:
         data = {}
     data[name] = value

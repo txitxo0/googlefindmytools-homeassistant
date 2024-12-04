@@ -8,16 +8,15 @@ import binascii
 from NovaApi.util import generate_random_uuid
 from ProtoDecoders import DeviceUpdate_pb2
 
-
 def get_security_domain_request_url():
-    encryptionUnlockRequestExtras = DeviceUpdate_pb2.EncryptionUnlockRequestExtras()
-    encryptionUnlockRequestExtras.operation = 1
-    encryptionUnlockRequestExtras.securityDomain.name = "finder_hw"
-    encryptionUnlockRequestExtras.securityDomain.unknown = 0
-    encryptionUnlockRequestExtras.sessionId = generate_random_uuid()
+    encryption_unlock_request_extras = DeviceUpdate_pb2.EncryptionUnlockRequestExtras()
+    encryption_unlock_request_extras.operation = 1
+    encryption_unlock_request_extras.securityDomain.name = "finder_hw"
+    encryption_unlock_request_extras.securityDomain.unknown = 0
+    encryption_unlock_request_extras.sessionId = generate_random_uuid()
 
     # serialize and print as base64
-    serialized = encryptionUnlockRequestExtras.SerializeToString()
+    serialized = encryption_unlock_request_extras.SerializeToString()
 
     scope = "https://accounts.google.com/encryption/unlock/android?kdi="
 

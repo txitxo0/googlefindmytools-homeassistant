@@ -3,7 +3,7 @@
 #  Copyright © 2024 Leon Böttger. All rights reserved.
 #
 
-from Auth.app_token_retrieval import request_fmdn_app_token
+from Auth.token_retrieval import request_token
 from Auth.username_provider import get_username
 
 cached_adm_token = None
@@ -16,7 +16,7 @@ def get_adm_token(username):
         print("[AdmTokenRetrieval] Using Cached App Token.")
         return cached_adm_token
 
-    cached_adm_token = request_fmdn_app_token(username, "android_device_manager")
+    cached_adm_token = request_token(username, "android_device_manager")
     return cached_adm_token
 
 

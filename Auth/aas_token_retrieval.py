@@ -5,7 +5,7 @@
 
 import gpsoauth
 
-from Auth.auth_flow import get_google_account_auth_token
+from Auth.auth_flow import request_oauth_account_token_flow
 from Auth.fcm_receiver import FcmReceiver
 from Auth.token_cache import get_cached_value_or_set
 from Auth.username_provider import get_username
@@ -14,7 +14,7 @@ from Auth.username_provider import get_username
 def _generate_aas_token():
     username = get_username()
     android_id = FcmReceiver().get_android_id()
-    token = get_google_account_auth_token()
+    token = request_oauth_account_token_flow()
 
     print("[AASTokenRetrieval] Asking Server for AAS Token.")
     aas_token_response = gpsoauth.exchange_token(username, token, android_id)

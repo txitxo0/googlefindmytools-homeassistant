@@ -11,3 +11,5 @@ pytz>=2024.2
 protobuf>=5.28.3
 frida>=16.5.6
 firebase-messaging>=0.4.4
+httpx>=0.28.0
+h2>=4.1.0
