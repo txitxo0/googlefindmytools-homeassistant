@@ -10,4 +10,4 @@ Currently, it is possible to query Find My Device trackers and their correspondi
 - First registration for Cloud Messaging takes a while, be patient.
 
 ### Disclaimer
-If you use any code or information, you must acknowledge this repository in your work.
+If you use any code or information from this repository, you must acknowledge this repository and its author in your work. Commercial use cases are not allowed.
