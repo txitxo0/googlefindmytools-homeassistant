@@ -228,3 +228,9 @@ message SecurityDomain {
     string name = 1;
     int32 unknown = 2;
 }
+
+message Location {
+    fixed32 longitude = 1;
+    fixed32 latitude = 2;
+    int32 altitude = 3;
+}

@@ -2,9 +2,11 @@
 #  GoogleFindMyTools - A set of tools to interact with the Google Find My API
 #  Copyright © 2024 Leon Böttger. All rights reserved.
 #
+
 import asyncio
 
 from Auth.fcm_receiver import FcmReceiver
+from NovaApi.ExecuteAction.LocateTracker.decrypt_locations import decrypt_location_response_locations
 from NovaApi.ExecuteAction.nbe_execute_action import create_action_request, serialize_action_request
 from NovaApi.nova_request import nova_request
 from NovaApi.scopes import NOVA_ACTION_API_SCOPE
@@ -33,17 +35,17 @@ def get_location_data_for_device(canonic_device_id):
 
     print("[LocationRequest] Requesting location data for device with canonic ID:", canonic_device_id)
 
-    finished_request = False
+    result = None
     request_uuid = generate_random_uuid()
 
     def handle_location_response(response):
-        nonlocal finished_request
+        nonlocal result
         device_update = parse_device_update_protobuf(response)
 
         if device_update.fcmMetadata.requestUuid == request_uuid:
             print("[LocationRequest] Location request successful. Reponse:")
+            result = parse_device_update_protobuf(response)
             print_device_update_protobuf(response)
-            finished_request = True
         else:
             print("[LocationRequest] Received response for a different request. Ignoring.")
 
@@ -52,8 +54,10 @@ def get_location_data_for_device(canonic_device_id):
     hex_payload = create_location_request(canonic_device_id, fcm_token, request_uuid)
     nova_request(NOVA_ACTION_API_SCOPE, hex_payload)
 
-    while not finished_request:
+    while result is None:
         asyncio.get_event_loop().run_until_complete(asyncio.sleep(1))
+
+    decrypt_location_response_locations(result)
 
 if __name__ == '__main__':
     get_location_data_for_device(get_example_data("sample_canonic_device_id"))

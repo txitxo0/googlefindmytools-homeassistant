@@ -8,6 +8,14 @@ from KeyBackup.shared_key_flow import request_shared_key_flow
 
 
 def _retrieve_shared_key():
+    print("""[SharedKeyRetrieval] You need to log in again to access end-to-end encrypted keys to decrypt location reports.
+    This script will now open Google Chrome on your device. 
+    Make that you allow Python (or PyCharm) to control Chrome (macOS only).
+    """)
+
+    # Press enter to continue
+    input("[SharedKeyRetrieval] Press Enter to continue...")
+
     shared_key = request_shared_key_flow()
 
     return shared_key
