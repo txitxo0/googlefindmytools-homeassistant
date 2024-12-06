@@ -10,7 +10,6 @@ from FMDNCrypto.LocationReporting.foreign_tracker_encryptor import decrypt
 from KeyBackup.cloud_key_decryptor import decrypt_eik
 from NovaApi.ExecuteAction.LocateTracker.decrypted_location import EncryptedLocation
 from ProtoDecoders import DeviceUpdate_pb2
-from ProtoDecoders.decoder import parse_device_update_protobuf
 from SpotApi.GetEidInfoForE2eeDevices.get_owner_key import get_owner_key
 
 
@@ -63,7 +62,6 @@ def decrypt_location_response_locations(device_update_protobuf):
         print(f"Is Own Report: {loc.is_own_report}")
         print("-" * 40)
 
-    print("[NovaApi] Decrypting Locations...")
     pass
 
 
