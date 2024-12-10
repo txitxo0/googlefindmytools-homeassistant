@@ -3,7 +3,7 @@
 #  Copyright © 2024 Leon Böttger. All rights reserved.
 #
 
-class EncryptedLocation:
+class WrappedLocation:
     def __init__(self, decrypted_location, time, accuracy, status, is_own_report):
         self.time = time
         self.status = status

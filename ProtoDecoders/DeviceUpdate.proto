@@ -230,7 +230,7 @@ message SecurityDomain {
 }
 
 message Location {
-    fixed32 longitude = 1;
-    fixed32 latitude = 2;
+    fixed32 latitude = 1;
+    fixed32 longitude = 2;
     int32 altitude = 3;
 }

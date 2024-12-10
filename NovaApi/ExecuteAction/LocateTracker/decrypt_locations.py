@@ -8,7 +8,7 @@ from binascii import unhexlify
 
 from FMDNCrypto.LocationReporting.foreign_tracker_encryptor import decrypt
 from KeyBackup.cloud_key_decryptor import decrypt_eik
-from NovaApi.ExecuteAction.LocateTracker.decrypted_location import EncryptedLocation
+from NovaApi.ExecuteAction.LocateTracker.decrypted_location import WrappedLocation
 from ProtoDecoders import DeviceUpdate_pb2
 from SpotApi.GetEidInfoForE2eeDevices.get_owner_key import get_owner_key
 
@@ -34,7 +34,7 @@ def decrypt_location_response_locations(device_update_protobuf):
 
         decrypted_location = decrypt(identity_key.hex(), encrypted_location_hex, public_key_random, time_offset)
 
-        encrypted_location = EncryptedLocation(
+        encrypted_location = WrappedLocation(
             decrypted_location=decrypted_location,
             time=int(time.seconds),
             accuracy=loc.locationAndDeviceTimeOffset.accuracy,
