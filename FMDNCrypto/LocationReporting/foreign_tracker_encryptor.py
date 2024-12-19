@@ -96,7 +96,7 @@ def encrypt(message, random, eid):
     m_dash, tag = encrypt_aes_eax(message, nonce, k)
 
     # Step 8: Result (m' || tag, Sx)
-    return (m_dash + tag, S.x().to_bytes(20, 'big'))
+    return m_dash + tag, S.x().to_bytes(20, 'big')
 
 
 def decrypt(identity_key, encryptedAndTag, Sx, beacon_time_counter):

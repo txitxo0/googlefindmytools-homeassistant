@@ -46,6 +46,10 @@ def decrypt_location_response_locations(device_update_protobuf):
     print("-" * 40)
     print("[DecryptLocations] Decrypted Locations:")
 
+    if not location_time_array:
+        print("No locations found.")
+        return
+
     for loc in location_time_array:
         proto_loc = DeviceUpdate_pb2.Location()
         proto_loc.ParseFromString(loc.decrypted_location)

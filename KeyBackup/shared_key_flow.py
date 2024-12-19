@@ -65,8 +65,6 @@ def request_shared_key_flow():
                 import json
                 data = json.loads(message)
 
-                shared_key = None
-
                 if data['method'] == 'setVaultSharedKeys':
                     print("setVaultSharedKeys called. Parsing vault keys...")
                     shared_key = get_fmdn_shared_key(data['vaultKeys'])
