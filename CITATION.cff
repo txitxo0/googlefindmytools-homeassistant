@@ -1,0 +1,18 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: 'GoogleFindMyTools'
+message: 'If you use this software, please cite it as below.'
+type: software
+authors:
+  - given-names: Leon
+    family-names: Böttger
+    affiliation: 'SEEMOO, TU Darmstadt'
+repository-code: 'https://github.com/leonboe1/GoogleFindMyTools'
+keywords:
+  - Google Find My Device
+  - Bluetooth Tracker
+  - Python
+commit: 44656de7a388a3c6dc6e7a86dedbc5507ec6ad77
+date-released: '2024-12-20'
