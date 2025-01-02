@@ -30,7 +30,7 @@ def request_oauth_account_token_flow():
         driver = uc.Chrome(options=chrome_options)
         print("[AuthFlow] ChromeDriver installed and browser started.")
     except Exception as e:
-        raise Exception("[AuthFlow] Failed to install ChromeDriver. Chrome was not detected on your system.\n\nIf you know that Chrome is installed, open the file 'auth_flow.py' and set the path to your Chrome executable in line 16.")
+        raise Exception("[AuthFlow] Failed to install ChromeDriver. Chrome was not detected on your system.\n\nIf you know that Chrome is installed, open the file 'Auth/auth_flow.py' and set the path to your Chrome executable in line 16.")
 
     try:
         # Open the browser and navigate to the URL
