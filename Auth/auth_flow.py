@@ -13,18 +13,24 @@ def request_oauth_account_token_flow():
     chrome_options.add_argument("--disable-extensions")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox")
+    # chrome_options.binary_location = r"INSERT_PATH_TO_CHROME_BINARY_HERE"
 
-    print("""[AuthFlow] This script will now open Google Chrome on your device. 
-    Make that you allow Python (or PyCharm) to control Chrome (macOS only). 
-    Please login with your Google account.""")
+    print("""[AuthFlow] This script will now open Google Chrome on your device to login to your Google account.
+> Please make sure that Chrome is installed on your system.
+> For macOS users only: Make that you allow Python (or PyCharm) to control Chrome if prompted. 
+    """)
 
     # Press enter to continue
     input("[AuthFlow] Press Enter to continue...")
 
     # Automatically install and set up the Chrome driver
     print("[AuthFlow] Installing ChromeDriver...")
-    driver = uc.Chrome(options=chrome_options)
-    print("[AuthFlow] ChromeDriver installed and browser started.")
+
+    try:
+        driver = uc.Chrome(options=chrome_options)
+        print("[AuthFlow] ChromeDriver installed and browser started.")
+    except Exception as e:
+        raise Exception("[AuthFlow] Failed to install ChromeDriver. Chrome was not detected on your system.\n\nIf you know that Chrome is installed, open the file 'auth_flow.py' and set the path to your Chrome executable in line 16.")
 
     try:
         # Open the browser and navigate to the URL
