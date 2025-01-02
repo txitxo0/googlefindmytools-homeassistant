@@ -4,60 +4,68 @@
 #
 
 import time
-import undetected_chromedriver as uc
-from selenium.webdriver.support.ui import WebDriverWait
+import subprocess
+from playwright.sync_api import sync_playwright
 
 def request_oauth_account_token_flow():
-    # Set up Chrome options
-    chrome_options = uc.ChromeOptions()
-    chrome_options.add_argument("--disable-extensions")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--no-sandbox")
-    # chrome_options.binary_location = r"INSERT_PATH_TO_CHROME_BINARY_HERE"
-
-    print("""[AuthFlow] This script will now open Google Chrome on your device to login to your Google account.
-> Please make sure that Chrome is installed on your system.
-> For macOS users only: Make that you allow Python (or PyCharm) to control Chrome if prompted. 
+    print("""[AuthFlow] This script will now open a browser to log in to your Google account.
+> Please make sure that you are ready to log in.
+> For macOS users only: Ensure that you allow Python (or your terminal) to control the browser if prompted.
     """)
 
     # Press enter to continue
     input("[AuthFlow] Press Enter to continue...")
 
-    # Automatically install and set up the Chrome driver
-    print("[AuthFlow] Installing ChromeDriver...")
-
+    # Ensure Playwright browsers are installed
+    print("[AuthFlow] Ensuring Playwright browsers are installed...")
     try:
-        driver = uc.Chrome(options=chrome_options)
-        print("[AuthFlow] ChromeDriver installed and browser started.")
-    except Exception as e:
-        raise Exception("[AuthFlow] Failed to install ChromeDriver. Chrome was not detected on your system.\n\nIf you know that Chrome is installed, open the file 'Auth/auth_flow.py' and set the path to your Chrome executable in line 16.")
+        subprocess.run(["playwright", "install"], check=True)
+    except subprocess.CalledProcessError as e:
+        raise Exception("[AuthFlow] Failed to install Playwright browsers. Ensure Playwright is properly installed.") from e
 
-    try:
-        # Open the browser and navigate to the URL
-        print("[AuthFlow] Navigating to the URL...")
-        start_time = time.time()
-        driver.get("https://accounts.google.com/EmbeddedSetup")
-        print(f"[AuthFlow] Page loaded in {time.time() - start_time:.2f} seconds.")
+    print("[AuthFlow] Launching browser...")
 
-        # Wait until the "oauth_token" cookie is set
-        print("[AuthFlow] Waiting for 'oauth_token' cookie to be set...")
-        WebDriverWait(driver, 300).until(
-            lambda d: d.get_cookie("oauth_token") is not None
-        )
+    with sync_playwright() as p:
+        # Launch Chromium in non-headless mode
+        browser = p.chromium.launch(headless=False, args=['--disable-blink-features=AutomationControlled'])
+        context = browser.new_context()
+        page = context.new_page()
 
-        # Get the value of the "oauth_token" cookie
-        oauth_token_cookie = driver.get_cookie("oauth_token")
-        oauth_token_value = oauth_token_cookie['value']
+        try:
+            # Open the browser and navigate to the URL
+            print("[AuthFlow] Navigating to the URL...")
+            start_time = time.time()
+            page.goto("https://accounts.google.com/EmbeddedSetup", timeout=60000)
+            print(f"[AuthFlow] Page loaded in {time.time() - start_time:.2f} seconds.")
 
-        # Print the value of the "oauth_token" cookie
-        print("oauth_token:", oauth_token_value)
+            # Wait for the "oauth_token" cookie to be set (polling every 1 second)
+            print("[AuthFlow] Waiting for 'oauth_token' cookie to be set...")
+            timeout = 300  # 5 minutes timeout
+            start_time = time.time()
+            oauth_token_cookie = None
+            while time.time() - start_time < timeout:
+                cookies = context.cookies()
+                oauth_token_cookie = next(
+                    (cookie for cookie in cookies if cookie["name"] == "oauth_token"), None
+                )
+                if oauth_token_cookie:
+                    break
+                time.sleep(1)  # Wait 1 second before checking again
 
-        return oauth_token_value
+            if not oauth_token_cookie:
+                raise Exception("[AuthFlow] 'oauth_token' cookie was not set within the timeout period.")
 
-    finally:
-        # Close the browser
-        print("[AuthFlow] Closing the browser...")
-        driver.quit()
+            oauth_token_value = oauth_token_cookie['value']
+
+            # Print the value of the "oauth_token" cookie
+            print("oauth_token:", oauth_token_value)
+
+            return oauth_token_value
+
+        finally:
+            # Close the browser
+            print("[AuthFlow] Closing the browser...")
+            browser.close()
 
 if __name__ == '__main__':
     request_oauth_account_token_flow()
