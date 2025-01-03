@@ -14,6 +14,3 @@ Currently, it is possible to query Find My Device trackers and their correspondi
 ### Known Issues
 - First registration for Cloud Messaging takes a while, be patient.
 - There seem to be issues with the package "undetected-chromedriver" not detecting Chrome on Windows and ARM Linux. macOS is working fine.
-
-### Disclaimer
-If you use any code or information from this repository, you must acknowledge this repository and its author in your work. Commercial use cases are not allowed.
