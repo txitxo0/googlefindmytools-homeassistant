@@ -4,10 +4,11 @@
 #
 
 import datetime
+import hashlib
 from binascii import unhexlify
 
 from FMDNCrypto.LocationReporting.foreign_tracker_encryptor import decrypt
-from KeyBackup.cloud_key_decryptor import decrypt_eik
+from KeyBackup.cloud_key_decryptor import decrypt_eik, decrypt_aes_gcm
 from NovaApi.ExecuteAction.LocateTracker.decrypted_location import WrappedLocation
 from ProtoDecoders import DeviceUpdate_pb2
 from SpotApi.GetEidInfoForE2eeDevices.get_owner_key import get_owner_key
@@ -19,20 +20,33 @@ def decrypt_location_response_locations(device_update_protobuf):
     owner_key = get_owner_key()
 
     identity_key = decrypt_eik(unhexlify(owner_key), encrypted_identity_key.hex())
+    locations_proto = device_update_protobuf.deviceMetadata.information.locationInformation.reports.recentLocationAndNetworkLocations
 
-    print(identity_key.hex())
+    # At All Areas Reports or Own Reports
+    recent_location = locations_proto.recentLocation
+    recent_location_time = locations_proto.recentLocationTimestamp
 
-    network_locations = device_update_protobuf.deviceMetadata.information.locationInformation.reports.recentLocationAndNetworkLocations.networkLocations
-    network_locations_time = device_update_protobuf.deviceMetadata.information.locationInformation.reports.recentLocationAndNetworkLocations.networkLocationTimestamps
+    # High Traffic Reports
+    network_locations = list(locations_proto.networkLocations)
+    network_locations_time = list(locations_proto.networkLocationTimestamps)
+
+    if locations_proto.HasField("recentLocation"):
+        network_locations.append(recent_location)
+        network_locations_time.append(recent_location_time)
 
     location_time_array = []
     for loc, time in zip(network_locations, network_locations_time):
 
-        encrypted_location_hex = loc.locationAndDeviceTimeOffset.encryptedReport.encryptedLocation
+        encrypted_location = loc.locationAndDeviceTimeOffset.encryptedReport.encryptedLocation
         public_key_random = loc.locationAndDeviceTimeOffset.encryptedReport.publicKeyRandom
         time_offset = loc.locationAndDeviceTimeOffset.deviceTimeOffset
 
-        decrypted_location = decrypt(identity_key.hex(), encrypted_location_hex, public_key_random, time_offset)
+        if public_key_random == b"":  # Own Report
+            identity_key_hash = hashlib.sha256(identity_key).digest()
+            decrypted_location = decrypt_aes_gcm(identity_key_hash, encrypted_location)
+        else:
+            decrypted_location = decrypt(identity_key.hex(), encrypted_location, public_key_random, time_offset)
+
 
         encrypted_location = WrappedLocation(
             decrypted_location=decrypted_location,
