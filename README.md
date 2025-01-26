@@ -13,4 +13,4 @@ Currently, it is possible to query Find My Device trackers, read out their E2EE 
 ### Known Issues
 - First registration for Cloud Messaging takes a while, be patient.
 - There seem to be issues with the package "undetected-chromedriver" not detecting Chrome on Windows and ARM Linux. macOS is working fine.
-- No support for trackers using the P-256 curve and 32-Byte advertisements. Reason: Regular trackers don't seem to use this curve - I can only confirm that it is used on the Sony WH1000XM5 headphones. 
+- No support for trackers using the P-256 curve and 32-Byte advertisements. Regular trackers don't seem to use this curve at all - I can only confirm that it is used with Sony's WH1000XM5 headphones. 
