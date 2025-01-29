@@ -70,7 +70,10 @@ def parse_device_list_protobuf(hex_string):
 def get_canonic_ids(device_list):
     result = []
     for device in device_list.deviceMetadata:
-        canonic_ids = device.identifierInformation.canonicIds.canonicId
+        if device.identifierInformation.type == DeviceUpdate_pb2.IDENTIFIER_ANDROID: 
+            canonic_ids = device.identifierInformation.phoneInformation.canonicIds.canonicId
+        else:
+            canonic_ids = device.identifierInformation.canonicIds.canonicId
         device_name = device.userDefinedDeviceName
         for canonic_id in canonic_ids:
             result.append((device_name, canonic_id.id))

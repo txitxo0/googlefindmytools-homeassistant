@@ -113,7 +113,19 @@ message ImageInformation {
 }
 
 message IdentitfierInformation {
+  PhoneInformation phoneInformation = 1;
+  IdentifierInformationType type = 2;
   CanonicIds canonicIds = 3;
+}
+
+enum IdentifierInformationType {
+  IDENTIFIER_UNKNOWN = 0;
+  IDENTIFIER_ANDROID = 1;
+  IDENTIFIER_SPOT = 2;
+}
+
+message PhoneInformation {
+  CanonicIds canonicIds = 2;
 }
 
 message CanonicIds {
