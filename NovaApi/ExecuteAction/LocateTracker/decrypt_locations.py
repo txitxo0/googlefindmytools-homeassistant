@@ -16,7 +16,7 @@ from SpotApi.GetEidInfoForE2eeDevices.get_owner_key import get_owner_key
 
 def decrypt_location_response_locations(device_update_protobuf):
 
-    encrypted_identity_key = device_update_protobuf.deviceMetadata.information.ephemeralDeviceInformation.encryptedKeys.encryptedIdentityKey
+    encrypted_identity_key = device_update_protobuf.deviceMetadata.information.deviceRegistration.encryptedKeys.encryptedIdentityKey
     owner_key = get_owner_key()
 
     identity_key = decrypt_eik(unhexlify(owner_key), encrypted_identity_key.hex())
