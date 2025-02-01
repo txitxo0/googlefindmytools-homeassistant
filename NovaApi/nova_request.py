@@ -28,7 +28,6 @@ def nova_request(api_scope, hex_payload):
 
     response = requests.post(url, headers=headers, data=payload)
     print("[NovaRequest] Status Code:", response.status_code)
-    print("[NovaRequest] Response Hex: ", response.content.hex())
 
     if response.status_code == 200:
         print("[NovaRequest] Request performed successfully.")

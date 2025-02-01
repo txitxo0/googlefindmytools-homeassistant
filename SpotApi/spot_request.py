@@ -31,7 +31,6 @@ def spot_request(api_scope, hex_payload):
         response = client.post(url, headers=headers, content=payload)
 
         print("[SpotRequest] Status Code:", response.status_code)
-        print("[SpotRequest] Response Hex: ", response.content.hex())
 
         if response.status_code == 200:
             print("[SpotRequest] Request performed successfully.")

@@ -104,15 +104,9 @@ def decrypt(identity_key, encryptedAndTag, Sx, beacon_time_counter):
     m_dash = encryptedAndTag[:-16]
     tag = encryptedAndTag[-16:]
 
-    # Print message and tag
-    print("Encrypted Message: " + m_dash.hex())
-    print("Tag: " + tag.hex())
-
     # Given the beacon time counter value on which URx is based, compute the anticipated value of r
     curve = SECP160r1
     r = calculate_r(identity_key, beacon_time_counter)
-
-    print("r: " + r.__str__())
 
     # Compute R = r * G
     R = r * curve.generator

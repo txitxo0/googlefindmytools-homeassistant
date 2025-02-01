@@ -65,9 +65,6 @@ class FcmReceiver:
     # Define a callback function for handling notifications
     def _on_notification(self, obj, notification, data_message):
         print("[FCMReceiver] Notification received!")
-        print("[FCMReceiver] Object:", obj)
-        print("[FCMReceiver] Notification:", notification)
-        print("[FCMReceiver] Data Message:", data_message)
 
         # Check if the payload is present
         if 'data' in obj and 'com.google.android.apps.adm.FCM_PAYLOAD' in obj['data']:
@@ -76,15 +73,12 @@ class FcmReceiver:
             base64_string = obj['data']['com.google.android.apps.adm.FCM_PAYLOAD']
             decoded_bytes = base64.b64decode(base64_string)
 
-            print("[FCMReceiver] Decoded FMDN Message:", decoded_bytes.hex())
+            # print("[FCMReceiver] Decoded FMDN Message:", decoded_bytes.hex())
 
             # Convert to hex string
             hex_string = binascii.hexlify(decoded_bytes).decode('utf-8')
 
-            print(self.location_update_callbacks)
-
             for callback in self.location_update_callbacks:
-                print("[FCMReceiver] Calling location update callback.")
                 callback(hex_string)
         else:
             print("[FCMReceiver] Payload not found in the notification.")
@@ -109,7 +103,7 @@ class FcmReceiver:
                 print("[FCMReceiver] Failed to register with FCM. Retrying...")
                 await asyncio.sleep(5)
 
-        print("[FCMReceiver] Retrieved FCM Token successfully:", fcm_token)
+        print("[FCMReceiver] Retrieved FCM Token successfully.")
 
 
     async def _register_for_fcm_and_listen(self):
