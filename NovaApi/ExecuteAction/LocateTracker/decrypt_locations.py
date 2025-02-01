@@ -41,21 +41,22 @@ def decrypt_location_response_locations(device_update_protobuf):
         public_key_random = loc.locationAndDeviceTimeOffset.encryptedReport.publicKeyRandom
         time_offset = loc.locationAndDeviceTimeOffset.deviceTimeOffset
 
-        if public_key_random == b"":  # Own Report
-            identity_key_hash = hashlib.sha256(identity_key).digest()
-            decrypted_location = decrypt_aes_gcm(identity_key_hash, encrypted_location)
-        else:
-            decrypted_location = decrypt(identity_key.hex(), encrypted_location, public_key_random, time_offset)
+        if encrypted_location != b"":
+            if public_key_random == b"":  # Own Report
+                identity_key_hash = hashlib.sha256(identity_key).digest()
+                decrypted_location = decrypt_aes_gcm(identity_key_hash, encrypted_location)
+            else:
+                decrypted_location = decrypt(identity_key.hex(), encrypted_location, public_key_random, time_offset)
 
 
-        encrypted_location = WrappedLocation(
-            decrypted_location=decrypted_location,
-            time=int(time.seconds),
-            accuracy=loc.locationAndDeviceTimeOffset.accuracy,
-            status=loc.status,
-            is_own_report=loc.locationAndDeviceTimeOffset.encryptedReport.isOwnReport,
-        )
-        location_time_array.append(encrypted_location)
+            encrypted_location = WrappedLocation(
+                decrypted_location=decrypted_location,
+                time=int(time.seconds),
+                accuracy=loc.locationAndDeviceTimeOffset.accuracy,
+                status=loc.status,
+                is_own_report=loc.locationAndDeviceTimeOffset.encryptedReport.isOwnReport,
+            )
+            location_time_array.append(encrypted_location)
 
     print("-" * 40)
     print("[DecryptLocations] Decrypted Locations:")
