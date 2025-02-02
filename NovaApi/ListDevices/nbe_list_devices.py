@@ -51,7 +51,7 @@ def list_devices():
     for idx, (device_name, canonic_id) in enumerate(canonic_ids, start=1):
         print(f"{idx}. {device_name}: {canonic_id}")
 
-    selected_idx = int(input("Enter the number of the tracker you want to query and hit enter: ")) - 1
+    selected_idx = int(input("Enter the number of the tracker you want to query and press 'Enter': ")) - 1
     selected_canonic_id = canonic_ids[selected_idx][1]
 
     get_location_data_for_device(selected_canonic_id)

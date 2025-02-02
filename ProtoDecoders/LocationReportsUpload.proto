@@ -16,16 +16,12 @@ message LocationReportsUpload {
 message Report {
     Advertisement advertisement = 1;
     Time time = 4;
-    LocationsAndRotationOffsets locationAndRotationOffsets = 6;
+    LocationReport location = 6;
 }
 
 message Advertisement {
     Identifier identifier = 5;
     uint32 unwantedTrackingModeEnabled = 6;
-}
-
-message LocationsAndRotationOffsets {
-    repeated LocationAndRotationOffset locationAndRotationOffset = 10;
 }
 
 message Identifier {

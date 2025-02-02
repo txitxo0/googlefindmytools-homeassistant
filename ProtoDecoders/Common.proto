@@ -10,14 +10,31 @@ message Time {
     uint32 nanos = 2;
 }
 
+message LocationReport {
+  SemanticLocation semanticLocation = 5;
+  GeoLocation geoLocation = 10;
+  Status status = 11;
+}
+
+message SemanticLocation {
+  string locationName = 1;
+}
+
+enum Status {
+  SEMANTIC = 0;
+  LAST_KNOWN = 1;
+  CROWDSOURCED = 2;
+  AGGREGATED = 3;
+}
+
+message GeoLocation {
+  EncryptedReport encryptedReport = 1;
+  uint32 deviceTimeOffset = 2;
+  float accuracy = 3;
+}
+
 message EncryptedReport {
     bytes publicKeyRandom = 1;
     bytes encryptedLocation = 2;
     bool isOwnReport = 3;
-}
-
-message LocationAndRotationOffset {
-  EncryptedReport encryptedReport = 1;
-  uint32 deviceTimeOffset = 2;
-  float accuracy = 3;
 }

@@ -14,7 +14,7 @@ def _retrieve_shared_key():
     """)
 
     # Press enter to continue
-    input("[SharedKeyRetrieval] Press Enter to continue...")
+    input("[SharedKeyRetrieval] Press 'Enter' to continue...")
 
     shared_key = request_shared_key_flow()
 

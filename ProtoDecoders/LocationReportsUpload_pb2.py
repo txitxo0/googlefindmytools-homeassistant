@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 from ProtoDecoders import Common_pb2 as ProtoDecoders_dot_Common__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n)ProtoDecoders/LocationReportsUpload.proto\x1a\x1aProtoDecoders/Common.proto\"|\n\x15LocationReportsUpload\x12\x18\n\x07reports\x18\x01 \x03(\x0b\x32\x07.Report\x12\'\n\x0e\x63lientMetadata\x18\x02 \x01(\x0b\x32\x0f.ClientMetadata\x12\x0f\n\x07random1\x18\x03 \x01(\x04\x12\x0f\n\x07random2\x18\x04 \x01(\x04\"\x86\x01\n\x06Report\x12%\n\radvertisement\x18\x01 \x01(\x0b\x32\x0e.Advertisement\x12\x13\n\x04time\x18\x04 \x01(\x0b\x32\x05.Time\x12@\n\x1alocationAndRotationOffsets\x18\x06 \x01(\x0b\x32\x1c.LocationsAndRotationOffsets\"U\n\rAdvertisement\x12\x1f\n\nidentifier\x18\x05 \x01(\x0b\x32\x0b.Identifier\x12#\n\x1bunwantedTrackingModeEnabled\x18\x06 \x01(\r\"\\\n\x1bLocationsAndRotationOffsets\x12=\n\x19locationAndRotationOffset\x18\n \x03(\x0b\x32\x1a.LocationAndRotationOffset\"2\n\nIdentifier\x12\x0b\n\x03\x65id\x18\x06 \x01(\x0c\x12\x17\n\x0f\x63\x61nonicDeviceId\x18\x07 \x01(\x0c\"<\n\x0e\x43lientMetadata\x12*\n\x07version\x18\x02 \x01(\x0b\x32\x19.ClientVersionInformation\"7\n\x18\x43lientVersionInformation\x12\x1b\n\x13playServicesVersion\x18\x01 \x01(\tb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n)ProtoDecoders/LocationReportsUpload.proto\x1a\x1aProtoDecoders/Common.proto\"|\n\x15LocationReportsUpload\x12\x18\n\x07reports\x18\x01 \x03(\x0b\x32\x07.Report\x12\'\n\x0e\x63lientMetadata\x18\x02 \x01(\x0b\x32\x0f.ClientMetadata\x12\x0f\n\x07random1\x18\x03 \x01(\x04\x12\x0f\n\x07random2\x18\x04 \x01(\x04\"g\n\x06Report\x12%\n\radvertisement\x18\x01 \x01(\x0b\x32\x0e.Advertisement\x12\x13\n\x04time\x18\x04 \x01(\x0b\x32\x05.Time\x12!\n\x08location\x18\x06 \x01(\x0b\x32\x0f.LocationReport\"U\n\rAdvertisement\x12\x1f\n\nidentifier\x18\x05 \x01(\x0b\x32\x0b.Identifier\x12#\n\x1bunwantedTrackingModeEnabled\x18\x06 \x01(\r\"2\n\nIdentifier\x12\x0b\n\x03\x65id\x18\x06 \x01(\x0c\x12\x17\n\x0f\x63\x61nonicDeviceId\x18\x07 \x01(\x0c\"<\n\x0e\x43lientMetadata\x12*\n\x07version\x18\x02 \x01(\x0b\x32\x19.ClientVersionInformation\"7\n\x18\x43lientVersionInformation\x12\x1b\n\x13playServicesVersion\x18\x01 \x01(\tb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -24,16 +24,14 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
   _globals['_LOCATIONREPORTSUPLOAD']._serialized_start=73
   _globals['_LOCATIONREPORTSUPLOAD']._serialized_end=197
-  _globals['_REPORT']._serialized_start=200
-  _globals['_REPORT']._serialized_end=334
-  _globals['_ADVERTISEMENT']._serialized_start=336
-  _globals['_ADVERTISEMENT']._serialized_end=421
-  _globals['_LOCATIONSANDROTATIONOFFSETS']._serialized_start=423
-  _globals['_LOCATIONSANDROTATIONOFFSETS']._serialized_end=515
-  _globals['_IDENTIFIER']._serialized_start=517
-  _globals['_IDENTIFIER']._serialized_end=567
-  _globals['_CLIENTMETADATA']._serialized_start=569
-  _globals['_CLIENTMETADATA']._serialized_end=629
-  _globals['_CLIENTVERSIONINFORMATION']._serialized_start=631
-  _globals['_CLIENTVERSIONINFORMATION']._serialized_end=686
+  _globals['_REPORT']._serialized_start=199
+  _globals['_REPORT']._serialized_end=302
+  _globals['_ADVERTISEMENT']._serialized_start=304
+  _globals['_ADVERTISEMENT']._serialized_end=389
+  _globals['_IDENTIFIER']._serialized_start=391
+  _globals['_IDENTIFIER']._serialized_end=441
+  _globals['_CLIENTMETADATA']._serialized_start=443
+  _globals['_CLIENTMETADATA']._serialized_end=503
+  _globals['_CLIENTVERSIONINFORMATION']._serialized_start=505
+  _globals['_CLIENTVERSIONINFORMATION']._serialized_end=560
 # @@protoc_insertion_point(module_scope)

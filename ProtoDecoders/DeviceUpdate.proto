@@ -170,23 +170,11 @@ message LocationsAndTimestampsWrapper {
 }
 
 message RecentLocationAndNetworkLocations {
-  LocationStatusAndRotationOffset recentLocation = 1;
+  LocationReport recentLocation = 1;
   Time recentLocationTimestamp = 2;
-  repeated LocationStatusAndRotationOffset networkLocations = 5;
+  repeated LocationReport networkLocations = 5;
   repeated Time networkLocationTimestamps = 6;
   uint32 minLocationsNeededForAggregation = 9;
-}
-
-message LocationStatusAndRotationOffset {
-  LocationAndRotationOffset locationAndDeviceTimeOffset = 10;
-  Status status = 11;
-}
-
-enum Status {
-  SEMANTIC = 0;
-  LAST_KNOWN = 1;
-  CROWDSOURCED = 2;
-  AGGREGATED = 3;
 }
 
 enum SpotDeviceType {
