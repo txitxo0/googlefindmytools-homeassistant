@@ -37,12 +37,12 @@ class Advertisement(_message.Message):
     def __init__(self, identifier: _Optional[_Union[Identifier, _Mapping]] = ..., unwantedTrackingModeEnabled: _Optional[int] = ...) -> None: ...
 
 class Identifier(_message.Message):
-    __slots__ = ("eid", "canonicDeviceId")
-    EID_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ("truncatedEid", "canonicDeviceId")
+    TRUNCATEDEID_FIELD_NUMBER: _ClassVar[int]
     CANONICDEVICEID_FIELD_NUMBER: _ClassVar[int]
-    eid: bytes
+    truncatedEid: bytes
     canonicDeviceId: bytes
-    def __init__(self, eid: _Optional[bytes] = ..., canonicDeviceId: _Optional[bytes] = ...) -> None: ...
+    def __init__(self, truncatedEid: _Optional[bytes] = ..., canonicDeviceId: _Optional[bytes] = ...) -> None: ...
 
 class ClientMetadata(_message.Message):
     __slots__ = ("version",)

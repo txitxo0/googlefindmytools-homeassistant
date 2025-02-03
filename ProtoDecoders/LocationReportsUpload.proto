@@ -25,7 +25,7 @@ message Advertisement {
 }
 
 message Identifier {
-    bytes eid = 6;
+    bytes truncatedEid = 6;
     bytes canonicDeviceId = 7;
 }
 
