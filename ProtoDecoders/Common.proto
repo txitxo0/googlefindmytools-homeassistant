@@ -38,3 +38,8 @@ message EncryptedReport {
     bytes encryptedLocation = 2;
     bool isOwnReport = 3;
 }
+
+message GetEidInfoForE2eeDevicesRequest {
+    int32 ownerKeyVersion = 1;
+    bool hasOwnerKeyVersion = 2;
+}

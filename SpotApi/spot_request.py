@@ -10,9 +10,10 @@ from bs4 import BeautifulSoup
 
 from Auth.spot_token_retrieval import get_spot_token
 from Auth.username_provider import get_username
+from SpotApi.grpc_parser import GrpcParser
 
 
-def spot_request(api_scope, hex_payload):
+def spot_request(api_scope: str, payload: bytes) -> bytes:
     url = "https://spot-pa.googleapis.com/google.internal.spot.v1.SpotService/" + api_scope
     spot_oauth_token = get_spot_token(get_username())
 
@@ -24,7 +25,7 @@ def spot_request(api_scope, hex_payload):
         "Grpc-Accept-Encoding": "gzip"
     }
 
-    payload = binascii.unhexlify(hex_payload)
+    payload = GrpcParser.construct_grpc(payload)
 
     # httpx is necessary because requests does not support the Te header
     with httpx.Client(http2=True) as client:
@@ -34,7 +35,8 @@ def spot_request(api_scope, hex_payload):
 
         if response.status_code == 200:
             print("[SpotRequest] Request performed successfully.")
-            return response.content.hex()
+            result = GrpcParser.extract_grpc_payload(response.content)
+            return result
         else:
             soup = BeautifulSoup(response.text, 'html.parser')
             print("[NovaRequest] Error: ", soup.get_text())

@@ -59,3 +59,11 @@ class EncryptedReport(_message.Message):
     encryptedLocation: bytes
     isOwnReport: bool
     def __init__(self, publicKeyRandom: _Optional[bytes] = ..., encryptedLocation: _Optional[bytes] = ..., isOwnReport: bool = ...) -> None: ...
+
+class GetEidInfoForE2eeDevicesRequest(_message.Message):
+    __slots__ = ("ownerKeyVersion", "hasOwnerKeyVersion")
+    OWNERKEYVERSION_FIELD_NUMBER: _ClassVar[int]
+    HASOWNERKEYVERSION_FIELD_NUMBER: _ClassVar[int]
+    ownerKeyVersion: int
+    hasOwnerKeyVersion: bool
+    def __init__(self, ownerKeyVersion: _Optional[int] = ..., hasOwnerKeyVersion: bool = ...) -> None: ...
