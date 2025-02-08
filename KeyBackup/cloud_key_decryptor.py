@@ -2,6 +2,7 @@
 #  GoogleFindMyTools - A set of tools to interact with the Google Find My API
 #  Copyright © 2024 Leon Böttger. All rights reserved.
 #
+import secrets
 
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
@@ -65,7 +66,7 @@ def decrypt_aes_gcm_with_derived_key(encrypted_data: bytes, private_key: bytes, 
     return decrypt_aes_gcm(derived_key, ciphertext_and_iv, key_type_string)
 
 
-def derive_shared_secret(private_key_jwt, public_key_bytes):
+def derive_shared_secret(private_key_jwt: bytes, public_key_bytes: bytes):
 
     # Extract EC private curve from JWT format
     private_key_bytes = private_key_jwt[:32]
@@ -78,7 +79,7 @@ def derive_shared_secret(private_key_jwt, public_key_bytes):
     return private_key.exchange(ec.ECDH(), public_key)
 
 
-def decrypt_aes_gcm(key, encrypted_data_and_iv, additional_data=None, iv_length = 12) -> bytes:
+def decrypt_aes_gcm(key: bytes, encrypted_data_and_iv: bytes, additional_data=None, iv_length = 12) -> bytes:
 
     # IV is prepended to encrypted data
     iv = encrypted_data_and_iv[:iv_length]
@@ -92,7 +93,19 @@ def decrypt_aes_gcm(key, encrypted_data_and_iv, additional_data=None, iv_length 
     return decrypted_data
 
 
-def decrypt_aes_cbc_no_padding(key, encrypted_data_and_iv, iv_length = 16) -> bytes:
+def encrypt_aes_gcm(key: bytes, plaintext: bytes, additional_data=None, iv_length=12) -> bytes:
+    # Generate a random IV
+    iv = secrets.token_bytes(iv_length)
+
+    # Perform AES-GCM
+    aes_gcm = AESGCM(key)
+    ciphertext = aes_gcm.encrypt(iv, plaintext, additional_data)
+
+    # Prepend IV to the ciphertext
+    return iv + ciphertext
+
+
+def decrypt_aes_cbc_no_padding(key: bytes, encrypted_data_and_iv: bytes, iv_length = 16) -> bytes:
 
     # IV is prepended to encrypted data
     iv = encrypted_data_and_iv[:iv_length]
@@ -110,40 +123,40 @@ def decrypt_aes_cbc_no_padding(key, encrypted_data_and_iv, iv_length = 16) -> by
     return decrypted_data
 
 
-def decrypt_recovery_key(lskf_hash, encrypted_recovery_key):
+def decrypt_recovery_key(lskf_hash: bytes, encrypted_recovery_key: str):
 
     # The recovery key is encrypted using the hash of the LSKF
     return decrypt_aes_gcm_with_derived_key(unhexlify(encrypted_recovery_key), lskf_hash,
                                             ascii_to_bytes("V1 locally_encrypted_recovery_key"))
 
 
-def decrypt_application_key(recovery_key, encrypted_application_key):
+def decrypt_application_key(recovery_key: bytes, encrypted_application_key: str):
 
     # The application key is encrypted using the recovery key
     return decrypt_aes_gcm_with_derived_key(unhexlify(encrypted_application_key), recovery_key,
                                             ascii_to_bytes("V1 encrypted_application_key"))
 
 
-def decrypt_security_domain_key(application_key, encrypted_security_domain_key):
+def decrypt_security_domain_key(application_key: bytes, encrypted_security_domain_key: str):
 
     # The security domain key is encrypted using the application key
     return decrypt_aes_gcm(application_key, unhexlify(encrypted_security_domain_key))
 
 
-def decrypt_shared_key(security_domain_key, encrypted_shared_key):
+def decrypt_shared_key(security_domain_key: bytes, encrypted_shared_key: str):
 
     # The shared key is encrypted using the security domain key
     return decrypt_aes_gcm_with_derived_key(unhexlify(encrypted_shared_key), security_domain_key,
                                             ascii_to_bytes("V1 shared_key"), True)
 
 
-def decrypt_owner_key(shared_key, encrypted_owner_key):
+def decrypt_owner_key(shared_key: bytes, encrypted_owner_key: str):
 
     # The owner key is encrypted using the shared key. The owner key is valid for all trackers
     return decrypt_aes_gcm(shared_key, unhexlify(encrypted_owner_key))
 
 
-def decrypt_eik(owner_key, encrypted_eik):
+def decrypt_eik(owner_key: bytes, encrypted_eik: str):
 
     encrypted_eik_bytes = unhexlify(encrypted_eik)
 
@@ -157,7 +170,7 @@ def decrypt_eik(owner_key, encrypted_eik):
     raise ValueError("The encrypted EIK has invalid length!")
 
 
-def decrypt_account_key(owner_key, encrypted_account_key):
+def decrypt_account_key(owner_key: bytes, encrypted_account_key: str):
 
     encrypted_account_key_bytes = unhexlify(encrypted_account_key)
 

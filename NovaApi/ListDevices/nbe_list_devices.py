@@ -4,6 +4,7 @@
 #
 
 import binascii
+from faulthandler import register
 
 from NovaApi.ExecuteAction.LocateTracker.location_request import get_location_data_for_device
 from NovaApi.nova_request import nova_request
@@ -11,6 +12,7 @@ from NovaApi.scopes import NOVA_LIST_DEVICS_API_SCOPE
 from NovaApi.util import generate_random_uuid
 from ProtoDecoders import DeviceUpdate_pb2
 from ProtoDecoders.decoder import print_device_list_protobuf, parse_device_list_protobuf, get_canonic_ids
+from SpotApi.CreateBleDevice.create_ble_device import register_esp32
 
 
 def request_device_list():
@@ -40,8 +42,8 @@ def create_device_list_request():
 
 
 def list_devices():
+    print("Loading...")
     result_hex = request_device_list()
-    print_device_list_protobuf(result_hex)
 
     device_list = parse_device_list_protobuf(result_hex)
     canonic_ids = get_canonic_ids(device_list)
@@ -51,10 +53,16 @@ def list_devices():
     for idx, (device_name, canonic_id) in enumerate(canonic_ids, start=1):
         print(f"{idx}. {device_name}: {canonic_id}")
 
-    selected_idx = int(input("Enter the number of the tracker you want to query and press 'Enter': ")) - 1
-    selected_canonic_id = canonic_ids[selected_idx][1]
+    selected_value = input("\nIf you want to see locations of a tracker, type the number of the tracker and press 'Enter'.\nIf you want to register a new ESP32-based tracker, type 'r' and press 'Enter': ")
 
-    get_location_data_for_device(selected_canonic_id)
+    if selected_value == 'r':
+        print("Loading...")
+        register_esp32()
+    else:
+        selected_idx = int(selected_value) - 1
+        selected_canonic_id = canonic_ids[selected_idx][1]
+
+        get_location_data_for_device(selected_canonic_id)
 
 
 if __name__ == '__main__':

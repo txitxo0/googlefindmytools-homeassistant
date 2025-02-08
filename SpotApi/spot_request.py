@@ -3,7 +3,6 @@
 #  Copyright © 2024 Leon Böttger. All rights reserved.
 #
 
-import binascii
 import httpx
 import h2 # required for httpx to support HTTP/2
 from bs4 import BeautifulSoup
@@ -28,17 +27,14 @@ def spot_request(api_scope: str, payload: bytes) -> bytes:
     payload = GrpcParser.construct_grpc(payload)
 
     # httpx is necessary because requests does not support the Te header
-    with httpx.Client(http2=True) as client:
+    with httpx.Client(http2=True, timeout=30.0) as client:
         response = client.post(url, headers=headers, content=payload)
 
-        print("[SpotRequest] Status Code:", response.status_code)
-
         if response.status_code == 200:
-            print("[SpotRequest] Request performed successfully.")
             result = GrpcParser.extract_grpc_payload(response.content)
             return result
         else:
             soup = BeautifulSoup(response.text, 'html.parser')
             print("[NovaRequest] Error: ", soup.get_text())
 
-    return None
+    return b''

@@ -29,7 +29,6 @@ def get_cached_value(name):
                 data = json.load(file)
                 value = data.get(name)
                 if value:
-                    print("[TokenCache] Using cached " + name)
                     return value
             except json.JSONDecodeError:
                 return None

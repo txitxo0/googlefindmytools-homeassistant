@@ -287,30 +287,32 @@ class DeviceTypeInformation(_message.Message):
     def __init__(self, deviceType: _Optional[_Union[SpotDeviceType, str]] = ...) -> None: ...
 
 class DeviceRegistration(_message.Message):
-    __slots__ = ("deviceTypeInformation", "encryptedKeys", "manufacturer", "model")
+    __slots__ = ("deviceTypeInformation", "encryptedUserSecrets", "manufacturer", "fastPairModelId", "model")
     DEVICETYPEINFORMATION_FIELD_NUMBER: _ClassVar[int]
-    ENCRYPTEDKEYS_FIELD_NUMBER: _ClassVar[int]
+    ENCRYPTEDUSERSECRETS_FIELD_NUMBER: _ClassVar[int]
     MANUFACTURER_FIELD_NUMBER: _ClassVar[int]
+    FASTPAIRMODELID_FIELD_NUMBER: _ClassVar[int]
     MODEL_FIELD_NUMBER: _ClassVar[int]
     deviceTypeInformation: DeviceTypeInformation
-    encryptedKeys: EncryptedKeys
+    encryptedUserSecrets: EncryptedUserSecrets
     manufacturer: str
+    fastPairModelId: str
     model: str
-    def __init__(self, deviceTypeInformation: _Optional[_Union[DeviceTypeInformation, _Mapping]] = ..., encryptedKeys: _Optional[_Union[EncryptedKeys, _Mapping]] = ..., manufacturer: _Optional[str] = ..., model: _Optional[str] = ...) -> None: ...
+    def __init__(self, deviceTypeInformation: _Optional[_Union[DeviceTypeInformation, _Mapping]] = ..., encryptedUserSecrets: _Optional[_Union[EncryptedUserSecrets, _Mapping]] = ..., manufacturer: _Optional[str] = ..., fastPairModelId: _Optional[str] = ..., model: _Optional[str] = ...) -> None: ...
 
-class EncryptedKeys(_message.Message):
-    __slots__ = ("encryptedIdentityKey", "keyVersion", "encryptedAccountKey", "keyTimestamp", "encryptedSha256AccountKeyPublicAddress")
+class EncryptedUserSecrets(_message.Message):
+    __slots__ = ("encryptedIdentityKey", "ownerKeyVersion", "encryptedAccountKey", "creationDate", "encryptedSha256AccountKeyPublicAddress")
     ENCRYPTEDIDENTITYKEY_FIELD_NUMBER: _ClassVar[int]
-    KEYVERSION_FIELD_NUMBER: _ClassVar[int]
+    OWNERKEYVERSION_FIELD_NUMBER: _ClassVar[int]
     ENCRYPTEDACCOUNTKEY_FIELD_NUMBER: _ClassVar[int]
-    KEYTIMESTAMP_FIELD_NUMBER: _ClassVar[int]
+    CREATIONDATE_FIELD_NUMBER: _ClassVar[int]
     ENCRYPTEDSHA256ACCOUNTKEYPUBLICADDRESS_FIELD_NUMBER: _ClassVar[int]
     encryptedIdentityKey: bytes
-    keyVersion: int
+    ownerKeyVersion: int
     encryptedAccountKey: bytes
-    keyTimestamp: _Common_pb2.Time
+    creationDate: _Common_pb2.Time
     encryptedSha256AccountKeyPublicAddress: bytes
-    def __init__(self, encryptedIdentityKey: _Optional[bytes] = ..., keyVersion: _Optional[int] = ..., encryptedAccountKey: _Optional[bytes] = ..., keyTimestamp: _Optional[_Union[_Common_pb2.Time, _Mapping]] = ..., encryptedSha256AccountKeyPublicAddress: _Optional[bytes] = ...) -> None: ...
+    def __init__(self, encryptedIdentityKey: _Optional[bytes] = ..., ownerKeyVersion: _Optional[int] = ..., encryptedAccountKey: _Optional[bytes] = ..., creationDate: _Optional[_Union[_Common_pb2.Time, _Mapping]] = ..., encryptedSha256AccountKeyPublicAddress: _Optional[bytes] = ...) -> None: ...
 
 class LocationInformation(_message.Message):
     __slots__ = ("reports",)
@@ -383,3 +385,84 @@ class Location(_message.Message):
     longitude: int
     altitude: int
     def __init__(self, latitude: _Optional[int] = ..., longitude: _Optional[int] = ..., altitude: _Optional[int] = ...) -> None: ...
+
+class RegisterBleDeviceRequest(_message.Message):
+    __slots__ = ("fastPairModelId", "description", "capabilities", "e2eePublicKeyRegistration", "manufacturerName", "ringKey", "recoveryKey", "unwantedTrackingKey", "modelName")
+    FASTPAIRMODELID_FIELD_NUMBER: _ClassVar[int]
+    DESCRIPTION_FIELD_NUMBER: _ClassVar[int]
+    CAPABILITIES_FIELD_NUMBER: _ClassVar[int]
+    E2EEPUBLICKEYREGISTRATION_FIELD_NUMBER: _ClassVar[int]
+    MANUFACTURERNAME_FIELD_NUMBER: _ClassVar[int]
+    RINGKEY_FIELD_NUMBER: _ClassVar[int]
+    RECOVERYKEY_FIELD_NUMBER: _ClassVar[int]
+    UNWANTEDTRACKINGKEY_FIELD_NUMBER: _ClassVar[int]
+    MODELNAME_FIELD_NUMBER: _ClassVar[int]
+    fastPairModelId: str
+    description: DeviceDescription
+    capabilities: DeviceCapabilities
+    e2eePublicKeyRegistration: E2EEPublicKeyRegistration
+    manufacturerName: str
+    ringKey: bytes
+    recoveryKey: bytes
+    unwantedTrackingKey: bytes
+    modelName: str
+    def __init__(self, fastPairModelId: _Optional[str] = ..., description: _Optional[_Union[DeviceDescription, _Mapping]] = ..., capabilities: _Optional[_Union[DeviceCapabilities, _Mapping]] = ..., e2eePublicKeyRegistration: _Optional[_Union[E2EEPublicKeyRegistration, _Mapping]] = ..., manufacturerName: _Optional[str] = ..., ringKey: _Optional[bytes] = ..., recoveryKey: _Optional[bytes] = ..., unwantedTrackingKey: _Optional[bytes] = ..., modelName: _Optional[str] = ...) -> None: ...
+
+class E2EEPublicKeyRegistration(_message.Message):
+    __slots__ = ("rotationExponent", "encryptedUserSecrets", "publicKeyIdList", "pairingDate")
+    ROTATIONEXPONENT_FIELD_NUMBER: _ClassVar[int]
+    ENCRYPTEDUSERSECRETS_FIELD_NUMBER: _ClassVar[int]
+    PUBLICKEYIDLIST_FIELD_NUMBER: _ClassVar[int]
+    PAIRINGDATE_FIELD_NUMBER: _ClassVar[int]
+    rotationExponent: int
+    encryptedUserSecrets: EncryptedUserSecrets
+    publicKeyIdList: PublicKeyIdList
+    pairingDate: int
+    def __init__(self, rotationExponent: _Optional[int] = ..., encryptedUserSecrets: _Optional[_Union[EncryptedUserSecrets, _Mapping]] = ..., publicKeyIdList: _Optional[_Union[PublicKeyIdList, _Mapping]] = ..., pairingDate: _Optional[int] = ...) -> None: ...
+
+class PublicKeyIdList(_message.Message):
+    __slots__ = ("publicKeyIdInfo",)
+    class PublicKeyIdInfo(_message.Message):
+        __slots__ = ("timestamp", "publicKeyId", "trackableComponent")
+        TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
+        PUBLICKEYID_FIELD_NUMBER: _ClassVar[int]
+        TRACKABLECOMPONENT_FIELD_NUMBER: _ClassVar[int]
+        timestamp: _Common_pb2.Time
+        publicKeyId: TruncatedEID
+        trackableComponent: int
+        def __init__(self, timestamp: _Optional[_Union[_Common_pb2.Time, _Mapping]] = ..., publicKeyId: _Optional[_Union[TruncatedEID, _Mapping]] = ..., trackableComponent: _Optional[int] = ...) -> None: ...
+    PUBLICKEYIDINFO_FIELD_NUMBER: _ClassVar[int]
+    publicKeyIdInfo: _containers.RepeatedCompositeFieldContainer[PublicKeyIdList.PublicKeyIdInfo]
+    def __init__(self, publicKeyIdInfo: _Optional[_Iterable[_Union[PublicKeyIdList.PublicKeyIdInfo, _Mapping]]] = ...) -> None: ...
+
+class TruncatedEID(_message.Message):
+    __slots__ = ("truncatedEid",)
+    TRUNCATEDEID_FIELD_NUMBER: _ClassVar[int]
+    truncatedEid: bytes
+    def __init__(self, truncatedEid: _Optional[bytes] = ...) -> None: ...
+
+class DeviceCapabilities(_message.Message):
+    __slots__ = ("isAdvertising", "capableComponents", "trackableComponents")
+    ISADVERTISING_FIELD_NUMBER: _ClassVar[int]
+    CAPABLECOMPONENTS_FIELD_NUMBER: _ClassVar[int]
+    TRACKABLECOMPONENTS_FIELD_NUMBER: _ClassVar[int]
+    isAdvertising: bool
+    capableComponents: int
+    trackableComponents: int
+    def __init__(self, isAdvertising: bool = ..., capableComponents: _Optional[int] = ..., trackableComponents: _Optional[int] = ...) -> None: ...
+
+class DeviceDescription(_message.Message):
+    __slots__ = ("userDefinedName", "deviceType", "deviceComponentsInformation")
+    USERDEFINEDNAME_FIELD_NUMBER: _ClassVar[int]
+    DEVICETYPE_FIELD_NUMBER: _ClassVar[int]
+    DEVICECOMPONENTSINFORMATION_FIELD_NUMBER: _ClassVar[int]
+    userDefinedName: str
+    deviceType: SpotDeviceType
+    deviceComponentsInformation: _containers.RepeatedCompositeFieldContainer[DeviceComponentInformation]
+    def __init__(self, userDefinedName: _Optional[str] = ..., deviceType: _Optional[_Union[SpotDeviceType, str]] = ..., deviceComponentsInformation: _Optional[_Iterable[_Union[DeviceComponentInformation, _Mapping]]] = ...) -> None: ...
+
+class DeviceComponentInformation(_message.Message):
+    __slots__ = ("imageUrl",)
+    IMAGEURL_FIELD_NUMBER: _ClassVar[int]
+    imageUrl: str
+    def __init__(self, imageUrl: _Optional[str] = ...) -> None: ...

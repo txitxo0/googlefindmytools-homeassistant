@@ -103,8 +103,6 @@ class FcmReceiver:
                 print("[FCMReceiver] Failed to register with FCM. Retrying...")
                 await asyncio.sleep(5)
 
-        print("[FCMReceiver] Retrieved FCM Token successfully.")
-
 
     async def _register_for_fcm_and_listen(self):
         await self._register_for_fcm()

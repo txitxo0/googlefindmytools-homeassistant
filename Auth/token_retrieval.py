@@ -11,8 +11,6 @@ from Auth.fcm_receiver import FcmReceiver
 
 def request_token(username, scope, play_services = False):
 
-    print("[AppTokenRetrieval] Asking Server for " + scope + " token.")
-
     aas_token = get_aas_token()
     android_id = FcmReceiver().get_android_id()
     request_app = 'com.google.android.gms' if play_services else 'com.google.android.apps.adm'

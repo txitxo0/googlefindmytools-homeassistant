@@ -27,10 +27,8 @@ def nova_request(api_scope, hex_payload):
     payload = binascii.unhexlify(hex_payload)
 
     response = requests.post(url, headers=headers, data=payload)
-    print("[NovaRequest] Status Code:", response.status_code)
 
     if response.status_code == 200:
-        print("[NovaRequest] Request performed successfully.")
         return response.content.hex()
     else:
         soup = BeautifulSoup(response.text, 'html.parser')

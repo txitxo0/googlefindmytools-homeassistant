@@ -148,16 +148,17 @@ message DeviceTypeInformation {
 
 message DeviceRegistration {
   DeviceTypeInformation deviceTypeInformation = 2;
-  EncryptedKeys encryptedKeys = 19;
+  EncryptedUserSecrets encryptedUserSecrets = 19;
   string manufacturer = 20;
+  string fastPairModelId = 21;
   string model = 34;
 }
 
-message EncryptedKeys {
+message EncryptedUserSecrets {
   bytes encryptedIdentityKey = 1;
-  int32 keyVersion = 3;
+  int32 ownerKeyVersion = 3;
   bytes encryptedAccountKey = 4;
-  Time keyTimestamp = 8;
+  Time creationDate = 8;
   bytes encryptedSha256AccountKeyPublicAddress = 11;
 }
 
@@ -233,4 +234,55 @@ message Location {
     sfixed32 latitude = 1;
     sfixed32 longitude = 2;
     int32 altitude = 3;
+}
+
+message RegisterBleDeviceRequest {
+    string fastPairModelId = 7;
+    DeviceDescription description = 10;
+    DeviceCapabilities capabilities = 11;
+
+    E2EEPublicKeyRegistration e2eePublicKeyRegistration = 16;
+
+    string manufacturerName = 17;
+    bytes ringKey = 21;
+    bytes recoveryKey = 22;
+    bytes unwantedTrackingKey = 24;
+    string modelName = 25;
+}
+
+message E2EEPublicKeyRegistration {
+    int32 rotationExponent = 1;
+    EncryptedUserSecrets encryptedUserSecrets = 3;
+    PublicKeyIdList publicKeyIdList = 4;
+    int32 pairingDate = 5;
+}
+
+message PublicKeyIdList {
+    repeated PublicKeyIdInfo publicKeyIdInfo = 1;
+
+    message PublicKeyIdInfo {
+        Time timestamp = 1;
+        TruncatedEID publicKeyId = 2;
+        int32 trackableComponent = 3;
+    }
+}
+
+message TruncatedEID {
+    bytes truncatedEid = 1;
+}
+
+message DeviceCapabilities {
+    bool isAdvertising = 1;
+    int32 capableComponents = 5;
+    int32 trackableComponents = 6;
+}
+
+message DeviceDescription {
+    string userDefinedName = 1;
+    SpotDeviceType deviceType = 2;
+    repeated DeviceComponentInformation deviceComponentsInformation = 9;
+}
+
+message DeviceComponentInformation {
+    string imageUrl = 1;
 }

@@ -16,7 +16,6 @@ def _generate_aas_token():
     android_id = FcmReceiver().get_android_id()
     token = request_oauth_account_token_flow()
 
-    print("[AASTokenRetrieval] Asking Server for AAS Token.")
     aas_token_response = gpsoauth.exchange_token(username, token, android_id)
     aas_token = aas_token_response['Token']
 

@@ -14,11 +14,14 @@ from ProtoDecoders import DeviceUpdate_pb2
 from ProtoDecoders import Common_pb2
 from ProtoDecoders.decoder import parse_device_update_protobuf
 from SpotApi.GetEidInfoForE2eeDevices.get_owner_key import get_owner_key
+from SpotApi.CreateBleDevice.create_ble_device import esp32Id, flip_bits
 
 
 def decrypt_location_response_locations(device_update_protobuf):
 
-    encrypted_identity_key = device_update_protobuf.deviceMetadata.information.deviceRegistration.encryptedKeys.encryptedIdentityKey
+    is_custom_tracker = device_update_protobuf.deviceMetadata.information.deviceRegistration.fastPairModelId == esp32Id
+
+    encrypted_identity_key = flip_bits(device_update_protobuf.deviceMetadata.information.deviceRegistration.encryptedUserSecrets.encryptedIdentityKey, is_custom_tracker)
     owner_key = get_owner_key()
 
     identity_key = decrypt_eik(unhexlify(owner_key), encrypted_identity_key.hex())
@@ -55,12 +58,12 @@ def decrypt_location_response_locations(device_update_protobuf):
 
             encrypted_location = loc.geoLocation.encryptedReport.encryptedLocation
             public_key_random = loc.geoLocation.encryptedReport.publicKeyRandom
-            time_offset = loc.geoLocation.deviceTimeOffset
 
             if public_key_random == b"":  # Own Report
                 identity_key_hash = hashlib.sha256(identity_key).digest()
                 decrypted_location = decrypt_aes_gcm(identity_key_hash, encrypted_location)
             else:
+                time_offset = 0 if is_custom_tracker else loc.geoLocation.deviceTimeOffset
                 decrypted_location = decrypt(identity_key.hex(), encrypted_location, public_key_random, time_offset)
 
             wrapped_location = WrappedLocation(
