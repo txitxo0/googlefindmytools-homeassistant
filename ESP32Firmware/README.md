@@ -7,12 +7,12 @@ The firmware works differently to regular Find My Device trackers. It is made to
 
 ## How to use
 
-- Run the Python Script 'main.py' in the parent folder. Follow the instructions of the README of the parent folder.
-- When the device list is displayed, press 'C' to register a new ESP32 device in your account. Copy the displayed advertisement key.
-- Install Visual Studio Code
+- Run the Python Script [`main.py`](../main.py) in the parent folder. Follow the instructions of the [README of the parent folder](../README.md).
+- When the device list is displayed, press 'r' to register a new ESP32 device in your account. Copy the displayed advertisement key.
+- Install Visual Studio Code [here](https://code.visualstudio.com/download)
 - Go to Visual Studio Code Extensions, search, install and open 'ESP-IDF' by Espressif
 - Open the folder containing this README file in Visual Studio Code
-- Navigate to the folder main, select the file 'main.c'
+- Navigate to the folder main, select the file [`main.c`](main/main.c)
 - Edit Line 15, and insert the advertisement key retrieved from the Python Script
 - Connect your ESP32 to your system with USB
 - On the bottom left of Visual Studio Code, click the 'plug' icon and select your ESP32, it should be named '/dev/tty.usbserial-0001' or similar
