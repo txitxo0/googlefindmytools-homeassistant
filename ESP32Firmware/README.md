@@ -26,4 +26,4 @@ The firmware works differently to regular Find My Device trackers. It is made to
 - After 1 year, you need to re-register the ESP32
 - You cannot view locations for the ESP32 in the Google Find My Device app. You will need to use the Python script to do so.
 - No privacy features such as rotating MAC addresses are implemented
-- The firmware was built to receive as many network reports as possible. Therefore, it might consume more power than necessary. To fix this, you can tweak the parameters (TX Power and advertising interval) in 'main.c'
+- The firmware was built to receive as many network reports as possible. Therefore, it might consume more power than necessary. To fix this, you can tweak the parameters (TX Power and advertising interval) in [`main.c`](main/main.c)
