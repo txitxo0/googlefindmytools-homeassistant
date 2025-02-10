@@ -187,12 +187,12 @@ class ExecuteActionType(_message.Message):
     def __init__(self, locateTracker: _Optional[_Union[ExecuteActionLocateTrackerType, _Mapping]] = ..., startSound: _Optional[_Union[ExecuteActionSoundType, _Mapping]] = ..., stopSound: _Optional[_Union[ExecuteActionSoundType, _Mapping]] = ...) -> None: ...
 
 class ExecuteActionLocateTrackerType(_message.Message):
-    __slots__ = ("activationDate", "contributorType")
-    ACTIVATIONDATE_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ("lastHighTrafficEnablingTime", "contributorType")
+    LASTHIGHTRAFFICENABLINGTIME_FIELD_NUMBER: _ClassVar[int]
     CONTRIBUTORTYPE_FIELD_NUMBER: _ClassVar[int]
-    activationDate: _Common_pb2.Time
+    lastHighTrafficEnablingTime: _Common_pb2.Time
     contributorType: SpotContributorType
-    def __init__(self, activationDate: _Optional[_Union[_Common_pb2.Time, _Mapping]] = ..., contributorType: _Optional[_Union[SpotContributorType, str]] = ...) -> None: ...
+    def __init__(self, lastHighTrafficEnablingTime: _Optional[_Union[_Common_pb2.Time, _Mapping]] = ..., contributorType: _Optional[_Union[SpotContributorType, str]] = ...) -> None: ...
 
 class ExecuteActionSoundType(_message.Message):
     __slots__ = ("component",)

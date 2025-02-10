@@ -4,6 +4,7 @@
 #
 
 import asyncio
+import time
 
 from Auth.fcm_receiver import FcmReceiver
 from NovaApi.ExecuteAction.LocateTracker.decrypt_locations import decrypt_location_response_locations
@@ -20,9 +21,7 @@ def create_location_request(canonic_device_id, fcm_registration_id, request_uuid
     actionRequest = create_action_request(canonic_device_id, fcm_registration_id, request_uuid=request_uuid)
 
     # Random values, can be arbitrary
-    actionRequest.action.locateTracker.activationDate.seconds = 1732120060
-    actionRequest.action.locateTracker.activationDate.nanos = 0
-
+    actionRequest.action.locateTracker.lastHighTrafficEnablingTime.seconds = 1732120060
     actionRequest.action.locateTracker.contributorType = DeviceUpdate_pb2.SpotContributorType.FMDN_ALL_LOCATIONS
 
     # Convert to hex string

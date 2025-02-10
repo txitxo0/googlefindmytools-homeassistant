@@ -63,7 +63,7 @@ message ExecuteActionType {
 }
 
 message ExecuteActionLocateTrackerType {
-  Time activationDate = 2;
+  Time lastHighTrafficEnablingTime = 2;
   SpotContributorType contributorType = 3;
 }
 
