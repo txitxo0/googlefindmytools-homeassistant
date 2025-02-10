@@ -11,8 +11,8 @@
 
 #define TAG "ESP_FMDN"
 
-// This is the advertisement / EID. Change it to your own EID.
-const char *eid_string = "INSERT_YOUR_HEX_ADVERTISEMENT_HERE";
+// This is the advertisement key / EID. Change it to your own EID.
+const char *eid_string = "INSERT_YOUR_ADVERTISEMENT_KEY_HERE";
 
 // Function to convert a hex string into a byte array
 void hex_string_to_bytes(const char *hex, uint8_t *bytes, size_t len) {
