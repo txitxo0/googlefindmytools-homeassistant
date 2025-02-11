@@ -42,7 +42,7 @@ def get_location_data_for_device(canonic_device_id):
         device_update = parse_device_update_protobuf(response)
 
         if device_update.fcmMetadata.requestUuid == request_uuid:
-            print("[LocationRequest] Location request successful. Response:")
+            print("[LocationRequest] Location request successful.")
             result = parse_device_update_protobuf(response)
             #print_device_update_protobuf(response)
         else:

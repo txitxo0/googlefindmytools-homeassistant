@@ -19,20 +19,20 @@ def create_driver():
 def request_shared_key_flow():
     driver = create_driver()
     try:
-        # Step 1: Open Google accounts sign-in page
+        # Open Google accounts sign-in page
         driver.get("https://accounts.google.com/")
 
-        # Step 2: Wait for user to sign in and redirect to https://myaccount.google.com
+        # Wait for user to sign in and redirect to https://myaccount.google.com
         WebDriverWait(driver, 300).until(
             EC.url_contains("https://myaccount.google.com")
         )
-        print("User signed in successfully.")
+        print("[SharedKeyFlow] Signed in successfully.")
 
-        # Step 3: Open the security domain request URL
+        # Open the security domain request URL
         security_url = get_security_domain_request_url()
         driver.get(security_url)
 
-        # Step 4: Inject JavaScript interface
+        # Inject JavaScript interface
         script = """
         window.mm = {
             setVaultSharedKeys: function(str, vaultKeys) {
@@ -47,9 +47,6 @@ def request_shared_key_flow():
         """
         driver.execute_script(script)
 
-        # Step 5: Listen for interactions
-        print("JavaScript interface 'mm' is set. Waiting for interactions...")
-
         while True:
             # Check for alerts indicating JavaScript calls
             try:
@@ -58,20 +55,17 @@ def request_shared_key_flow():
                 message = alert.text
                 alert.accept()
 
-                print("Alert received:", message)
-                print(message)
-
                 # Parse the alert message
                 import json
                 data = json.loads(message)
 
                 if data['method'] == 'setVaultSharedKeys':
-                    print("setVaultSharedKeys called. Parsing vault keys...")
                     shared_key = get_fmdn_shared_key(data['vaultKeys'])
+                    print("[SharedKeyFlow] Received Shared Key.")
                     driver.quit()
                     return shared_key.hex()
                 elif data['method'] == 'closeView':
-                    print("closeView called. Closing browser.")
+                    print("[SharedKeyFlow] closeView() called. Closing browser.")
                     driver.quit()
                     break
 
