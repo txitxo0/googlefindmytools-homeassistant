@@ -30,15 +30,11 @@ def request_oauth_account_token_flow():
         driver = uc.Chrome(options=chrome_options)
         print("[AuthFlow] ChromeDriver installed and browser started.")
     except Exception as e:
-        raise Exception(
-            "[AuthFlow] Failed to install ChromeDriver. A current version of Chrome was not detected on your system.\n\nIf you know that Chrome is installed, first try to update Chrome to the latest version. If the script is still not working afterward, open the file 'Auth/auth_flow.py' and set the path to your Chrome executable in line 16.")
+        raise Exception("[AuthFlow] Failed to install ChromeDriver. A current version of Chrome was not detected on your system.\n\nIf you know that Chrome is installed, first try to update Chrome to the latest version. If the script is still not working afterward, open the file 'Auth/auth_flow.py' and set the path to your Chrome executable in line 16.")
 
     try:
         # Open the browser and navigate to the URL
-        print("[AuthFlow] Navigating to the URL...")
-        start_time = time.time()
         driver.get("https://accounts.google.com/EmbeddedSetup")
-        print(f"[AuthFlow] Page loaded in {time.time() - start_time:.2f} seconds.")
 
         # Wait until the "oauth_token" cookie is set
         print("[AuthFlow] Waiting for 'oauth_token' cookie to be set...")
@@ -51,13 +47,12 @@ def request_oauth_account_token_flow():
         oauth_token_value = oauth_token_cookie['value']
 
         # Print the value of the "oauth_token" cookie
-        print("oauth_token:", oauth_token_value)
+        print("[AuthFlow] Retrieved Account Token successfully.")
 
         return oauth_token_value
 
     finally:
         # Close the browser
-        print("[AuthFlow] Closing the browser...")
         driver.quit()
 
 if __name__ == '__main__':
