@@ -23,6 +23,7 @@ The firmware works differently to regular Find My Device trackers. It is made to
 
 ## Known Issues
 
+- Might not work with 'fresh' Google accounts, make sure that you used the Find My Device app on an Android device before registering a new tracker
 - After 1 year, you need to re-register the ESP32
 - You cannot view locations for the ESP32 in the Google Find My Device app. You will need to use the Python script to do so.
 - No privacy features such as rotating MAC addresses are implemented
