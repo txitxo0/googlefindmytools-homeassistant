@@ -1,9 +1,9 @@
 # GoogleFindMyTools
 
-This repository includes some useful tools for understanding how Google's Find My Device Network works. It will be extended over time. Note that the code of this repo is still very experimental.
+This repository includes some useful tools that reimplement parts of Google's Find My Device Network. Note that the code of this repo is still very experimental.
 
 ### What's possible?
-Currently, it is possible to query Find My Device trackers and Android devices, read out their E2EE keys, and decrypt encrypted locations sent from the Find My Device network. You can also send commands to your trackers over the network, such as ringing the tracker.
+Currently, it is possible to query Find My Device trackers and Android devices, read out their E2EE keys, and decrypt encrypted locations sent from the Find My Device network. You can also send register your own ESP32-based trackers, as described below.
 
 ### How to use
 - All packages in requirements.txt need to be installed: `pip install -r requirements.txt`
