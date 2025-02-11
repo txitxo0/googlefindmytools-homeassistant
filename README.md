@@ -7,7 +7,7 @@ Currently, it is possible to query Find My Device trackers and Android devices, 
 
 ### How to use
 - All packages in requirements.txt need to be installed: `pip install -r requirements.txt`
-- Google Chrome needs to be installed on your system.
+- The latest version of Google Chrome needs to be installed on your system.
 - You can try out this code by running [main.py](main.py): `python main.py`
 
 ### Known Issues
