@@ -11,7 +11,6 @@ Currently, it is possible to query Find My Device trackers and Android devices, 
 - You can try out this code by running [main.py](main.py): `python main.py`
 
 ### Known Issues
-- First registration for Cloud Messaging takes a while, be patient.
 - There seem to be issues with the package "undetected-chromedriver" not detecting Chrome on Windows and ARM Linux. macOS is working fine.
 - No support for trackers using the P-256 curve and 32-Byte advertisements. Regular trackers don't seem to use this curve at all - I can only confirm that it is used with Sony's WH1000XM5 headphones.
 

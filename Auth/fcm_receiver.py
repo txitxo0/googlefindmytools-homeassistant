@@ -2,7 +2,7 @@ import asyncio
 import base64
 import binascii
 
-from firebase_messaging import FcmRegisterConfig, FcmPushClient
+from Auth.firebase_messaging import FcmRegisterConfig, FcmPushClient
 from Auth.token_cache import set_cached_value, get_cached_value
 
 class FcmReceiver:
@@ -100,6 +100,7 @@ class FcmReceiver:
             try:
                 fcm_token = await self.pc.checkin_or_register()
             except Exception as e:
+                await self.pc.stop()
                 print("[FCMReceiver] Failed to register with FCM. Retrying...")
                 await asyncio.sleep(5)
 
