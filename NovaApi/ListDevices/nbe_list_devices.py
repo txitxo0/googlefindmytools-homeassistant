@@ -53,7 +53,7 @@ def list_devices():
     for idx, (device_name, canonic_id) in enumerate(canonic_ids, start=1):
         print(f"{idx}. {device_name}: {canonic_id}")
 
-    selected_value = input("\nIf you want to see locations of a tracker, type the number of the tracker and press 'Enter'.\nIf you want to register a new ESP32-based tracker, type 'r' and press 'Enter': ")
+    selected_value = input("\nIf you want to see locations of a tracker, type the number of the tracker and press 'Enter'.\nIf you want to register a new ESP32- or Zephyr-based tracker, type 'r' and press 'Enter': ")
 
     if selected_value == 'r':
         print("Loading...")
