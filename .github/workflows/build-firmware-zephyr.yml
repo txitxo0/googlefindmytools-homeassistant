@@ -18,7 +18,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Install cmake
-      run: apt update && apt install -y cmake
+      run: sudo apt update && sudo apt install -y cmake
 
     - name: Setup Zephyr project
       uses: zephyrproject-rtos/action-zephyr-setup@v1
