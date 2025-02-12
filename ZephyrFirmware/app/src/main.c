@@ -29,6 +29,7 @@ typedef struct __attribute__((packed)) {
   uint8_t flags_data;
 } fmdn_flags_data_t;
 
+/* Adv Frame, see https://developers.google.com/nearby/fast-pair/specifications/extensions/fmdn#advertised-frames */
 typedef struct __attribute__((packed)) {
   uint16_t service_uuid;
   uint8_t frame_type;
