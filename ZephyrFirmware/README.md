@@ -50,3 +50,7 @@ To build with UART logging:
 ```
 west build -p -b nrf52840dk/nrf52840 app -- -DEXTRA_CONF_FILE=logging.conf
 ```
+
+## Known Issues
+
+See [the README](../ESP32Firmware/README.md) for ESP32-based trackers (also applies here).
