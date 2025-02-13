@@ -18,3 +18,6 @@ Currently, it is possible to query Find My Device trackers and Android devices, 
 If you want to use an ESP32 as a custom Find My Device tracker, you can find the firmware in the folder ESP32Firmware. To register a new tracker, run main.py and press 'r' if you are asked to. Afterward, follow the instructions on-screen.
 
 For more information, check the [README in the ESP32Firmware folder](ESP32Firmware/README.md).
+
+### iOS App
+You can also use my [iOS App](https://testflight.apple.com/join/rGqa2mTe) to access your Find My Device trackers on the go.
