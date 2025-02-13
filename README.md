@@ -23,3 +23,6 @@ For more information, check the [README in the ESP32Firmware folder](ESP32Firmwa
 If you want to use a Zephyr-supported BLE device (e.g. nRF51/52) as a custom Find My Device tracker, you can find the firmware in the folder ZephyrFirmware. To register a new tracker, run main.py and press 'r' if you are asked to. Afterward, follow the instructions on-screen.
 
 For more information, check the [README in the ZephyrFirmware folder](ZephyrFirmware/README.md).
+
+### iOS App
+You can also use my [iOS App](https://testflight.apple.com/join/rGqa2mTe) to access your Find My Device trackers on the go.
