@@ -1,0 +1,33 @@
+name: Firmware build
+
+on:
+  push:
+    paths:
+      - ZephyrFirmware/**
+  pull_request:
+    paths:
+      - ZephyrFirmware/**
+  workflow_call:
+
+jobs:
+  build-firmware-zephyr:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install cmake
+      run: sudo apt update && sudo apt install -y cmake
+
+    - name: Setup Zephyr project
+      uses: zephyrproject-rtos/action-zephyr-setup@v1
+      with:
+          base-path: ZephyrFirmware
+          app-path: app
+          toolchains: arm-zephyr-eabi
+
+    - name: Build
+      working-directory: ZephyrFirmware
+      run: |
+        west build -b nrf52840dk/nrf52840 app

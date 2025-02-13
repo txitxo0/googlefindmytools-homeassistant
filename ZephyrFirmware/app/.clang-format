@@ -1,0 +1,10 @@
+---
+BasedOnStyle: Google
+AllowShortFunctionsOnASingleLine: Empty
+ColumnLimit: '120'
+IncludeBlocks: Preserve
+AllowShortIfStatementsOnASingleLine: Never
+SortIncludes: 'false'
+AllowShortLoopsOnASingleLine: 'false'
+
+...
