@@ -7,6 +7,7 @@ import secrets
 import time
 from binascii import unhexlify
 
+from FMDNCrypto.TrackerCommunication.key_derivation import FMDNOwnerOperations
 from FMDNCrypto.eid_generator import ROTATION_PERIOD, generate_eid
 from KeyBackup.cloud_key_decryptor import encrypt_aes_gcm
 from ProtoDecoders.DeviceUpdate_pb2 import DeviceComponentInformation, SpotDeviceType, RegisterBleDeviceRequest, PublicKeyIdList
@@ -85,10 +86,12 @@ def register_esp32():
     register_request.manufacturerName = "Espressif"
     register_request.modelName = "ESP32"
 
-    # Random keys, not used for ESP
-    register_request.ringKey = secrets.token_bytes(16)
-    register_request.recoveryKey = secrets.token_bytes(16)
-    register_request.unwantedTrackingKey = secrets.token_bytes(16)
+    ownerKeys = FMDNOwnerOperations()
+    ownerKeys.generate_keys(ephemeral_identity_key_hex=eik.hex())
+
+    register_request.ringKey = ownerKeys.ringing_key
+    register_request.recoveryKey = ownerKeys.recovery_key
+    register_request.unwantedTrackingKey = ownerKeys.tracking_key
 
     bytes_data = register_request.SerializeToString()
     spot_request("CreateBleDevice", bytes_data)

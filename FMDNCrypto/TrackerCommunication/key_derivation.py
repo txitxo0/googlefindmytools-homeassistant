@@ -21,6 +21,5 @@ class FMDNOwnerOperations:
             self.ringing_key = calculate_truncated_sha256(ephemeral_identity_key_hex, 0x02)
             self.tracking_key = calculate_truncated_sha256(ephemeral_identity_key_hex, 0x03)
 
-            print(f"Generated Keys: {hex_encoded_string(self.recovery_key)} {hex_encoded_string(self.ringing_key)} {hex_encoded_string(self.tracking_key)}")
         except Exception as e:
             print(str(e))
