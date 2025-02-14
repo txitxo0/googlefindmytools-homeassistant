@@ -3,7 +3,7 @@
 This repository includes some useful tools that reimplement parts of Google's Find My Device Network. Note that the code of this repo is still very experimental.
 
 ### What's possible?
-Currently, it is possible to query Find My Device trackers and Android devices, read out their E2EE keys, and decrypt encrypted locations sent from the Find My Device network. You can also send register your own ESP32-based trackers, as described below.
+Currently, it is possible to query Find My Device trackers and Android devices, read out their E2EE keys, and decrypt encrypted locations sent from the Find My Device network. You can also send register your own ESP32- or Zephyr-based trackers, as described below.
 
 ### How to use
 - All packages in requirements.txt need to be installed: `pip install -r requirements.txt`
@@ -18,6 +18,11 @@ Currently, it is possible to query Find My Device trackers and Android devices, 
 If you want to use an ESP32 as a custom Find My Device tracker, you can find the firmware in the folder ESP32Firmware. To register a new tracker, run main.py and press 'r' if you are asked to. Afterward, follow the instructions on-screen.
 
 For more information, check the [README in the ESP32Firmware folder](ESP32Firmware/README.md).
+
+### Firmware for custom Zephyr-based trackers
+If you want to use a Zephyr-supported BLE device (e.g. nRF51/52) as a custom Find My Device tracker, you can find the firmware in the folder ZephyrFirmware. To register a new tracker, run main.py and press 'r' if you are asked to. Afterward, follow the instructions on-screen.
+
+For more information, check the [README in the ZephyrFirmware folder](ZephyrFirmware/README.md).
 
 ### iOS App
 You can also use my [iOS App](https://testflight.apple.com/join/rGqa2mTe) to access your Find My Device trackers on the go.

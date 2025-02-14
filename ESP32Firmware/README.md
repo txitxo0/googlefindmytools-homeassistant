@@ -8,7 +8,7 @@ The firmware works differently to regular Find My Device trackers. It is made to
 ## How to use
 
 - Run the Python Script [`main.py`](../main.py) in the parent folder. Follow the instructions of the [README of the parent folder](../README.md).
-- When the device list is displayed, press 'r' to register a new ESP32 device in your account. Copy the displayed advertisement key.
+- When the device list is displayed, press 'r' to register a new ESP32/Zephyr device in your account. Copy the displayed advertisement key.
 - Install Visual Studio Code [here](https://code.visualstudio.com/download)
 - Go to Visual Studio Code Extensions, search, install and open 'ESP-IDF' by Espressif
 - Open the folder containing this README file in Visual Studio Code
