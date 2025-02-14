@@ -7,16 +7,14 @@ import secrets
 import time
 from binascii import unhexlify
 
-from FMDNCrypto.TrackerCommunication.key_derivation import FMDNOwnerOperations
+from FMDNCrypto.key_derivation import FMDNOwnerOperations
 from FMDNCrypto.eid_generator import ROTATION_PERIOD, generate_eid
 from KeyBackup.cloud_key_decryptor import encrypt_aes_gcm
 from ProtoDecoders.DeviceUpdate_pb2 import DeviceComponentInformation, SpotDeviceType, RegisterBleDeviceRequest, PublicKeyIdList
 from SpotApi.GetEidInfoForE2eeDevices.get_owner_key import get_owner_key
 from SpotApi.spot_request import spot_request
 
-
 mcu_fast_pair_model_id = "003200"
-
 
 def hours_to_seconds(hours):
     return hours * 3600
@@ -73,8 +71,8 @@ def register_esp32():
     time_counter = pair_date
     truncated_eid = eid[:10]
 
-    # announce advertisements for the next year
-    for _ in range(int(hours_to_seconds(8760) / ROTATION_PERIOD)):
+    # announce advertisements
+    for _ in range(int(hours_to_seconds(3000) / ROTATION_PERIOD)):
         pub_key_id = PublicKeyIdList.PublicKeyIdInfo()
         pub_key_id.publicKeyId.truncatedEid = truncated_eid
         pub_key_id.timestamp.seconds = time_counter

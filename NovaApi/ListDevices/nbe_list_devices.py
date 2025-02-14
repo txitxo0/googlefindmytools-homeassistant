@@ -11,6 +11,7 @@ from NovaApi.util import generate_random_uuid
 from ProtoDecoders import DeviceUpdate_pb2
 from ProtoDecoders.decoder import parse_device_list_protobuf, get_canonic_ids
 from SpotApi.CreateBleDevice.create_ble_device import register_esp32
+from SpotApi.UploadPrecomputedPublicKeyIds.upload_precomputed_public_key_ids import refresh_custom_trackers
 
 
 def request_device_list():
@@ -44,8 +45,15 @@ def list_devices():
     result_hex = request_device_list()
 
     device_list = parse_device_list_protobuf(result_hex)
+
+    refresh_custom_trackers(device_list)
     canonic_ids = get_canonic_ids(device_list)
 
+    print("")
+    print("-" * 50)
+    print("Welcome to GoogleFindMyTools!")
+    print("-" * 50)
+    print("")
     print("The following trackers are available:")
 
     for idx, (device_name, canonic_id) in enumerate(canonic_ids, start=1):

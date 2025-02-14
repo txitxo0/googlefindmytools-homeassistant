@@ -12,7 +12,7 @@ from example_data_provider import get_example_data
 K = 10
 ROTATION_PERIOD = 1024  # 2^K seconds
 
-def generate_eid(identity_key, timestamp):
+def generate_eid(identity_key: str, timestamp: int):
     # Calculate r
     r = calculate_r(identity_key, timestamp)
 
@@ -24,7 +24,7 @@ def generate_eid(identity_key, timestamp):
     return R.x()
 
 
-def calculate_r(identity_key, timestamp):
+def calculate_r(identity_key: str, timestamp: int):
     # ts_bytes is the timestamp in bytes, but the least K significant bits are set to 0
     ts_bytes = get_masked_timestamp(timestamp, K)
     identity_key_bytes = hexadecimal(identity_key)
@@ -53,7 +53,7 @@ def calculate_r(identity_key, timestamp):
     return (r_dash_int % n)
 
 
-def get_masked_timestamp(timestamp, K):
+def get_masked_timestamp(timestamp: int, K: int):
     # Create a bitmask that has all bits set except for the K least significant bits
     mask = ~((1 << K) - 1)
 

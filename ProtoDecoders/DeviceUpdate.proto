@@ -151,6 +151,7 @@ message DeviceRegistration {
   EncryptedUserSecrets encryptedUserSecrets = 19;
   string manufacturer = 20;
   string fastPairModelId = 21;
+  int32 pairDate = 23;
   string model = 34;
 }
 
@@ -269,6 +270,16 @@ message PublicKeyIdList {
 
 message TruncatedEID {
     bytes truncatedEid = 1;
+}
+
+message UploadPrecomputedPublicKeyIdsRequest {
+    repeated DevicePublicKeyIds deviceEids = 1;
+
+    message DevicePublicKeyIds {
+        CanonicId canonicId = 1;
+        PublicKeyIdList clientList = 2;
+        int32 pairDate = 3;
+    }
 }
 
 message DeviceCapabilities {

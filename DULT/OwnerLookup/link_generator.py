@@ -4,7 +4,7 @@
 #
 
 from FMDNCrypto.eid_generator import generate_eid, ROTATION_PERIOD
-from FMDNCrypto.TrackerCommunication.key_derivation import FMDNOwnerOperations
+from FMDNCrypto.key_derivation import FMDNOwnerOperations
 from FMDNCrypto.util import calculate_hmac_sha256
 from example_data_provider import get_example_data
 

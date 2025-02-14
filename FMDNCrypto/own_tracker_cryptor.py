@@ -16,15 +16,18 @@ from example_data_provider import get_example_data
 def to_hex(byte_array):
     return hexlify(byte_array).decode()
 
+
 def encrypt_with_hashed_key(data, identity_key, iv):
     assert len(iv) == 12, "Invalid IV"
     assert len(identity_key) == 32, "Invalid identity key"
     return encrypt_bytes(get_message_digest(identity_key), data, iv)
 
+
 def encrypt_bytes(key, data, iv):
     cipher = AES.new(key, AES.MODE_GCM, nonce=iv)
     ciphertext, tag = cipher.encrypt_and_digest(data)
     return iv + ciphertext + tag
+
 
 def get_message_digest(byte_string):
     hasher = SHA256.new()
@@ -32,6 +35,7 @@ def get_message_digest(byte_string):
     hashed_key = hasher.digest()
     print("Hashed key: " + to_hex(hashed_key))
     return hashed_key
+
 
 def decrypt_bytes(key, encrypted_data):
     hashed_key = get_message_digest(key)
@@ -41,6 +45,7 @@ def decrypt_bytes(key, encrypted_data):
     cipher = AES.new(hashed_key, AES.MODE_GCM, nonce=iv)
     decrypted_data = cipher.decrypt_and_verify(ciphertext, tag)
     return decrypted_data
+
 
 if __name__ == "__main__":
 

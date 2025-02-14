@@ -7,25 +7,41 @@ import datetime
 import hashlib
 from binascii import unhexlify
 
-from FMDNCrypto.LocationReporting.foreign_tracker_encryptor import decrypt
+from FMDNCrypto.foreign_tracker_cryptor import decrypt
 from KeyBackup.cloud_key_decryptor import decrypt_eik, decrypt_aes_gcm
 from NovaApi.ExecuteAction.LocateTracker.decrypted_location import WrappedLocation
 from ProtoDecoders import DeviceUpdate_pb2
 from ProtoDecoders import Common_pb2
+from ProtoDecoders.DeviceUpdate_pb2 import DeviceRegistration
 from ProtoDecoders.decoder import parse_device_update_protobuf
 from SpotApi.GetEidInfoForE2eeDevices.get_owner_key import get_owner_key
 from SpotApi.CreateBleDevice.create_ble_device import mcu_fast_pair_model_id, flip_bits
 
 
-def decrypt_location_response_locations(device_update_protobuf):
+def is_mcu_tracker(device_registration: DeviceRegistration) -> bool:
+    return device_registration.fastPairModelId == mcu_fast_pair_model_id
 
-    is_custom_tracker = device_update_protobuf.deviceMetadata.information.deviceRegistration.fastPairModelId == mcu_fast_pair_model_id
 
-    encrypted_identity_key = flip_bits(device_update_protobuf.deviceMetadata.information.deviceRegistration.encryptedUserSecrets.encryptedIdentityKey, is_custom_tracker)
+def retrieve_identity_key(device_registration: DeviceRegistration) -> bytes:
+    is_mcu = is_mcu_tracker(device_registration)
+
+    encrypted_identity_key = flip_bits(
+        device_registration.encryptedUserSecrets.encryptedIdentityKey,
+        is_mcu)
     owner_key = get_owner_key()
 
     identity_key = decrypt_eik(unhexlify(owner_key), encrypted_identity_key.hex())
+
+    return identity_key
+
+
+def decrypt_location_response_locations(device_update_protobuf):
+
+    device_registration = device_update_protobuf.deviceMetadata.information.deviceRegistration
+
+    identity_key = retrieve_identity_key(device_registration)
     locations_proto = device_update_protobuf.deviceMetadata.information.locationInformation.reports.recentLocationAndNetworkLocations
+    is_mcu = is_mcu_tracker(device_registration)
 
     # At All Areas Reports or Own Reports
     recent_location = locations_proto.recentLocation
@@ -63,7 +79,7 @@ def decrypt_location_response_locations(device_update_protobuf):
                 identity_key_hash = hashlib.sha256(identity_key).digest()
                 decrypted_location = decrypt_aes_gcm(identity_key_hash, encrypted_location)
             else:
-                time_offset = 0 if is_custom_tracker else loc.geoLocation.deviceTimeOffset
+                time_offset = 0 if is_mcu else loc.geoLocation.deviceTimeOffset
                 decrypted_location = decrypt(identity_key.hex(), encrypted_location, public_key_random, time_offset)
 
             wrapped_location = WrappedLocation(
