@@ -36,12 +36,12 @@ def refresh_custom_trackers(device_list: DevicesList):
             request.deviceEids.append(new_truncated_ids)
 
     if needs_upload:
-        print("Updating your registered µC devices...")
+        print("[UploadPrecomputedPublicKeyIds] Updating your registered µC devices...")
         try:
             bytes_data = request.SerializeToString()
             spot_request("UploadPrecomputedPublicKeyIds", bytes_data)
         except Exception as e:
-            print(f"Failed to refresh custom trackers. Please file a bug report. Continuing... {str(e)}")
+            print(f"[UploadPrecomputedPublicKeyIds] Failed to refresh custom trackers. Please file a bug report. Continuing... {str(e)}")
 
 
 def get_next_eids(eik: bytes, pair_date: int, start_date: int, duration_seconds: int = hours_to_seconds(8760)) -> list[PublicKeyIdList.PublicKeyIdInfo]:

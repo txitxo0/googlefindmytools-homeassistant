@@ -8,7 +8,7 @@ import os
 
 SECRETS_FILE = 'secrets.json'
 
-def get_cached_value_or_set(name, generator):
+def get_cached_value_or_set(name: str, generator: callable):
 
     existing_value = get_cached_value(name)
 
@@ -20,7 +20,7 @@ def get_cached_value_or_set(name, generator):
     return value
 
 
-def get_cached_value(name):
+def get_cached_value(name: str):
     secrets_file = _get_secrets_file()
 
     if os.path.exists(secrets_file):
@@ -35,7 +35,7 @@ def get_cached_value(name):
     return None
 
 
-def set_cached_value(name, value):
+def set_cached_value(name: str, value: str):
     secrets_file = _get_secrets_file()
 
     if os.path.exists(secrets_file):

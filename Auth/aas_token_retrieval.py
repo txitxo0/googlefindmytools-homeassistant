@@ -7,8 +7,8 @@ import gpsoauth
 
 from Auth.auth_flow import request_oauth_account_token_flow
 from Auth.fcm_receiver import FcmReceiver
-from Auth.token_cache import get_cached_value_or_set
-from Auth.username_provider import get_username
+from Auth.token_cache import get_cached_value_or_set, set_cached_value
+from Auth.username_provider import get_username, username_string
 
 
 def _generate_aas_token():
@@ -18,6 +18,10 @@ def _generate_aas_token():
 
     aas_token_response = gpsoauth.exchange_token(username, token, android_id)
     aas_token = aas_token_response['Token']
+
+    if 'Email' in aas_token_response:
+        email = aas_token_response['Email']
+        set_cached_value(username_string, email)
 
     return aas_token
 
