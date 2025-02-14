@@ -4,6 +4,7 @@
 #
 
 import secrets
+from binascii import unhexlify
 
 from Cryptodome.Cipher import AES
 from ecdsa import SECP160r1
@@ -12,11 +13,10 @@ from cryptography.hazmat.primitives import hashes
 from ecdsa.ellipticcurve import Point
 
 from FMDNCrypto.eid_generator import generate_eid, calculate_r
-from FMDNCrypto.util import hexadecimal
 from example_data_provider import get_example_data
 
 
-def rx_to_ry(Rx, curve):
+def rx_to_ry(Rx: int, curve) -> int:
     # Calculate y^2 = x^3 + ax + b (mod p)
     Ryy = (Rx ** 3 + curve.a() * Rx + curve.b()) % curve.p()
 
@@ -34,7 +34,7 @@ def rx_to_ry(Rx, curve):
     return Ry
 
 
-def encrypt_aes_eax(data, nonce, key):
+def encrypt_aes_eax(data: bytes, nonce: bytes, key: bytes) -> (bytes, bytes):
     # Ensure the key is 32 bytes for AES-256
     if len(key) != 32:
         raise ValueError("Key must be 32 bytes long for AES-256")
@@ -48,7 +48,7 @@ def encrypt_aes_eax(data, nonce, key):
     return ciphertext, tag
 
 
-def decrypt_aes_eax(data, tag, nonce, key):
+def decrypt_aes_eax(data: bytes, tag: bytes, nonce: bytes, key: bytes) -> bytes:
     # Ensure the key is 32 bytes for AES-256
     if len(key) != 32:
         raise ValueError("Key must be 32 bytes long for AES-256")
@@ -60,7 +60,7 @@ def decrypt_aes_eax(data, tag, nonce, key):
     return cipher.decrypt_and_verify(data, tag)
 
 
-def encrypt(message, random, eid):
+def encrypt(message: bytes, random: bytes, eid: bytes) -> (bytes, bytes):
     # Step 1: Choose a random number s in Fp
     curve = SECP160r1
     s = int.from_bytes(random, byteorder='big', signed=True) % curve.order
@@ -70,7 +70,7 @@ def encrypt(message, random, eid):
 
     # Step 3: Compute R = (Rx, Ry) by substitution in the curve equation
     # and picking an arbitrary Ry value out of the possible results
-    Rx = eid
+    Rx = int.from_bytes(eid, byteorder='big')
     Ry = rx_to_ry(Rx, curve.curve)
     R = Point(curve.curve, Rx, Ry)
 
@@ -99,7 +99,7 @@ def encrypt(message, random, eid):
     return m_dash + tag, S.x().to_bytes(20, 'big')
 
 
-def decrypt(identity_key, encryptedAndTag, Sx, beacon_time_counter):
+def decrypt(identity_key: bytes, encryptedAndTag: bytes, Sx: bytes, beacon_time_counter: int) -> bytes:
     # Split into encrypted message and 16-byte tag
     m_dash = encryptedAndTag[:-16]
     tag = encryptedAndTag[-16:]
@@ -139,17 +139,16 @@ if __name__ == "__main__":
     # 4-byte timestamp
     timestamp = 0x0084D000
 
-    sample_identity_key = get_example_data("sample_identity_key")
-    sample_location_data = get_example_data("sample_location_data")
+    sample_identity_key = unhexlify(get_example_data("sample_identity_key"))
+    sample_location_data = unhexlify(get_example_data("sample_location_data"))
 
     # Generate EID
     eid = generate_eid(sample_identity_key, timestamp)
-    message = hexadecimal(sample_location_data)
 
     # generate 32-byte random number
     random = secrets.token_bytes(32)
 
-    encryptedAndTag, Sx = encrypt(message, random, eid)
+    encryptedAndTag, Sx = encrypt(sample_location_data, random, eid)
 
     print("Encrypted Message and Tag: " + encryptedAndTag.hex())
     print("Random Sx: " + Sx.hex())
@@ -157,4 +156,4 @@ if __name__ == "__main__":
     decrypted = decrypt(sample_identity_key, encryptedAndTag, Sx, timestamp)
     print("Decrypted Message: " + decrypted.hex())
 
-    assert decrypted == message
+    assert decrypted == sample_location_data

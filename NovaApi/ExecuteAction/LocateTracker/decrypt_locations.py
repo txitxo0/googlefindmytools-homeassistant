@@ -5,7 +5,6 @@
 
 import datetime
 import hashlib
-from binascii import unhexlify
 
 from FMDNCrypto.foreign_tracker_cryptor import decrypt
 from KeyBackup.cloud_key_decryptor import decrypt_eik, decrypt_aes_gcm
@@ -18,6 +17,7 @@ from SpotApi.GetEidInfoForE2eeDevices.get_owner_key import get_owner_key
 from SpotApi.CreateBleDevice.create_ble_device import mcu_fast_pair_model_id, flip_bits
 
 
+# Indicates if the device is a custom microcontroller
 def is_mcu_tracker(device_registration: DeviceRegistration) -> bool:
     return device_registration.fastPairModelId == mcu_fast_pair_model_id
 
@@ -30,7 +30,7 @@ def retrieve_identity_key(device_registration: DeviceRegistration) -> bytes:
         is_mcu)
     owner_key = get_owner_key()
 
-    identity_key = decrypt_eik(unhexlify(owner_key), encrypted_identity_key.hex())
+    identity_key = decrypt_eik(owner_key, encrypted_identity_key)
 
     return identity_key
 
@@ -80,7 +80,7 @@ def decrypt_location_response_locations(device_update_protobuf):
                 decrypted_location = decrypt_aes_gcm(identity_key_hash, encrypted_location)
             else:
                 time_offset = 0 if is_mcu else loc.geoLocation.deviceTimeOffset
-                decrypted_location = decrypt(identity_key.hex(), encrypted_location, public_key_random, time_offset)
+                decrypted_location = decrypt(identity_key, encrypted_location, public_key_random, time_offset)
 
             wrapped_location = WrappedLocation(
                 decrypted_location=decrypted_location,

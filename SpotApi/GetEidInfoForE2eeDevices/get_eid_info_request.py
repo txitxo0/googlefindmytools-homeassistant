@@ -7,11 +7,11 @@ from ProtoDecoders import DeviceUpdate_pb2
 from SpotApi.spot_request import spot_request
 
 def get_eid_info():
-    getEidInfoForE2eeDevicesRequest = Common_pb2.GetEidInfoForE2eeDevicesRequest()
-    getEidInfoForE2eeDevicesRequest.ownerKeyVersion = -1
-    getEidInfoForE2eeDevicesRequest.hasOwnerKeyVersion = True
+    get_eid_info_for_e2ee_devices_request = Common_pb2.GetEidInfoForE2eeDevicesRequest()
+    get_eid_info_for_e2ee_devices_request.ownerKeyVersion = -1
+    get_eid_info_for_e2ee_devices_request.hasOwnerKeyVersion = True
 
-    serialized_request = getEidInfoForE2eeDevicesRequest.SerializeToString()
+    serialized_request = get_eid_info_for_e2ee_devices_request.SerializeToString()
     response_bytes = spot_request("GetEidInfoForE2eeDevices", serialized_request)
 
     eid_info = DeviceUpdate_pb2.GetEidInfoForE2eeDevicesResponse()

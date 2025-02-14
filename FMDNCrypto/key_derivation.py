@@ -3,9 +3,7 @@
 #  Copyright © 2024 Leon Böttger. All rights reserved.
 #
 
-from FMDNCrypto.util import hexadecimal, hex_encoded_string, calculate_truncated_sha256
-import hashlib
-import hmac
+from FMDNCrypto.sha import calculate_truncated_sha256
 
 class FMDNOwnerOperations:
 
@@ -14,12 +12,12 @@ class FMDNOwnerOperations:
         self.ringing_key = None
         self.tracking_key = None
 
-    def generate_keys(self, ephemeral_identity_key_hex: str):
+    def generate_keys(self, identity_key: bytes):
 
         try:
-            self.recovery_key = calculate_truncated_sha256(ephemeral_identity_key_hex, 0x01)
-            self.ringing_key = calculate_truncated_sha256(ephemeral_identity_key_hex, 0x02)
-            self.tracking_key = calculate_truncated_sha256(ephemeral_identity_key_hex, 0x03)
+            self.recovery_key = calculate_truncated_sha256(identity_key, 0x01)
+            self.ringing_key = calculate_truncated_sha256(identity_key, 0x02)
+            self.tracking_key = calculate_truncated_sha256(identity_key, 0x03)
 
         except Exception as e:
             print(str(e))

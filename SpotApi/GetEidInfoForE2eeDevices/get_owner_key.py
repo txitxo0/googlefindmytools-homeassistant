@@ -13,14 +13,14 @@ def _retrieve_owner_key() -> str:
     eid_info = get_eid_info()
     shared_key = get_shared_key()
 
-    encrypted_owner_key = eid_info.encryptedOwnerKeyAndMetadata.encryptedOwnerKey.hex()
-    owner_key = decrypt_owner_key(unhexlify(shared_key), encrypted_owner_key)
+    encrypted_owner_key = eid_info.encryptedOwnerKeyAndMetadata.encryptedOwnerKey
+    owner_key = decrypt_owner_key(shared_key, encrypted_owner_key)
 
     return owner_key.hex()
 
 
-def get_owner_key():
-    return get_cached_value_or_set('owner_key', _retrieve_owner_key)
+def get_owner_key() -> bytes:
+    return unhexlify(get_cached_value_or_set('owner_key', _retrieve_owner_key))
 
 
 if __name__ == '__main__':

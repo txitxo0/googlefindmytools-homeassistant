@@ -4,17 +4,19 @@
 #
 
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions as ec
 import undetected_chromedriver as uc
 
 from KeyBackup.response_parser import get_fmdn_shared_key
 from KeyBackup.shared_key_request import get_security_domain_request_url
+
 
 # Initialize undetected Chrome WebDriver
 def create_driver():
     options = uc.ChromeOptions()
     options.add_argument("--start-maximized")
     return uc.Chrome(options=options)
+
 
 def request_shared_key_flow():
     driver = create_driver()
@@ -24,7 +26,7 @@ def request_shared_key_flow():
 
         # Wait for user to sign in and redirect to https://myaccount.google.com
         WebDriverWait(driver, 300).until(
-            EC.url_contains("https://myaccount.google.com")
+            ec.url_contains("https://myaccount.google.com")
         )
         print("[SharedKeyFlow] Signed in successfully.")
 
@@ -50,7 +52,7 @@ def request_shared_key_flow():
         while True:
             # Check for alerts indicating JavaScript calls
             try:
-                WebDriverWait(driver, 0.5).until(EC.alert_is_present())
+                WebDriverWait(driver, 0.5).until(ec.alert_is_present())
                 alert = driver.switch_to.alert
                 message = alert.text
                 alert.accept()
@@ -76,6 +78,7 @@ def request_shared_key_flow():
         print(f"An error occurred: {e}")
     finally:
         driver.quit()
+
 
 if __name__ == "__main__":
    request_shared_key_flow()

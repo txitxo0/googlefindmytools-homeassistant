@@ -6,7 +6,7 @@
 import json
 import os
 
-def get_example_data(identifier):
+def get_example_data(identifier: str) -> str:
     try:
         with open(_get_example_file(), 'r') as file:
             data = json.load(file)
@@ -20,6 +20,6 @@ def get_example_data(identifier):
         raise ValueError("The requested value was not found in the example data file (example_data.json). Please make sure the file is present and correctly formatted.")
 
 
-def _get_example_file():
+def _get_example_file() -> str:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(script_dir, 'example_data.json')

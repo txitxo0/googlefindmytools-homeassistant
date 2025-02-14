@@ -8,11 +8,11 @@ from ProtoDecoders import DeviceUpdate_pb2
 
 def create_sound_request(should_start, canonic_device_id, gcm_registration_id):
 
-    actionRequest = create_action_request(canonic_device_id, gcm_registration_id)
+    action_request = create_action_request(canonic_device_id, gcm_registration_id)
 
     if should_start:
-        actionRequest.action.startSound.component = DeviceUpdate_pb2.DeviceComponent.DEVICE_COMPONENT_UNSPECIFIED
+        action_request.action.startSound.component = DeviceUpdate_pb2.DeviceComponent.DEVICE_COMPONENT_UNSPECIFIED
     else:
-        actionRequest.action.stopSound.component = DeviceUpdate_pb2.DeviceComponent.DEVICE_COMPONENT_UNSPECIFIED
+        action_request.action.stopSound.component = DeviceUpdate_pb2.DeviceComponent.DEVICE_COMPONENT_UNSPECIFIED
 
-    return serialize_action_request(actionRequest)
+    return serialize_action_request(action_request)

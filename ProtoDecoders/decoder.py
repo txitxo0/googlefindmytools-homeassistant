@@ -50,21 +50,21 @@ def custom_message_formatter(message, indent, as_one_line):
 
 
 def parse_location_report_upload_protobuf(hex_string):
-    locationReports = LocationReportsUpload_pb2.LocationReportsUpload()
-    locationReports.ParseFromString(bytes.fromhex(hex_string))
-    return locationReports
+    location_reports = LocationReportsUpload_pb2.LocationReportsUpload()
+    location_reports.ParseFromString(bytes.fromhex(hex_string))
+    return location_reports
 
 
 def parse_device_update_protobuf(hex_string):
-    deviceUpdate = DeviceUpdate_pb2.DeviceUpdate()
-    deviceUpdate.ParseFromString(bytes.fromhex(hex_string))
-    return deviceUpdate
+    device_update = DeviceUpdate_pb2.DeviceUpdate()
+    device_update.ParseFromString(bytes.fromhex(hex_string))
+    return device_update
 
 
 def parse_device_list_protobuf(hex_string):
-    deviceList = DeviceUpdate_pb2.DevicesList()
-    deviceList.ParseFromString(bytes.fromhex(hex_string))
-    return deviceList
+    device_list = DeviceUpdate_pb2.DevicesList()
+    device_list.ParseFromString(bytes.fromhex(hex_string))
+    return device_list
 
 
 def get_canonic_ids(device_list):

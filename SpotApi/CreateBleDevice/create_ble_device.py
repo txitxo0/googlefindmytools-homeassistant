@@ -5,7 +5,6 @@
 
 import secrets
 import time
-from binascii import unhexlify
 
 from FMDNCrypto.key_derivation import FMDNOwnerOperations
 from FMDNCrypto.eid_generator import ROTATION_PERIOD, generate_eid
@@ -30,10 +29,10 @@ def flip_bits(data: bytes, enabled: bool) -> bytes:
 
 def register_esp32():
 
-    owner_key = unhexlify(get_owner_key())
+    owner_key = get_owner_key()
 
     eik = secrets.token_bytes(32)
-    eid = generate_eid(eik.hex(), 0).to_bytes(length=20, byteorder='big')
+    eid = generate_eid(eik, 0)
     pair_date = int(time.time())
 
     register_request = RegisterBleDeviceRequest()
@@ -85,7 +84,7 @@ def register_esp32():
     register_request.modelName = "µC"
 
     ownerKeys = FMDNOwnerOperations()
-    ownerKeys.generate_keys(ephemeral_identity_key_hex=eik.hex())
+    ownerKeys.generate_keys(identity_key=eik)
 
     register_request.ringKey = ownerKeys.ringing_key
     register_request.recoveryKey = ownerKeys.recovery_key

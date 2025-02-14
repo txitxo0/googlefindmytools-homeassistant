@@ -6,16 +6,8 @@
 import hashlib
 import hmac
 
-def hexadecimal(data: str) -> bytes:
-    return bytes.fromhex(data)
-
-
-def hex_encoded_string(data: bytes) -> str:
-    return data.hex()
-
-
-def calculate_truncated_sha256(identity_key_hex: str, operation: int) -> bytes:
-    identity_key_bytes = hexadecimal(identity_key_hex)
+def calculate_truncated_sha256(identity_key: bytes, operation: int) -> bytes:
+    identity_key_bytes = identity_key
     data = identity_key_bytes + bytes([operation])
 
     sha256_hash = hashlib.sha256(data).digest()

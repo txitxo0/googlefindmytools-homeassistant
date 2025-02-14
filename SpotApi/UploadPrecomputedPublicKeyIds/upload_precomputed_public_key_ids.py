@@ -51,7 +51,7 @@ def get_next_eids(eik: bytes, pair_date: int, start_date: int, duration_seconds:
     start_offset = start_date - pair_date
     current_time_offset = start_offset - (start_offset % ROTATION_PERIOD)
 
-    static_eid = generate_eid(eik.hex(), 0).to_bytes(20, 'big')
+    static_eid = generate_eid(eik, 0)
 
     while current_time_offset <= start_offset + duration_seconds:
         time = pair_date + current_time_offset

@@ -23,5 +23,6 @@ def get_security_domain_request_url():
     url = scope + binascii.b2a_base64(serialized).decode('utf-8')
     return url
 
+
 if __name__ == '__main__':
     print(get_security_domain_request_url())

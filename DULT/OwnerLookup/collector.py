@@ -5,6 +5,7 @@
 
 import csv
 import time
+from binascii import unhexlify
 from datetime import datetime
 import os
 import struct
@@ -52,7 +53,7 @@ if __name__ == '__main__':
         print(f"New iteration started at {datetime.now()} with offset {current_tried_offset}")
 
         while True:
-            (eid, url) = getOwnerLoopUpLink(get_example_data("sample_identity_key"), current_tried_offset)
+            (eid, url) = getOwnerLoopUpLink(unhexlify(get_example_data("sample_identity_key")), current_tried_offset)
             success = not check_url_for_404(url)
             print(f"Time Offset: {current_tried_offset}, EID: {eid}, URL: {url}, Success: {success}")
 

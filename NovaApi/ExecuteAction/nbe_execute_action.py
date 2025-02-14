@@ -12,19 +12,19 @@ from ProtoDecoders import DeviceUpdate_pb2
 client_id = generate_random_uuid()
 
 def create_action_request(canonic_device_id, gcm_registration_id, request_uuid = generate_random_uuid(), fmd_client_uuid = client_id):
-    actionRequest = DeviceUpdate_pb2.ExecuteActionRequest()
+    action_request = DeviceUpdate_pb2.ExecuteActionRequest()
 
-    actionRequest.scope.type = DeviceUpdate_pb2.DeviceType.SPOT_DEVICE
-    actionRequest.scope.device.canonicId.id = canonic_device_id
+    action_request.scope.type = DeviceUpdate_pb2.DeviceType.SPOT_DEVICE
+    action_request.scope.device.canonicId.id = canonic_device_id
 
-    actionRequest.requestMetadata.type = DeviceUpdate_pb2.DeviceType.SPOT_DEVICE
-    actionRequest.requestMetadata.requestUuid = request_uuid
+    action_request.requestMetadata.type = DeviceUpdate_pb2.DeviceType.SPOT_DEVICE
+    action_request.requestMetadata.requestUuid = request_uuid
 
-    actionRequest.requestMetadata.fmdClientUuid = fmd_client_uuid
-    actionRequest.requestMetadata.gcmRegistrationId.id = gcm_registration_id
-    actionRequest.requestMetadata.unknown = True
+    action_request.requestMetadata.fmdClientUuid = fmd_client_uuid
+    action_request.requestMetadata.gcmRegistrationId.id = gcm_registration_id
+    action_request.requestMetadata.unknown = True
 
-    return actionRequest
+    return action_request
 
 
 def serialize_action_request(actionRequest):

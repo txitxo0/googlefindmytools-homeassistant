@@ -2,7 +2,6 @@
 #  GoogleFindMyTools - A set of tools to interact with the Google Find My API
 #  Copyright © 2024 Leon Böttger. All rights reserved.
 #
-
 from binascii import unhexlify
 
 import pyscrypt
@@ -13,7 +12,7 @@ def ascii_to_bytes(string):
     return string.encode('ascii')
 
 
-def get_lskf_hash(pin, salt):
+def get_lskf_hash(pin: str, salt: bytes) -> bytes:
     # Parameters
     data_to_hash = ascii_to_bytes(pin)  # Convert the string to an ASCII byte array
 
@@ -25,7 +24,7 @@ def get_lskf_hash(pin, salt):
     # Perform Scrypt hashing
     hashed = pyscrypt.hash(
         password=data_to_hash,
-        salt=unhexlify(salt),
+        salt=salt,
         N=log_n_cost,
         r=block_size,
         p=parallelization,
@@ -37,6 +36,6 @@ def get_lskf_hash(pin, salt):
 if __name__ == '__main__':
 
     sample_pin = get_example_data("sample_pin")
-    sample_pin_salt = get_example_data("sample_pin_salt")
+    sample_pin_salt = unhexlify(get_example_data("sample_pin_salt"))
 
     print(get_lskf_hash(sample_pin, sample_pin_salt).hex())
