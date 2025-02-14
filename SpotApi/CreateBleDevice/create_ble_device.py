@@ -15,7 +15,7 @@ from SpotApi.GetEidInfoForE2eeDevices.get_owner_key import get_owner_key
 from SpotApi.spot_request import spot_request
 
 
-esp32Id = "003200"
+mcu_fast_pair_model_id = "003200"
 
 
 def hours_to_seconds(hours):
@@ -39,10 +39,10 @@ def register_esp32():
     pair_date = int(time.time())
 
     register_request = RegisterBleDeviceRequest()
-    register_request.fastPairModelId = esp32Id
+    register_request.fastPairModelId = mcu_fast_pair_model_id
 
     # Description
-    register_request.description.userDefinedName = "GoogleFindMyTools ESP32"
+    register_request.description.userDefinedName = "GoogleFindMyTools µC"
     register_request.description.deviceType = SpotDeviceType.DEVICE_TYPE_BEACON
 
     # Device Components Information
@@ -83,8 +83,8 @@ def register_esp32():
         time_counter += ROTATION_PERIOD
 
     # General
-    register_request.manufacturerName = "Espressif"
-    register_request.modelName = "ESP32"
+    register_request.manufacturerName = "GoogleFindMyTools"
+    register_request.modelName = "µC"
 
     ownerKeys = FMDNOwnerOperations()
     ownerKeys.generate_keys(ephemeral_identity_key_hex=eik.hex())
@@ -97,7 +97,7 @@ def register_esp32():
     spot_request("CreateBleDevice", bytes_data)
 
     print("Registered device successfully. Copy the Advertisement Key below. It will not be shown again.")
-    print("Afterward, go to the folder 'GoogleFindMyTools/ESP32Firmware' and follow the instructions in the README.md file.")
+    print("Afterward, go to the folder 'GoogleFindMyTools/ESP32Firmware' or 'GoogleFindMyTools/ZephyrFirmware' and follow the instructions in the README.md file.")
 
     print("+" + "-" * 78 + "+")
     print("|" + " " * 19 + eid.hex() + " " * 19 + "|")

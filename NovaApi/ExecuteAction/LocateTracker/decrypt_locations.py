@@ -14,12 +14,12 @@ from ProtoDecoders import DeviceUpdate_pb2
 from ProtoDecoders import Common_pb2
 from ProtoDecoders.decoder import parse_device_update_protobuf
 from SpotApi.GetEidInfoForE2eeDevices.get_owner_key import get_owner_key
-from SpotApi.CreateBleDevice.create_ble_device import esp32Id, flip_bits
+from SpotApi.CreateBleDevice.create_ble_device import mcu_fast_pair_model_id, flip_bits
 
 
 def decrypt_location_response_locations(device_update_protobuf):
 
-    is_custom_tracker = device_update_protobuf.deviceMetadata.information.deviceRegistration.fastPairModelId == esp32Id
+    is_custom_tracker = device_update_protobuf.deviceMetadata.information.deviceRegistration.fastPairModelId == mcu_fast_pair_model_id
 
     encrypted_identity_key = flip_bits(device_update_protobuf.deviceMetadata.information.deviceRegistration.encryptedUserSecrets.encryptedIdentityKey, is_custom_tracker)
     owner_key = get_owner_key()
