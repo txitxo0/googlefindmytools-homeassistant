@@ -53,7 +53,8 @@ def get_location_data_for_device(canonic_device_id, name):
     while result is None:
         asyncio.get_event_loop().run_until_complete(asyncio.sleep(0.1))
 
-    decrypt_location_response_locations(result)
+    locations = decrypt_location_response_locations(result)
+    return locations
 
 if __name__ == '__main__':
     get_location_data_for_device(get_example_data("sample_canonic_device_id"), "Test")

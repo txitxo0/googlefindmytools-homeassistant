@@ -129,32 +129,47 @@ def decrypt_location_response_locations(device_update_protobuf):
 
     if not location_time_array:
         print("No locations found.")
-        return
+        return None
 
-    for loc in location_time_array:
+    # Return data from the most recent location
+    loc = location_time_array[0]
+    
+    if loc.status == Common_pb2.Status.SEMANTIC:
+        print(f"Semantic Location: {loc.name}")
+        location_data = {
+            'semantic_location': loc.name,
+            'timestamp': datetime.datetime.fromtimestamp(loc.time).strftime('%Y-%m-%d %H:%M:%S'),
+            'status': loc.status,
+            'is_own_report': loc.is_own_report
+        }
+    else:
+        proto_loc = DeviceUpdate_pb2.Location()
+        proto_loc.ParseFromString(loc.decrypted_location)
 
-        if loc.status == Common_pb2.Status.SEMANTIC:
-            print(f"Semantic Location: {loc.name}")
+        latitude = proto_loc.latitude / 1e7
+        longitude = proto_loc.longitude / 1e7
+        altitude = proto_loc.altitude
 
-        else:
-            proto_loc = DeviceUpdate_pb2.Location()
-            proto_loc.ParseFromString(loc.decrypted_location)
-
-            latitude = proto_loc.latitude / 1e7
-            longitude = proto_loc.longitude / 1e7
-            altitude = proto_loc.altitude
-
-            print(f"Latitude: {latitude}")
-            print(f"Longitude: {longitude}")
-            print(f"Altitude: {altitude}")
-            print(f"Google Maps Link: {create_google_maps_link(latitude, longitude)}")
-            
+        print(f"Latitude: {latitude}")
+        print(f"Longitude: {longitude}")
+        print(f"Altitude: {altitude}")
+        print(f"Google Maps Link: {create_google_maps_link(latitude, longitude)}")
         print(f"Time: {datetime.datetime.fromtimestamp(loc.time).strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"Status: {loc.status}")
         print(f"Is Own Report: {loc.is_own_report}")
         print("-" * 40)
 
-    pass
+        location_data = {
+            'latitude': latitude,
+            'longitude': longitude,
+            'altitude': altitude,
+            'accuracy': loc.accuracy,
+            'timestamp': datetime.datetime.fromtimestamp(loc.time).strftime('%Y-%m-%d %H:%M:%S'),
+            'status': loc.status,
+            'is_own_report': loc.is_own_report
+        }
+
+    return location_data
 
 
 if __name__ == '__main__':
