@@ -28,7 +28,6 @@ def publish_device_config(client: mqtt.Client, device_name: str, canonic_id: str
     
     # Device configuration for Home Assistant
     config = {
-        #"name": device_name,
         "unique_id": f"{DEVICE_PREFIX}_{canonic_id}",
         "state_topic": f"{base_topic}/state",
         "json_attributes_topic": f"{base_topic}/attributes",
