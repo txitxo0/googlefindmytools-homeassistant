@@ -31,8 +31,6 @@ def publish_device_config(client: mqtt.Client, device_name: str, canonic_id: str
         "unique_id": f"{DEVICE_PREFIX}_{canonic_id}",
         "state_topic": f"{base_topic}/state",
         "json_attributes_topic": f"{base_topic}/attributes",
-        "payload_home": "home",
-        "payload_not_home": "not_home",
         "source_type": "gps",
         "device": {
             "identifiers": [f"{DEVICE_PREFIX}_{canonic_id}"],
