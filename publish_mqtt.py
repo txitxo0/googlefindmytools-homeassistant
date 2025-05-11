@@ -18,9 +18,9 @@ MQTT_CLIENT_ID = "google_find_my_publisher"
 DISCOVERY_PREFIX = "homeassistant"
 DEVICE_PREFIX = "google_find_my"
 
-def on_connect(client: mqtt.Client, userdata: Any, flags: Dict, rc: int) -> None:
+def on_connect(client, userdata, flags, result_code, properties):
     """Callback when connected to MQTT broker"""
-    print(f"Connected to MQTT broker with result code {rc}")
+    print(f"Connected to MQTT broker with result code {result_code}")
 
 def publish_device_config(client: mqtt.Client, device_name: str, canonic_id: str) -> None:
     """Publish Home Assistant MQTT discovery configuration for a device"""
@@ -28,7 +28,7 @@ def publish_device_config(client: mqtt.Client, device_name: str, canonic_id: str
     
     # Device configuration for Home Assistant
     config = {
-        "name": device_name,
+        #"name": device_name,
         "unique_id": f"{DEVICE_PREFIX}_{canonic_id}",
         "state_topic": f"{base_topic}/state",
         "json_attributes_topic": f"{base_topic}/attributes",
@@ -42,9 +42,10 @@ def publish_device_config(client: mqtt.Client, device_name: str, canonic_id: str
             "manufacturer": "Google"
         }
     }
-    
+    print(f"{base_topic}/config")
     # Publish discovery config
-    client.publish(f"{base_topic}/config", json.dumps(config), retain=True)
+    r = client.publish(f"{base_topic}/config", json.dumps(config), retain=True)
+    return r
 
 def publish_device_state(client: mqtt.Client, device_name: str, canonic_id: str, location_data: Dict) -> None:
     """Publish device state and attributes to MQTT"""
@@ -58,7 +59,7 @@ def publish_device_state(client: mqtt.Client, device_name: str, canonic_id: str,
     timestamp = location_data.get('timestamp', time.time())
     
     # Publish state (home/not_home/unknown)
-    state = "not_home" if lat and lon else "unknown"
+    state = "unknown"
     client.publish(f"{base_topic}/state", state)
     
     # Publish attributes
@@ -70,13 +71,14 @@ def publish_device_state(client: mqtt.Client, device_name: str, canonic_id: str,
         "source_type": "gps",
         "last_updated": timestamp
     }
-    client.publish(f"{base_topic}/attributes", json.dumps(attributes))
+    r = client.publish(f"{base_topic}/attributes", json.dumps(attributes))
+    return r
 
 def main():
     # Initialize MQTT client
-    client = mqtt.Client(client_id=MQTT_CLIENT_ID)
+    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, MQTT_CLIENT_ID)
     client.on_connect = on_connect
-    
+
     if MQTT_USERNAME and MQTT_PASSWORD:
         client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
     
@@ -96,12 +98,14 @@ def main():
             print(f"Processing device: {device_name}")
             
             # Publish discovery configuration
-            publish_device_config(client, device_name, canonic_id)
+            msg_info = publish_device_config(client, device_name, canonic_id)
+            msg_info.wait_for_publish()
             
             # Get and publish location data
             location_data = get_location_data_for_device(canonic_id, device_name)
-            publish_device_state(client, device_name, canonic_id, location_data)
-            
+            msg_info = publish_device_state(client, device_name, canonic_id, location_data)
+            msg_info.wait_for_publish()
+
             print(f"Published data for {device_name}")
             
         print("\nAll devices have been published to MQTT")
