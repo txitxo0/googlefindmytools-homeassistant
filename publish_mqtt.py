@@ -24,8 +24,8 @@ logger = logging.getLogger("GoogleFindMyTools")
 # MQTT Configuration
 MQTT_BROKER = os.environ["MQTT_BROKER"]  # Default to localhost if not set
 MQTT_PORT = int(os.environ.get("MQTT_PORT", 1883))
-MQTT_USERNAME = os.environ["MQTT_USERNAME"]  # Set your MQTT username if required
-MQTT_PASSWORD = os.environ["MQTT_PASSWORD"]  # Set your MQTT password if required
+MQTT_USERNAME = os.environ.get("MQTT_USERNAME")  # Set your MQTT username if required
+MQTT_PASSWORD = os.environ.get("MQTT_PASSWORD")  # Set your MQTT password if required
 MQTT_CLIENT_ID = f"{os.environ.get('MQTT_CLIENT_ID', 'google_find_my_publisher')}_{petname.Generate(3, '')}"
 
 # Home Assistant MQTT Discovery
@@ -109,7 +109,7 @@ def main():
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, MQTT_CLIENT_ID)
     client.on_connect = on_connect
 
-    if MQTT_USERNAME and MQTT_PASSWORD:
+    if MQTT_USERNAME:
         client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
 
     try:
