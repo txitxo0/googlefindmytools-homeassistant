@@ -15,4 +15,5 @@ h2>=4.1.0
 setuptools>=75.6.0
 aiohttp>=3.11.8
 http_ece>=1.1.0
-paho_mqtt
+paho_mqtt>=2.1.0
+petname>=2.6.0

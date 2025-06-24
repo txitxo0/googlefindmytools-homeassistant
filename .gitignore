@@ -186,3 +186,7 @@ venv/
 *** Python cache***
 *.pyc  
 # End of https://www.toptal.com/developers/gitignore/api/macos,xcode,swift,swiftpackagemanager,objective-c
+
+# Local settings
+# This file is used to store local settings that should not be committed to the repository.
+local.settings
