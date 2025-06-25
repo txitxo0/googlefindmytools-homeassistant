@@ -190,3 +190,4 @@ venv/
 # Local settings
 # This file is used to store local settings that should not be committed to the repository.
 local.settings
+settings.local

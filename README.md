@@ -1,118 +1,131 @@
-# Google Find My Tools for Home Assistant
+# Google Find My Tools for Home Assistant 📍
 
-This project is a fork of [GoogleFindMyTools by leonboe1](https://github.com/leonboe1/GoogleFindMyTools) adapted to publish Google Find My Device locations to an MQTT broker for integration with [Home Assistant](https://www.home-assistant.io/).
+Tired of wondering where your Google Find My-enabled devices are? 🤔 This project brings the power of Google's Find My Device network right into your Home Assistant dashboard! 🏠✨
 
-It retrieves the location of your registered devices (phones, watches, trackers) from Google's Find My Device network and publishes them via MQTT, allowing Home Assistant to automatically discover and display them as `device_tracker` entities.
+It periodically fetches the location of your trackers (like Chipolo, Pebblebee, etc.) and publishes them to an MQTT broker, with auto-discovery for Home Assistant.
 
-## How it works
+## ⭐ Features
 
-The script uses an undocumented Google API to fetch device information and location data. It then connects to your MQTT broker and publishes the data in a format compatible with Home Assistant's MQTT Discovery feature.
+- 🔎 Fetches location data for your Google Find My network devices.
+- 🛰️ Publishes device locations via MQTT.
+- 🤖 Supports Home Assistant MQTT Discovery for seamless integration.
+- ⚙️ Highly configurable through environment variables.
+- 🐳 Docker-friendly for easy deployment.
+- 🕵️ Uses `undetected-chromedriver` to handle Google's login and bot detection.
 
-## Setup
+## 🚦 Prerequisites
 
-### Prerequisites
+- Python 3.9+
+- A running MQTT Broker (like Mosquitto).
+- Google Chrome installed on the machine where the script will run (if not using Docker).
+- A Google Account with Find My devices paired.
 
-*   Python 3.10 or newer.
-*   A recent version of Google Chrome installed.
-*   An MQTT broker (like the Mosquitto add-on in Home Assistant).
+## 🛠️ Setup & Installation
 
-### Installation
-
-1.  Clone this repository:
+1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-repo/GoogleFindMyTools-homeassistant.git
+    git clone https://github.com/your-username/GoogleFindMyTools-homeassistant.git
     cd GoogleFindMyTools-homeassistant
     ```
 
-2.  Install the required Python packages:
-
-    It is highly recommended to use a Python virtual environment.
+2.  **Install dependencies:**
     ```bash
-    # Create a virtual environment
-    python -m venv venv
-    
-    # Activate it (the command depends on your OS)
-    # On Windows (in Command Prompt or PowerShell)
-    .\venv\Scripts\activate
-    # On Linux/macOS
-    source venv/bin/activate
-    
-    # Install dependencies into the virtual environment
     pip install -r requirements.txt
     ```
 
-### Authentication
+## ⚙️ Configuration
 
-To use the tools, you need to authenticate with your Google account. The `main.py` script handles this by opening a browser for you to log in, then saving your authentication cookies for future use.
+The application is configured using environment variables.
 
-1.  Run the authentication script from the root of the project:
-    ```bash
-    python main.py
-    ```
-2.  A Google Chrome window will open. Log in to the Google account associated with your Find My Device network.
-3.  After a successful login, the script will automatically create and save the necessary cookies to an `Auth/secrets.json` file.
-4.  You only need to do this once. The `publish_mqtt.py` script will use this file for all subsequent runs.
+| Variable              | Description                                                                                                   | Default                               | Required |
+| --------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------- | -------- |
+| `MQTT_BROKER`         | The address of your MQTT broker (e.g., `192.168.1.100` or `mqtt.local`).                                       | -                                     | **Yes**  |
+| `MQTT_PORT`           | The port for your MQTT broker.                                                                                | `1883`                                | No       |
+| `MQTT_USERNAME`       | The username for your MQTT broker, if authentication is enabled.                                              | -                                     | No       |
+| `MQTT_PASSWORD`       | The password for your MQTT broker, if authentication is enabled.                                              | -                                     | No       |
+| `MQTT_CLIENT_ID`      | A custom client ID for connecting to MQTT. A random suffix is added to prevent collisions.                    | `google_find_my_publisher`            | No       |
+| `REFRESH_INTERVAL`    | The time in seconds between location updates. 🕒                                                              | `300` (5 minutes)                     | No       |
+| `DEVICE_NAMES_FILTER` | A comma-separated list of device names to track. If not set, all devices will be tracked. Example: `My Keys,Wallet` | -                                     | No       |
 
-**Important**: The generated `Auth/secrets.json` file contains sensitive authentication tokens. Treat this file like a password and do not share it or commit it to version control.
+## 🚀 Usage (Local)
 
-## Usage
+The script requires a one-time manual login to create a persistent session.
 
-The main script for this integration is `publish_mqtt.py`. It fetches the location for all your devices and publishes them to MQTT.
+### 1. First-Time Authentication (One-Time Step)
 
-### Environment Variables
-
-The script is configured using environment variables.
-
-| Variable          | Required | Default                          | Description                                                              |
-| ----------------- | -------- | -------------------------------- | ------------------------------------------------------------------------ |
-| `MQTT_BROKER`     | **Yes**  | -                                | The hostname or IP address of your MQTT broker.                          |
-| `MQTT_PORT`       | No       | `1883`                           | The port number for your MQTT broker.                                    |
-| `MQTT_USERNAME`   | No       | -                                | The username for authenticating with the MQTT broker.                    |
-| `MQTT_PASSWORD`   | No       | -                                | The password for authenticating with the MQTT broker.                    |
-| `MQTT_CLIENT_ID`  | No       | `google_find_my_publisher_...`   | The client ID to use when connecting to MQTT. A random one is generated. |
-
-### Running the script
-
-Set the required environment variables and run the script.
-
-**Example (Linux/macOS):**
+Run the `main.py` script to authorize the application with your Google Account.
 
 ```bash
-export MQTT_BROKER="192.168.1.100"
-export MQTT_USERNAME="my-mqtt-user"
-export MQTT_PASSWORD="my-mqtt-password"
+python main.py
+```
+
+- A Chrome window will open.
+- **Log in to your Google account** and complete any 2-Factor Authentication steps.
+- The script will list your devices in the console and then exit. Your session is now saved.
+
+### 2. Run the Publisher
+
+Once authenticated, set your environment variables and run the main publisher script to start sending data to MQTT.
+
+```bash
+# Example for Linux/macOS
+export MQTT_BROKER=192.168.1.100
+export MQTT_USERNAME=myuser
+
 python publish_mqtt.py
 ```
 
-**Example (Windows - Command Prompt):**
+## 🐳 Docker Deployment
 
-```powershell
-$env:MQTT_BROKER="192.168.1.100"
-$env:MQTT_PORT="192.168.1.100"
-$env:MQTT_USERNAME="my-mqtt-user"
-$env:MQTT_PASSWORD="my-mqtt-password"
-python publish_mqtt.py
-```
+For a more robust and isolated setup, you can run this tool in a Docker container.
 
-**Example (Windows - PowerShell):**
+**IMPORTANT:** You must first generate a Chrome user profile with a valid Google session on your local machine (with a graphical interface).
 
-```powershell
-$env:MQTT_BROKER="192.168.1.100"
-$env:MQTT_USERNAME="my-mqtt-user"
-$env:MQTT_PASSWORD="my-mqtt-password"
-python publish_mqtt.py
-```
+1.  **Generate Session Data (One-Time Setup):**
+    a. On your local computer, run the authentication script: `python main.py`.
+    b. A Chrome window will open. **Log in to your Google Account**. The script will exit after listing your devices.
+    c. This creates a user profile folder. The location depends on your OS:
+       - **Linux:** `~/.config/undetected_chromedriver`
+       - **Windows:** `%LOCALAPPDATA%\undetected_chromedriver`
+       - **macOS:** `~/Library/Application Support/undetected_chromedriver`
+    d. Copy the contents of this folder into a local directory for the Docker context, for example, `./user_data`. This is your persistent session data.
 
-You can run this script periodically (e.g., using a cron job or a systemd timer) to keep the device locations updated in Home Assistant.
+2.  **Build the Docker image:**
+    ```bash
+    docker build -t google-find-my-tools .
+    ```
 
-## Home Assistant Integration
+3.  **Run the container:**
+    Run the container, mounting the `user_data` directory. Note the updated volume path (`/home/appuser/...`) which is required for the more secure non-root user inside the container.
 
-If MQTT Discovery is enabled in your Home Assistant configuration (it is by default), the devices will appear automatically after the script runs for the first time.
+    ```bash
+    docker run -d \
+      --name=google-find-my-tools \
+      -e MQTT_BROKER="your_broker_ip" \
+      -e MQTT_USERNAME="your_mqtt_user" \
+      -e MQTT_PASSWORD="your_mqtt_password" \
+      -e REFRESH_INTERVAL="600" \
+      -e DEVICE_NAMES_FILTER="My Keys,My Backpack" \
+      -v ./user_data:/home/appuser/.config/undetected_chromedriver \
+      --restart unless-stopped \
+      google-find-my-tools
+    ```
+    The container will now run in headless mode and use your existing login session.
 
-*   Each device will be created as a `device_tracker` entity (e.g., `device_tracker.google_find_my_pixel_8_pro`).
-*   The state of the tracker will be `unknown` as this script only provides GPS coordinates, not zone information. You can use Home Assistant zones to determine if a device is `home` or `not_home`.
-*   The device will have attributes such as `latitude`, `longitude`, `gps_accuracy`, and `last_updated`.
+## 🤝 Home Assistant Integration
 
-## Acknowledgements
+This script uses the Home Assistant MQTT Discovery protocol.
 
-This project is heavily based on the work of Leon Böttger in his GoogleFindMyTools repository.
+- Once the script runs successfully and connects to your MQTT broker, your devices will automatically appear as `device_tracker` entities in Home Assistant.
+- No further configuration is needed in Home Assistant, as long as MQTT discovery is enabled!
+
+## 🙏 Acknowledgements
+
+This project builds upon the fantastic work of others. A huge thank you to the original authors for their contributions!
+
+-   **leonboe1/GoogleFindMyTools:** The core logic for interacting with Google's Find My Device API and the authentication script (`main.py`) are based on this repository.
+-   **endeavour/GoogleFindMyTools-homeassistant:** The Home Assistant integration, including MQTT discovery and publishing logic, is adapted from this project.
+
+---
+
+*Disclaimer: This project is not affiliated with or endorsed by Google. Use it at your own risk.*
