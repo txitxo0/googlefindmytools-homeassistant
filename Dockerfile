@@ -1,34 +1,33 @@
-# Use a base image with Python
-FROM python:3.11-slim
-
-# Install Google Chrome for undetected_chromedriver
-RUN apt-get update && apt-get install -y \
-    wget \
-    gnupg \
-    --no-install-recommends \
-    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list' \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable \
-    --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
-
-# Set the working directory
+# Stage 1: Builder
+# This stage installs all Python dependencies.
+FROM python:3.11-slim AS builder
 WORKDIR /app
-
-# Copy requirements and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
+# Stage 2: Runtime
+# This is the final, smaller image. We start from a clean base and only copy
+# the necessary artifacts from the builder stage.
+FROM python:3.11-slim AS runtime
+
+WORKDIR /app
+
+# Install only the runtime dependencies (Google Chrome)
+RUN apt-get update && apt-get install -y wget gnupg --no-install-recommends \
+    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
+    && apt-get update \
+    && apt-get install -y google-chrome-stable --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy only the installed Python packages from the builder stage
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+# Copy your application code
 COPY . .
 
-# Set HEADLESS=true for Docker environment
 ENV HEADLESS=true
 
-# Create a non-root user to run the application
 RUN useradd --system --create-home appuser
 USER appuser
 
-# Set the entrypoint
 CMD ["python", "publish_mqtt.py"]

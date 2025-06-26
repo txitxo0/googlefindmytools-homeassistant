@@ -191,3 +191,7 @@ venv/
 # This file is used to store local settings that should not be committed to the repository.
 local.settings
 settings.local
+
+# Environment variables file
+.env
+docker-compose.yml

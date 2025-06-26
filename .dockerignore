@@ -1,0 +1,13 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv
+
+# Secrets - Do not include in the image
+Auth/secrets.json
