@@ -13,7 +13,7 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.backends import default_backend
 
 from KeyBackup.lskf_hasher import ascii_to_bytes, get_lskf_hash
-from example_data_provider import get_example_data
+
 
 # Constants
 VERSION = b'\x02\x00'
@@ -180,48 +180,5 @@ def decrypt_account_key(owner_key: bytes, encrypted_account_key: bytes) -> bytes
     raise ValueError("The encrypted Account Key has invalid length!")
 
 
-if __name__ == '__main__':
 
-    # Load sample data
-    pin = get_example_data("sample_pin")
-    pin_salt = unhexlify(get_example_data("sample_pin_salt"))
-    encrypted_recovery_key = unhexlify(get_example_data("sample_locally_encrypted_recovery_key"))
-    encrypted_application_key = unhexlify(get_example_data("sample_encrypted_application_key"))
-    encrypted_security_domain_key = unhexlify(get_example_data("sample_encrypted_security_domain_key"))
-    encrypted_shared_key = unhexlify(get_example_data("sample_encrypted_shared_key"))
-    encrypted_owner_key = unhexlify(get_example_data("sample_encrypted_owner_key"))
-    encrypted_eik = unhexlify(get_example_data("sample_encrypted_eik"))
-    encrypted_account_key = unhexlify(get_example_data("sample_encrypted_account_key"))
-
-    # Calculate keys
-    lskf_hash = get_lskf_hash(pin, pin_salt)
-    recovery_key = decrypt_recovery_key(lskf_hash, encrypted_recovery_key)
-    application_key = decrypt_application_key(recovery_key, encrypted_application_key)
-    security_domain_key = decrypt_security_domain_key(application_key, encrypted_security_domain_key)
-    shared_key = decrypt_shared_key(security_domain_key, encrypted_shared_key)
-    owner_key = decrypt_owner_key(shared_key, encrypted_owner_key)
-    eik = decrypt_eik(owner_key, encrypted_eik)
-    account_key = decrypt_account_key(owner_key, encrypted_account_key)
-
-    # Print results
-    print("Recovery Key:")
-    print(recovery_key.hex())
-
-    print("Application Key:")
-    print(application_key.hex())
-
-    print("Security Domain Key:")
-    print(security_domain_key.hex())
-
-    print("Shared Key:")
-    print(shared_key.hex())
-
-    print("Owner Key:")
-    print(owner_key.hex())
-
-    print("EIK:")
-    print(eik.hex())
-
-    print("Account Key:")
-    print(account_key.hex())
 

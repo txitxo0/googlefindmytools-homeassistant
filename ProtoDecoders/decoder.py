@@ -11,7 +11,7 @@ import datetime
 import pytz
 
 from ProtoDecoders import DeviceUpdate_pb2, LocationReportsUpload_pb2
-from example_data_provider import get_example_data
+
 
 
 # Custom message formatter to print the Protobuf byte fields as hex strings
@@ -92,30 +92,4 @@ def print_device_list_protobuf(hex_string):
     print(text_format.MessageToString(parse_device_list_protobuf(hex_string), message_formatter=custom_message_formatter))
 
 
-if __name__ == '__main__':
-    # Recompile
-    subprocess.run(["protoc", "--python_out=.", "ProtoDecoders/Common.proto"], cwd="../")
-    subprocess.run(["protoc", "--python_out=.", "ProtoDecoders/DeviceUpdate.proto"], cwd="../")
-    subprocess.run(["protoc", "--python_out=.", "ProtoDecoders/LocationReportsUpload.proto"], cwd="../")
 
-    subprocess.run(["protoc", "--pyi_out=.", "ProtoDecoders/Common.proto"], cwd="../")
-    subprocess.run(["protoc", "--pyi_out=.", "ProtoDecoders/DeviceUpdate.proto"], cwd="../")
-    subprocess.run(["protoc", "--pyi_out=.", "ProtoDecoders/LocationReportsUpload.proto"], cwd="../")
-
-    print("\n ------------------- \n")
-
-    print("Device List: ")
-    print_device_list_protobuf(get_example_data("sample_nbe_list_devices_response"))
-
-    print("Own Report: ")
-    print_location_report_upload_protobuf(get_example_data("sample_own_report"))
-
-    print("\n ------------------- \n")
-
-    print("Not Own Report: ")
-    print_location_report_upload_protobuf(get_example_data("sample_foreign_report"))
-
-    print("\n ------------------- \n")
-
-    print("Device Update: ")
-    print_device_update_protobuf(get_example_data("sample_device_update"))

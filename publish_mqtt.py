@@ -8,11 +8,23 @@ from typing import Dict
 import paho.mqtt.client as mqtt
 import petname
 
-from NovaApi.ExecuteAction.LocateTracker.location_request import (
-    get_location_data_for_device,
-)
 from NovaApi.ListDevices.nbe_list_devices import request_device_list
 from ProtoDecoders.decoder import get_canonic_ids, parse_device_list_protobuf
+
+# --- Configuration Validation ---
+def validate_config():
+    # Check for MQTT_BROKER environment variable
+    if "MQTT_BROKER" not in os.environ:
+        logger.error("FATAL: The MQTT_BROKER environment variable is not set. Please set it to your MQTT broker's address.")
+        return False
+
+    # Check for secrets.json
+    secrets_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Auth', 'secrets.json')
+    if not os.path.exists(secrets_path) or os.path.getsize(secrets_path) <= 2:
+        logger.error(f"FATAL: '{secrets_path}' is missing or empty. Please mount your 'secrets.json' file.")
+        return False
+
+    return True
 
 # --- Logging Setup ---
 logging.basicConfig(
@@ -23,11 +35,7 @@ logging.basicConfig(
 logger = logging.getLogger("GoogleFindMyTools")
 
 # MQTT Configuration
-try:
-    MQTT_BROKER = os.environ["MQTT_BROKER"]
-except KeyError:
-    logger.error("FATAL: The MQTT_BROKER environment variable is not set. Please set it to your MQTT broker's address.")
-    exit(1)
+MQTT_BROKER = os.environ.get("MQTT_BROKER")
 
 MQTT_PORT = int(os.environ.get("MQTT_PORT", 1883))
 MQTT_USERNAME = os.environ.get("MQTT_USERNAME")  # Set your MQTT username if required
@@ -133,6 +141,9 @@ def publish_device_state(
 
 
 def main():
+    if not validate_config():
+        exit(1)
+
     # Initialize MQTT client
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, MQTT_CLIENT_ID)
     client.on_connect = on_connect
@@ -173,11 +184,7 @@ def main():
                         msg_info = publish_device_config(client, device_name, canonic_id)
                         msg_info.wait_for_publish()
 
-                        # Get and publish location data
-                        location_data = get_location_data_for_device(canonic_id, device_name)
-                        if not location_data or not all(k in location_data for k in ['latitude', 'longitude']):
-                            logger.warning(f"Incomplete or missing location data for '{device_name}'. Skipping.")
-                            continue
+                        
 
                         msg_info = publish_device_state(client, device_name, canonic_id, location_data)
                         msg_info.wait_for_publish()

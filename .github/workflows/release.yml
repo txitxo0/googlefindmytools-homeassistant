@@ -1,18 +1,17 @@
-name: Publish Docker image
+name: Create Release and Publish Docker Image
 
 on:
-  # Run this workflow every time a change is pushed to the 'main' branch
   push:
-    branches: ['main']
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
   push_to_registry:
-    name: Build and push Docker image to GitHub Container Registry
+    name: Build and push Docker image to GHCR
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write # This permission is required to push to GHCR
-
+      packages: write
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -29,9 +28,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ghcr.io/${{ github.repository }}
-          tags: |
-            # tag with the git commit sha
-            type=sha,prefix=
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -40,3 +36,18 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  create_release:
+    name: Create Release
+    needs: push_to_registry
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true

@@ -13,7 +13,7 @@ from cryptography.hazmat.primitives import hashes
 from ecdsa.ellipticcurve import Point
 
 from FMDNCrypto.eid_generator import generate_eid, calculate_r
-from example_data_provider import get_example_data
+
 
 
 def rx_to_ry(Rx: int, curve) -> int:
@@ -135,25 +135,4 @@ def decrypt(identity_key: bytes, encryptedAndTag: bytes, Sx: bytes, beacon_time_
     return decrypt_aes_eax(m_dash, tag, nonce, k)
 
 
-if __name__ == "__main__":
-    # 4-byte timestamp
-    timestamp = 0x0084D000
 
-    sample_identity_key = unhexlify(get_example_data("sample_identity_key"))
-    sample_location_data = unhexlify(get_example_data("sample_location_data"))
-
-    # Generate EID
-    eid = generate_eid(sample_identity_key, timestamp)
-
-    # generate 32-byte random number
-    random = secrets.token_bytes(32)
-
-    encryptedAndTag, Sx = encrypt(sample_location_data, random, eid)
-
-    print("Encrypted Message and Tag: " + encryptedAndTag.hex())
-    print("Random Sx: " + Sx.hex())
-
-    decrypted = decrypt(sample_identity_key, encryptedAndTag, Sx, timestamp)
-    print("Decrypted Message: " + decrypted.hex())
-
-    assert decrypted == sample_location_data

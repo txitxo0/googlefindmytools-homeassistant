@@ -3,10 +3,11 @@
 #  Copyright © 2024 Leon Böttger. All rights reserved.
 #
 
-from selenium.webdriver.support.ui import WebDriverWait
-from chrome_driver import create_driver
+
 
 def request_oauth_account_token_flow():
+    from selenium.webdriver.support.ui import WebDriverWait
+    from chrome_driver import create_driver
 
     print("""[AuthFlow] This script will now open Google Chrome on your device to login to your Google account.
 > Please make sure that Chrome is installed on your system.

@@ -11,16 +11,17 @@ It periodically fetches the location of your trackers (like Chipolo, Pebblebee, 
 - 🤖 Supports Home Assistant MQTT Discovery for seamless integration.
 - ⚙️ Highly configurable through environment variables.
 - 🐳 Docker-friendly for easy deployment.
-- 🕵️ Uses `undetected-chromedriver` to handle Google's login and bot detection.
 
 ## 🚦 Prerequisites
 
-- Python 3.9+
 - A running MQTT Broker (like Mosquitto).
-- Google Chrome installed on the machine where the script will run (if not using Docker).
 - A Google Account with Find My devices paired.
 
 ## 🛠️ Setup & Installation
+
+### 1. Authentication (One-Time Step)
+
+To use this tool, you first need to obtain your Google authentication credentials. This is a manual process that requires a graphical environment.
 
 1.  **Clone the repository:**
     ```bash
@@ -33,13 +34,64 @@ It periodically fetches the location of your trackers (like Chipolo, Pebblebee, 
     pip install -r requirements.txt
     ```
 
+3.  **Run the authentication script:**
+    ```bash
+    python main.py
+    ```
+    - A Chrome window will open.
+    - **Log in to your Google account** and complete any 2-Factor Authentication steps.
+    - The script will create a `Auth/secrets.json` file. This file contains the necessary credentials for the script to run.
+
+### 2. Docker Deployment
+
+This is the recommended way to run the tool after the initial authentication.
+
+**`docker-compose.yml`:**
+
+```yaml
+services:
+  google-find-my-tools:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: google-find-my-tools
+    restart: unless-stopped
+    volumes:
+      - ./Auth/secrets.json:/app/Auth/secrets.json:ro
+    # Environment variables can be set in a .env file
+    # MQTT_BROKER=your_broker_ip
+    # MQTT_USERNAME=your_mqtt_user
+    # MQTT_PASSWORD=your_mqtt_password
+```
+
+**To run:**
+
+1.  Make sure you have the `Auth/secrets.json` file from the authentication step.
+2.  Create a `.env` file in the same directory as the `docker-compose.yml` file with your MQTT credentials.
+3.  Run `docker-compose up -d`.
+
+**`docker run` command:**
+
+```bash
+docker run -d \
+  --name=google-find-my-tools \
+  -e MQTT_BROKER="your_broker_ip" \
+  -e MQTT_USERNAME="your_mqtt_user" \
+  -e MQTT_PASSWORD="your_mqtt_password" \
+  -e REFRESH_INTERVAL="600" \
+  -e DEVICE_NAMES_FILTER="My Keys,My Backpack" \
+  -v $(pwd)/Auth/secrets.json:/app/Auth/secrets.json:ro \
+  --restart unless-stopped \
+  google-find-my-tools
+```
+
 ## ⚙️ Configuration
 
 The application is configured using environment variables.
 
 | Variable              | Description                                                                                                   | Default                               | Required |
 | --------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------- | -------- |
-| `MQTT_BROKER`         | The address of your MQTT broker (e.g., `192.168.1.100` or `mqtt.local`).                                       | -                                     | **Yes**  |
+| `MQTT_BROROKER`         | The address of your MQTT broker (e.g., `192.168.1.100` or `mqtt.local`).                                       | -                                     | **Yes**  |
 | `MQTT_PORT`           | The port for your MQTT broker.                                                                                | `1883`                                | No       |
 | `MQTT_USERNAME`       | The username for your MQTT broker, if authentication is enabled.                                              | -                                     | No       |
 | `MQTT_PASSWORD`       | The password for your MQTT broker, if authentication is enabled.                                              | -                                     | No       |
@@ -111,6 +163,8 @@ For a more robust and isolated setup, you can run this tool in a Docker containe
       google-find-my-tools
     ```
     The container will now run in headless mode and use your existing login session.
+
+
 
 ## 🤝 Home Assistant Integration
 

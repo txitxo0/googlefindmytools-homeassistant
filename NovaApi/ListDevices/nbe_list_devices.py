@@ -4,14 +4,11 @@
 #
 
 import binascii
-from NovaApi.ExecuteAction.LocateTracker.location_request import get_location_data_for_device
 from NovaApi.nova_request import nova_request
 from NovaApi.scopes import NOVA_LIST_DEVICS_API_SCOPE
 from NovaApi.util import generate_random_uuid
 from ProtoDecoders import DeviceUpdate_pb2
 from ProtoDecoders.decoder import parse_device_list_protobuf, get_canonic_ids
-from SpotApi.CreateBleDevice.create_ble_device import register_esp32
-from SpotApi.UploadPrecomputedPublicKeyIds.upload_precomputed_public_key_ids import refresh_custom_trackers
 
 
 def request_device_list():
@@ -45,8 +42,6 @@ def list_devices():
     result_hex = request_device_list()
 
     device_list = parse_device_list_protobuf(result_hex)
-
-    refresh_custom_trackers(device_list)
     canonic_ids = get_canonic_ids(device_list)
 
     print("")
@@ -58,18 +53,9 @@ def list_devices():
 
     for idx, (device_name, canonic_id) in enumerate(canonic_ids, start=1):
         print(f"{idx}. {device_name}: {canonic_id}")
-
-    selected_value = input("\nIf you want to see locations of a tracker, type the number of the tracker and press 'Enter'.\nIf you want to register a new ESP32- or Zephyr-based tracker, type 'r' and press 'Enter': ")
-
-    if selected_value == 'r':
-        print("Loading...")
-        register_esp32()
-    else:
-        selected_idx = int(selected_value) - 1
-        selected_device_name = canonic_ids[selected_idx][0]
-        selected_canonic_id = canonic_ids[selected_idx][1]
-
-        get_location_data_for_device(selected_canonic_id, selected_device_name)
+    
+    print("\nThis tool is now configured for MQTT publishing.")
+    print("To publish device locations, run 'publish_mqtt.py'.")
 
 
 if __name__ == '__main__':
