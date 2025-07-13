@@ -29,7 +29,7 @@ def create_location_request(canonic_device_id, fcm_registration_id, request_uuid
     return hex_payload
 
 
-def get_location_data_for_device(canonic_device_id, name):
+def get_location_data_for_device(fcm_receiver: FcmReceiver, canonic_device_id, name):
 
     print(f"[LocationRequest] Requesting location data for {name}...")
 
@@ -45,7 +45,7 @@ def get_location_data_for_device(canonic_device_id, name):
             result = parse_device_update_protobuf(response)
             #print_device_update_protobuf(response)
 
-    fcm_token = FcmReceiver().register_for_location_updates(handle_location_response)
+    fcm_token = fcm_receiver.register_for_location_updates(handle_location_response)
 
     hex_payload = create_location_request(canonic_device_id, fcm_token, request_uuid)
     nova_request(NOVA_ACTION_API_SCOPE, hex_payload)

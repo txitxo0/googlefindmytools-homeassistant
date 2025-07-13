@@ -8,6 +8,7 @@ from typing import Dict
 import paho.mqtt.client as mqtt
 import petname
 
+from Auth.fcm_receiver import FcmReceiver
 from NovaApi.ExecuteAction.LocateTracker.location_request import (
     get_location_data_for_device,
 )
@@ -140,6 +141,7 @@ def main():
     if MQTT_USERNAME:
         client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
 
+    fcm_receiver = FcmReceiver()
     try:
         logger.info("Connecting to the MQTT broker...")
         client.connect(MQTT_BROKER, MQTT_PORT)
@@ -174,7 +176,7 @@ def main():
                         msg_info.wait_for_publish()
 
                         # Get and publish location data
-                        location_data = get_location_data_for_device(canonic_id, device_name)
+                        location_data = get_location_data_for_device(fcm_receiver, canonic_id, device_name)
                         if not location_data or not all(k in location_data for k in ['latitude', 'longitude']):
                             logger.warning(f"Incomplete or missing location data for '{device_name}'. Skipping.")
                             continue
@@ -197,6 +199,7 @@ def main():
     except Exception as e:
         logger.error(f"An unrecoverable error occurred: {e}")
     finally:
+        fcm_receiver.stop_listening()
         client.loop_stop()
         client.disconnect()
         logger.info("Disconnected from the MQTT broker.")
