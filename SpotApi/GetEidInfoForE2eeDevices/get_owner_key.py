@@ -4,7 +4,7 @@
 #
 from binascii import unhexlify
 
-from Auth.token_cache import get_cached_value_or_set
+from auth.token_cache import get_cached_value_or_set
 from KeyBackup.cloud_key_decryptor import decrypt_owner_key
 from KeyBackup.shared_key_retrieval import get_shared_key
 from SpotApi.GetEidInfoForE2eeDevices.get_eid_info_request import get_eid_info

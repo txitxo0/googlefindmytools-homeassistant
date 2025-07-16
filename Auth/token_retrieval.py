@@ -5,8 +5,8 @@
 
 import gpsoauth
 
-from Auth.aas_token_retrieval import get_aas_token
-from Auth.fcm_receiver import FcmReceiver
+from auth.aas_token_retrieval import get_aas_token
+from auth.fcm_receiver import FcmReceiver
 
 
 def request_token(username, scope, play_services = False):

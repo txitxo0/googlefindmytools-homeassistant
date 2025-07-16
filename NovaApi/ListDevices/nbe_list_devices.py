@@ -4,7 +4,7 @@
 #
 
 import binascii
-from Auth.fcm_receiver import FcmReceiver
+from auth.fcm_receiver import FcmReceiver
 from NovaApi.ExecuteAction.LocateTracker.location_request import get_location_data_for_device
 from NovaApi.nova_request import nova_request
 from NovaApi.scopes import NOVA_LIST_DEVICS_API_SCOPE

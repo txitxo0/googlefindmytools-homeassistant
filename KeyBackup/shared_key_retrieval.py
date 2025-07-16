@@ -4,7 +4,7 @@
 #
 from binascii import unhexlify
 
-from Auth.token_cache import get_cached_value_or_set
+from auth.token_cache import get_cached_value_or_set
 from KeyBackup.shared_key_flow import request_shared_key_flow
 
 

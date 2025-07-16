@@ -2,7 +2,7 @@
 /DynamicAnalysis
 /.idea
 /DULT/OwnerLookup/Results
-/Auth/secrets.json
+/auth/secrets.json
 /example_data.json
 .venv
 

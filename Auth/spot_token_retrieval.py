@@ -3,8 +3,8 @@
 #  Copyright © 2024 Leon Böttger. All rights reserved.
 #
 
-from Auth.token_retrieval import request_token
-from Auth.username_provider import get_username
+from auth.token_retrieval import request_token
+from auth.username_provider import get_username
 
 def get_spot_token(username):
     return request_token(username, "spot", True)
