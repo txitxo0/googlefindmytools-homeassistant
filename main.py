@@ -4,7 +4,11 @@
 #
 
 from NovaApi.ListDevices.nbe_list_devices import list_devices
+from auth.fcm_receiver import FcmReceiver
 
 if __name__ == '__main__':
-
-    list_devices()
+    try:
+        list_devices()
+    finally:
+        # Ensure the FCM receiver connection is closed
+        FcmReceiver().stop_listening()
