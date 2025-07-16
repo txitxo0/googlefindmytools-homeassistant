@@ -4,6 +4,7 @@
 #
 
 import binascii
+from Auth.fcm_receiver import FcmReceiver
 from NovaApi.ExecuteAction.LocateTracker.location_request import get_location_data_for_device
 from NovaApi.nova_request import nova_request
 from NovaApi.scopes import NOVA_LIST_DEVICS_API_SCOPE
@@ -69,7 +70,8 @@ def list_devices():
         selected_device_name = canonic_ids[selected_idx][0]
         selected_canonic_id = canonic_ids[selected_idx][1]
 
-        get_location_data_for_device(selected_canonic_id, selected_device_name)
+        fcm_receiver = FcmReceiver()
+        get_location_data_for_device(fcm_receiver, selected_canonic_id, selected_device_name)
 
 
 if __name__ == '__main__':
