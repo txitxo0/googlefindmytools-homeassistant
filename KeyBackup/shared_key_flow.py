@@ -3,14 +3,13 @@
 #  Copyright © 2024 Leon Böttger. All rights reserved.
 #
 
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
-
 from KeyBackup.response_parser import get_fmdn_shared_key
 from KeyBackup.shared_key_request import get_security_domain_request_url
 from chrome_driver import create_driver
 
 def request_shared_key_flow():
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as ec
     driver = create_driver()
     try:
         # Open Google accounts sign-in page

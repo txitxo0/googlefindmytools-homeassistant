@@ -29,9 +29,20 @@ It periodically fetches the location of your trackers (like Chipolo, Pebblebee, 
     ```
 
 2.  **Install dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+
+    There are two sets of dependencies for this project:
+
+    -   **`requirements.txt`**: This file contains the core dependencies needed to run the `publish_mqtt.py` script in a headless environment. It excludes packages like Selenium, which are only needed for the initial authentication step.
+
+        ```bash
+        pip install -r requirements.txt
+        ```
+
+    -   **`requirements.dev.txt`**: This file includes all dependencies, including those required for the one-time authentication process (like Selenium and `undetected-chromedriver`). You only need this if you are running the authentication flow for the first time.
+
+        ```bash
+        pip install -r requirements.dev.txt
+        ```
 
 ## ⚙️ Configuration
 
@@ -53,15 +64,16 @@ The script requires a one-time manual login to create a persistent session.
 
 ### 1. First-Time Authentication (One-Time Step)
 
-Run the `main.py` script to authorize the application with your Google Account.
+Run the `main.py` script to authorize the application with your Google Account. Make sure you have installed the development dependencies first:
 
 ```bash
+pip install -r requirements.dev.txt
 python main.py
 ```
 
 - A Chrome window will open.
 - **Log in to your Google account** and complete any 2-Factor Authentication steps.
-- The script will list your devices in the console and then exit. Your session is now saved.
+- The script will list your devices in the console and then exit. Your session is now saved in `auth/secrets.json`.
 
 ### 2. Run the Publisher
 
