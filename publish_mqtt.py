@@ -118,7 +118,7 @@ def publish_device_state(
         state = "home"
         logger.info(f"Device '{device_name}' has semantic location '{semantic_location}', setting state to 'home'.")
     else:
-        state = "unknown"
+        state = None
 
     # Publish state (home/not_home/unknown)
     client.publish(f"{base_topic}/state", state)
