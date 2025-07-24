@@ -93,6 +93,7 @@ def publish_device_state(
     accuracy = location_data.get("accuracy")
     altitude = location_data.get("altitude")
     timestamp = location_data.get("timestamp")
+    semantic_location = location_data.get("semantic_location")
 
     if timestamp:
         if isinstance(timestamp, (int, float)):
@@ -112,23 +113,44 @@ def publish_device_state(
         # If no timestamp is provided, use the current time.
         last_updated_iso = datetime.now(timezone.utc).isoformat()
 
+    # Determine state based on semantic_location
+    if semantic_location:
+        state = "home"
+        logger.info(f"Device '{device_name}' has semantic location '{semantic_location}', setting state to 'home'.")
+    else:
+        state = None
+
     # Publish state (home/not_home/unknown)
-    state = "unknown"
     client.publish(f"{base_topic}/state", state)
 
     # Publish attributes
     attributes = {
-        "latitude": lat,
-        "longitude": lon,
-        "altitude": altitude,
-        "gps_accuracy": accuracy,
         "source_type": "gps",
         "last_updated": last_updated_iso,
     }
-    logger.info(
-        f"Publishing location for '{device_name}' (ID: {canonic_id}): "
-        f"lat={lat}, lon={lon}, accuracy={accuracy}"
-    )
+    
+    # Add GPS attributes if they exist and are not None/empty
+    if lat is not None:
+        attributes["latitude"] = lat
+    if lon is not None:
+        attributes["longitude"] = lon
+    if altitude is not None:
+        attributes["altitude"] = altitude
+    if accuracy is not None:
+        attributes["gps_accuracy"] = accuracy
+    
+    # Add semantic_location to attributes if it exists
+    if semantic_location:
+        attributes["semantic_location"] = semantic_location
+        logger.info(
+            f"Publishing location for '{device_name}' (ID: {canonic_id}) with semantic location: {semantic_location}"
+        )
+    else:
+        logger.info(
+            f"Publishing location for '{device_name}' (ID: {canonic_id}): "
+            f"lat={lat}, lon={lon}, accuracy={accuracy}"
+        )
+    
     r = client.publish(f"{base_topic}/attributes", json.dumps(attributes))
     return r
 
@@ -177,8 +199,16 @@ def main():
 
                         # Get and publish location data
                         location_data = get_location_data_for_device(fcm_receiver, canonic_id, device_name)
-                        if not location_data or not all(k in location_data for k in ['latitude', 'longitude']):
-                            logger.warning(f"Incomplete or missing location data for '{device_name}'. Skipping.")
+                        if not location_data:
+                            logger.warning(f"No location data received for '{device_name}'. Skipping.")
+                            continue
+                        
+                        # Check if we have either GPS coordinates or semantic location
+                        has_gps = location_data.get('latitude') is not None and location_data.get('longitude') is not None
+                        has_semantic = location_data.get('semantic_location') is not None
+                        
+                        if not has_gps and not has_semantic:
+                            logger.warning(f"No usable location data (GPS or semantic) for '{device_name}'. Skipping.")
                             continue
 
                         msg_info = publish_device_state(client, device_name, canonic_id, location_data)
