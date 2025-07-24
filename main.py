@@ -24,8 +24,9 @@ def check_and_run_auth_flow():
 
 if __name__ == '__main__':
     check_and_run_auth_flow()
+    fcm_receiver = FcmReceiver()
     try:
-        list_devices()
+        list_devices(fcm_receiver)
     finally:
         # Ensure the FCM receiver connection is closed
-        FcmReceiver().stop_listening()
+        fcm_receiver.stop_listening()
