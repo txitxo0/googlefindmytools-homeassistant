@@ -41,7 +41,7 @@ def create_device_list_request():
     return hex_payload
 
 
-def list_devices():
+def list_devices(fcm_receiver=None):
     print("Loading...")
     result_hex = request_device_list()
 
@@ -70,7 +70,8 @@ def list_devices():
         selected_device_name = canonic_ids[selected_idx][0]
         selected_canonic_id = canonic_ids[selected_idx][1]
 
-        fcm_receiver = FcmReceiver()
+        if fcm_receiver is None:
+            fcm_receiver = FcmReceiver()
         get_location_data_for_device(fcm_receiver, selected_canonic_id, selected_device_name)
 
 

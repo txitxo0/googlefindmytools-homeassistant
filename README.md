@@ -91,16 +91,12 @@ python publish_mqtt.py
 
 For a more robust and isolated setup, you can run this tool in a Docker container.
 
-**IMPORTANT:** You must first generate a Chrome user profile with a valid Google session on your local machine (with a graphical interface).
+**IMPORTANT:** You must first generate the `auth/secrets.json` file on your local machine (with a graphical interface).
 
 1.  **Generate Session Data (One-Time Setup):**
     a. On your local computer, run the authentication script: `python main.py`.
     b. A Chrome window will open. **Log in to your Google Account**. The script will exit after listing your devices.
-    c. This creates a user profile folder. The location depends on your OS:
-       - **Linux:** `~/.config/undetected_chromedriver`
-       - **Windows:** `%LOCALAPPDATA%\undetected_chromedriver`
-       - **macOS:** `~/Library/Application Support/undetected_chromedriver`
-    d. Copy the contents of this folder into a local directory for the Docker context, for example, `./user_data`. This is your persistent session data.
+    c. This creates the `auth/secrets.json` file.
 
 2.  **Build the Docker image:**
     ```bash
@@ -108,7 +104,7 @@ For a more robust and isolated setup, you can run this tool in a Docker containe
     ```
 
 3.  **Run the container:**
-    Run the container, mounting the `user_data` directory. Note the updated volume path (`/home/appuser/...`) which is required for the more secure non-root user inside the container.
+    Run the container, mounting the `auth` directory.
 
     ```bash
     docker run -d \
@@ -118,7 +114,7 @@ For a more robust and isolated setup, you can run this tool in a Docker containe
       -e MQTT_PASSWORD="your_mqtt_password" \
       -e REFRESH_INTERVAL="600" \
       -e DEVICE_NAMES_FILTER="My Keys,My Backpack" \
-      -v ./user_data:/home/appuser/.config/undetected_chromedriver \
+      -v ./auth:/app/auth \
       --restart unless-stopped \
       google-find-my-tools
     ```
