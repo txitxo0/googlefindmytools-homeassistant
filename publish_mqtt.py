@@ -95,22 +95,13 @@ def publish_device_state(
     timestamp = location_data.get("timestamp")
 
     if timestamp:
-        if isinstance(timestamp, (int, float)):
-            # It's a Unix timestamp, as expected
-            last_updated_iso = datetime.fromtimestamp(timestamp, tz=timezone.utc).isoformat()
-        else:
-            # It's likely a string. Attempt to parse it into ISO 8601 format.
-            try:
-                # Assuming format from logs: "YYYY-MM-DD HH:MM:SS" and it's in UTC.
-                dt_obj = datetime.strptime(str(timestamp), "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
-                last_updated_iso = dt_obj.isoformat()
-            except (ValueError, TypeError):
-                # If parsing fails, log a warning and use the raw value.
-                logger.warning(f"Could not parse timestamp '{timestamp}'. Using the raw value. This may affect Home Assistant history.")
-                last_updated_iso = str(timestamp)
+        # Just use whatever timestamp format we received without conversion
+        last_updated_iso = str(timestamp)
+        logger.debug(f"Using received timestamp as-is: {last_updated_iso}")
     else:
         # If no timestamp is provided, use the current time.
         last_updated_iso = datetime.now(timezone.utc).isoformat()
+        logger.debug(f"No timestamp provided, using current UTC time: {last_updated_iso}")
 
     # Publish state (home/not_home/unknown)
     state = "unknown"
