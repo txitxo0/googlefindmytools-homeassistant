@@ -2,7 +2,7 @@
 #  GoogleFindMyTools - A set of tools to interact with the Google Find My API
 #  Copyright © 2024 Leon Böttger. All rights reserved.
 #
-from Auth.fcm_receiver import FcmReceiver
+from auth.fcm_receiver import FcmReceiver
 from NovaApi.ExecuteAction.PlaySound.sound_request import create_sound_request
 from NovaApi.nova_request import nova_request
 from NovaApi.scopes import NOVA_ACTION_API_SCOPE

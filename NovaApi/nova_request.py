@@ -7,9 +7,9 @@ import binascii
 import requests
 from bs4 import BeautifulSoup
 
-from Auth.aas_token_retrieval import get_aas_token
-from Auth.adm_token_retrieval import get_adm_token
-from Auth.username_provider import get_username
+from auth.aas_token_retrieval import get_aas_token
+from auth.adm_token_retrieval import get_adm_token
+from auth.username_provider import get_username
 
 
 def nova_request(api_scope, hex_payload):

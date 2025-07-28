@@ -1,8 +1,8 @@
 import asyncio
 import base64
 import binascii
-from Auth.firebase_messaging import FcmRegisterConfig, FcmPushClient
-from Auth.token_cache import set_cached_value, get_cached_value
+from auth.firebase_messaging import FcmRegisterConfig, FcmPushClient
+from auth.token_cache import set_cached_value, get_cached_value
 
 class FcmReceiver:
     _instance = None
@@ -36,7 +36,7 @@ class FcmReceiver:
         self.listen_task = None
         self.timeout_task = None
     
-    def register_for_location_updates(self, callback, timeout_seconds=60):
+    def register_for_location_updates(self, callback, timeout_seconds=120):
         if not self._listening:
             asyncio.get_event_loop().run_until_complete(
                 self._register_for_fcm_and_listen(timeout_seconds)
@@ -105,7 +105,7 @@ class FcmReceiver:
                 print(f"[FCMReceiver] Failed to register with FCM: {str(e)}. Retrying...")
                 await asyncio.sleep(5)
     
-    async def _register_for_fcm_and_listen(self, timeout_seconds=60):
+    async def _register_for_fcm_and_listen(self, timeout_seconds=120):
         await self._register_for_fcm()
         
         self.listen_task = asyncio.create_task(self.pc.start())

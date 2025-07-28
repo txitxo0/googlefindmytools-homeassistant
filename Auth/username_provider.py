@@ -2,7 +2,7 @@
 #  GoogleFindMyTools - A set of tools to interact with the Google Find My API
 #  Copyright © 2024 Leon Böttger. All rights reserved.
 #
-from Auth.token_cache import get_cached_value
+from auth.token_cache import get_cached_value
 
 username_string = 'username'
 
