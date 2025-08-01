@@ -23,6 +23,19 @@ logging.basicConfig(
 )
 logger = logging.getLogger("GoogleFindMyTools")
 
+# --- Environment Variable for Semantic Location Mapping ---
+SEMANTIC_MAPPING_STR = os.environ.get("SEMANTIC_MAPPING", "")
+SEMANTIC_TO_STATE = {}
+if SEMANTIC_MAPPING_STR:
+    try:
+        SEMANTIC_TO_STATE = dict(
+            item.split(":", 1) for item in SEMANTIC_MAPPING_STR.split(";")
+        )
+    except ValueError:
+        logger.error(
+            f'Invalid format for SEMANTIC_MAPPING: "{SEMANTIC_MAPPING_STR}". Expected format: "key1:value1;key2:value2".'
+        )
+
 # MQTT Configuration
 try:
     MQTT_BROKER = os.environ["MQTT_BROKER"]
@@ -80,6 +93,25 @@ def publish_device_config(
     r = client.publish(f"{base_topic}/config", json.dumps(config), retain=True)
     return r
 
+def get_semantic_location(device_name: str, semantic_location: str, lat: float, lon: float) -> tuple[str | None, float, float]:
+    """Convert semantic location to state or coordinates"""
+    if not semantic_location or not (mapped_value := SEMANTIC_TO_STATE.get(semantic_location)):
+        return None, lat, lon
+
+    # Check if the mapped value is coordinates
+    if ',' in mapped_value:
+        try:
+            new_lat, new_lon = map(float, mapped_value.split(','))
+            logger.info(f"Device '{device_name}' location '{semantic_location}' -> coordinates ({new_lat}, {new_lon})")
+            return None, new_lat, new_lon
+        except ValueError:
+            logger.warning(f"Invalid coordinates for semantic location '{semantic_location}': {mapped_value}")
+            return None, lat, lon
+    
+    # Handle state case
+    logger.info(f"Device '{device_name}' location '{semantic_location}' -> state '{mapped_value}'")
+    return mapped_value, lat, lon
+            
 
 def publish_device_state(
     client: mqtt.Client, device_name: str, canonic_id: str, location_data: Dict
@@ -88,50 +120,67 @@ def publish_device_state(
     base_topic = f"{DISCOVERY_PREFIX}/device_tracker/{DEVICE_PREFIX}_{canonic_id}"
 
     # Extract location data
-    lat = location_data.get("latitude")
-    lon = location_data.get("longitude")
     accuracy = location_data.get("accuracy")
     altitude = location_data.get("altitude")
     timestamp = location_data.get("timestamp")
+    semantic_location = location_data.get("semantic_location")
 
+    # Determine state based on semantic_location
+    state, lat, lon = get_semantic_location(device_name, semantic_location, location_data.get("latitude"), location_data.get("longitude"))
+    client.publish(f"{base_topic}/state", state)
+
+    last_updated_iso = get_timestamp(timestamp)
+    
+    # Publish attributes
+    attributes = {
+        "source_type": "gps",
+        "last_updated": last_updated_iso,
+    }
+    
+    # Add GPS attributes if they exist and are not None/empty
+    if lat is not None:
+        attributes["latitude"] = lat
+    if lon is not None:
+        attributes["longitude"] = lon
+    if altitude is not None:
+        attributes["altitude"] = altitude
+    if accuracy is not None:
+        attributes["gps_accuracy"] = accuracy
+    
+    # Add semantic_location to attributes if it exists
+    if semantic_location:
+        attributes["semantic_location"] = semantic_location
+        logger.info(
+            f"Publishing location for '{device_name}' (ID: {canonic_id}) with semantic location: {semantic_location}"
+        )
+    else:
+        logger.info(
+            f"Publishing location for '{device_name}' (ID: {canonic_id}): "
+            f"lat={lat}, lon={lon}, accuracy={accuracy}"
+        )
+    
+    r = client.publish(f"{base_topic}/attributes", json.dumps(attributes))
+    return r
+
+def get_timestamp(timestamp: int) -> str:
+    """Convert timestamp to ISO format"""
     if timestamp:
         if isinstance(timestamp, (int, float)):
             # It's a Unix timestamp, as expected
-            last_updated_iso = datetime.fromtimestamp(timestamp, tz=timezone.utc).isoformat()
+            return datetime.fromtimestamp(timestamp, tz=timezone.utc).isoformat()
         else:
             # It's likely a string. Attempt to parse it into ISO 8601 format.
             try:
                 # Assuming format from logs: "YYYY-MM-DD HH:MM:SS" and it's in UTC.
                 dt_obj = datetime.strptime(str(timestamp), "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
-                last_updated_iso = dt_obj.isoformat()
+                return dt_obj.isoformat()
             except (ValueError, TypeError):
                 # If parsing fails, log a warning and use the raw value.
                 logger.warning(f"Could not parse timestamp '{timestamp}'. Using the raw value. This may affect Home Assistant history.")
-                last_updated_iso = str(timestamp)
+                return str(timestamp)
     else:
         # If no timestamp is provided, use the current time.
-        last_updated_iso = datetime.now(timezone.utc).isoformat()
-
-    # Publish state (home/not_home/unknown)
-    state = "unknown"
-    client.publish(f"{base_topic}/state", state)
-
-    # Publish attributes
-    attributes = {
-        "latitude": lat,
-        "longitude": lon,
-        "altitude": altitude,
-        "gps_accuracy": accuracy,
-        "source_type": "gps",
-        "last_updated": last_updated_iso,
-    }
-    logger.info(
-        f"Publishing location for '{device_name}' (ID: {canonic_id}): "
-        f"lat={lat}, lon={lon}, accuracy={accuracy}"
-    )
-    r = client.publish(f"{base_topic}/attributes", json.dumps(attributes))
-    return r
-
+        return datetime.now(timezone.utc).isoformat()
 
 def main():
     # Initialize MQTT client
@@ -177,8 +226,16 @@ def main():
 
                         # Get and publish location data
                         location_data = get_location_data_for_device(fcm_receiver, canonic_id, device_name)
-                        if not location_data or not all(k in location_data for k in ['latitude', 'longitude']):
+                        if not location_data:
                             logger.warning(f"Incomplete or missing location data for '{device_name}'. Skipping.")
+                            continue
+
+                        # Check if we have either GPS coordinates or semantic location
+                        has_gps = location_data.get('latitude') is not None and location_data.get('longitude') is not None
+                        has_semantic = location_data.get('semantic_location') is not None
+
+                        if not has_gps and not has_semantic:
+                            logger.warning(f"No usable location data (GPS or semantic) for '{device_name}'. Skipping.")
                             continue
 
                         msg_info = publish_device_state(client, device_name, canonic_id, location_data)
