@@ -10,4 +10,4 @@ __pycache__/
 .venv
 
 # Secrets - Do not include in the image
-Auth/secrets.json
+auth/secrets.json

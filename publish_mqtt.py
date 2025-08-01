@@ -8,7 +8,7 @@ from typing import Dict
 import paho.mqtt.client as mqtt
 import petname
 
-from Auth.fcm_receiver import FcmReceiver
+from auth.fcm_receiver import FcmReceiver
 from NovaApi.ExecuteAction.LocateTracker.location_request import (
     get_location_data_for_device,
 )

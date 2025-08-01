@@ -8,8 +8,6 @@ import os
 import platform
 import shutil
 
-import undetected_chromedriver as uc
-
 logger = logging.getLogger("GoogleFindMyTools")
 
 def find_chrome():
@@ -46,6 +44,7 @@ def find_chrome():
 
 
 def get_options():
+    import undetected_chromedriver as uc
     chrome_options = uc.ChromeOptions()
     chrome_options.add_argument("--start-maximized")
     chrome_options.add_argument("--disable-extensions")
@@ -61,6 +60,7 @@ def get_options():
 
 
 def create_driver():
+    import undetected_chromedriver as uc
     """Create a Chrome WebDriver with undetected_chromedriver."""
 
     try:

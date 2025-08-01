@@ -5,10 +5,10 @@
 
 import gpsoauth
 
-from Auth.auth_flow import request_oauth_account_token_flow
-from Auth.fcm_receiver import FcmReceiver
-from Auth.token_cache import get_cached_value_or_set, set_cached_value
-from Auth.username_provider import get_username, username_string
+from auth.auth_flow import request_oauth_account_token_flow
+from auth.fcm_receiver import FcmReceiver
+from auth.token_cache import get_cached_value_or_set, set_cached_value
+from auth.username_provider import get_username, username_string
 
 
 def _generate_aas_token():
