@@ -57,6 +57,7 @@ The application is configured using environment variables.
 | `MQTT_CLIENT_ID`      | A custom client ID for connecting to MQTT. A random suffix is added to prevent collisions.                    | `google_find_my_publisher`            | No       |
 | `REFRESH_INTERVAL`    | The time in seconds between location updates. 🕒                                                              | `300` (5 minutes)                     | No       |
 | `DEVICE_NAMES_FILTER` | A comma-separated list of device names to track. If not set, all devices will be tracked. Example: `My Keys,Wallet` | -                                     | No       |
+| `SEMANTIC_MAPPING`      | A semicolon-separated list of `key:value` pairs to map semantic locations to Home Assistant zones or specific GPS coordinates. <br> - **Zone Mapping:** `SemanticName:ZoneName` (e.g., `Home:home`) <br> - **Coordinate Mapping:** `SemanticName:latitude,longitude` (e.g., `MomsHouse:37.12345,-122.67890`) <br> - **Mixed Mapping:** `SemanticName:ZoneName;SemanticName:latitude,longitude` (e.g., `Home:home;MomsHouse:37.12345,-122.67890`) | -                                     | No       |
 
 ## 🚀 Usage (Local)
 
