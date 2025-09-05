@@ -24,7 +24,7 @@ It periodically fetches the location of your trackers (like Chipolo, Pebblebee, 
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/GoogleFindMyTools-homeassistant.git
+    git clone https://github.com/txitxo0/googlefindmytools-homeassistant.git
     cd GoogleFindMyTools-homeassistant
     ```
 
