@@ -4,6 +4,7 @@ import os
 import time
 from datetime import datetime, timezone
 from typing import Dict
+from dateutil.parser import parse
 
 import paho.mqtt.client as mqtt
 import petname
@@ -163,24 +164,18 @@ def publish_device_state(
     return r
 
 def get_timestamp(timestamp: int) -> str:
-    """Convert timestamp to ISO format"""
     if timestamp:
         if isinstance(timestamp, (int, float)):
-            # It's a Unix timestamp, as expected
-            return datetime.fromtimestamp(timestamp, tz=timezone.utc).isoformat()
+            dt_obj = datetime.fromtimestamp(timestamp, tz=timezone.utc)
         else:
-            # It's likely a string. Attempt to parse it into ISO 8601 format.
-            try:
-                # Assuming format from logs: "YYYY-MM-DD HH:MM:SS" and it's in UTC.
-                dt_obj = datetime.strptime(str(timestamp), "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
-                return dt_obj.isoformat()
-            except (ValueError, TypeError):
-                # If parsing fails, log a warning and use the raw value.
-                logger.warning(f"Could not parse timestamp '{timestamp}'. Using the raw value. This may affect Home Assistant history.")
-                return str(timestamp)
-    else:
-        # If no timestamp is provided, use the current time.
-        return datetime.now(timezone.utc).isoformat()
+            # Otherwise, parse the timestamp string
+            dt_obj = parse(str(timestamp))
+            # If the parsed timestamp has no timezone, assume it's in local time
+            if dt_obj.tzinfo is None:
+                dt_obj = dt_obj.astimezone()
+
+        last_updated_iso = dt_obj.isoformat()
+        return last_updated_iso
 
 def main():
     # Initialize MQTT client
