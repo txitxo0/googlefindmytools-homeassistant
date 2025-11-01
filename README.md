@@ -1,3 +1,9 @@
+>Repository deprecated in favor of: https://github.com/BSkando/GoogleFindMy-HA
+Same roadmap and already achieve and avalaible!
+
+
+
+
 # Google Find My Tools for Home Assistant 📍
 
 Tired of wondering where your Google Find My-enabled devices are? 🤔 This project brings the power of Google's Find My Device network right into your Home Assistant dashboard! 🏠✨
